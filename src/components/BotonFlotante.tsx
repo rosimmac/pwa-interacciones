@@ -12,7 +12,7 @@ export function BotonFlotante({ onClick }: BotonFlotanteProps) {
       size="icon"
       className="fixed bottom-6 right-6 bg-blue-600 text-white h-16 w-16 rounded-full shadow-xl"
     >
-      <Plus className="h-7 w-7" />
+      <Plus className="!h-9 !w-9" />
     </Button>
   );
 }

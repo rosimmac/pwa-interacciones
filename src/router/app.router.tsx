@@ -10,7 +10,7 @@ export const appRouter = createBrowserRouter([
     element: <LoginPage />,
   },
   {
-    path: "/",
+    path: "/interacciones",
     element: <PrivateRoute element={<InteraccionesPage />} />,
   },
   {
@@ -19,6 +19,6 @@ export const appRouter = createBrowserRouter([
   },
   {
     path: "*",
-    element: <Navigate to="/" />,
+    element: <Navigate to="/interacciones" />,
   },
 ]);

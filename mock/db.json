@@ -1,0 +1,73 @@
+{
+  "clientes": [
+    { "id": 1, "nombre": "Dolores Rodríguez Mata" },
+    { "id": 2, "nombre": "Eurosol, S.L" },
+    { "id": 3, "nombre": "Marcos Valenzuela Llamas" }
+  ],
+  "usuarios": [
+    {
+      "id": 1,
+      "email": "admin@demo.com",
+      "nombre": "Administrador",
+      "rol": "admin"
+    },
+    { "id": 2, "email": "user@demo.com", "nombre": "Rosa", "rol": "user" },
+    {
+      "id": 3,
+      "email": "readonly@demo.com",
+      "nombre": "Invitado",
+      "rol": "read-only"
+    }
+  ],
+  "interacciones": [
+    {
+      "id": 1,
+      "tipo": "consulta",
+      "descripcion": "Piden información sobre tarifas.",
+      "clienteId": 1,
+      "usuarioId": 2,
+      "fecha": "2026-03-01T10:30:00.000Z"
+    },
+    {
+      "id": 2,
+      "tipo": "reunion",
+      "descripcion": "Reunión de demostración del producto.",
+      "clienteId": 2,
+      "usuarioId": 2,
+      "fecha": "2026-03-02T16:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "tipo": "antecedente",
+      "descripcion": "Cliente pidió información hace un mes.",
+      "clienteId": 3,
+      "usuarioId": 1,
+      "fecha": "2026-03-03T09:15:00.000Z"
+    },
+
+    {
+      "id": 4,
+      "tipo": "consulta",
+      "descripcion": "Solicitan información sobre disponibilidad del equipo comercial.",
+      "clienteId": 2,
+      "usuarioId": 1,
+      "fecha": "2026-03-03T12:45:00.000Z"
+    },
+    {
+      "id": 5,
+      "tipo": "reunion",
+      "descripcion": "Reunión para negociar condiciones del contrato.",
+      "clienteId": 1,
+      "usuarioId": 2,
+      "fecha": "2026-03-04T09:00:00.000Z"
+    },
+    {
+      "id": 6,
+      "tipo": "antecedente",
+      "descripcion": "Cliente comentó que estaba comparando con la competencia.",
+      "clienteId": 3,
+      "usuarioId": 1,
+      "fecha": "2026-03-02T11:20:00.000Z"
+    }
+  ]
+}

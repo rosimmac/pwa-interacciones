@@ -1,16 +1,16 @@
-import { Menu, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { Input } from "./ui/input";
+import { SidebarMenu } from "./SidebarMenu";
 
 export function HeaderInteracciones() {
   return (
     <header className="w-full bg-blue-600 text-white px-4 py-6 flex flex-col gap-10 shadow-md">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Interacciones</h1>
-
-        <Menu className="h-7 w-7 cursor-pointer" />
+        <SidebarMenu />
       </div>
 
-      <div className="px-4 -mt-6">
+      <div className="w-full -mt-6">
         <div className="relative w-full text-white">
           <Search
             size={18}

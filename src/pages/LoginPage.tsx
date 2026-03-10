@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router";
 import { loginSchema, type LoginSchema } from "@/schemas/loginSchema";
 import { useContext } from "react";
-import { AuthContext } from "@/context/AuthContext";
+import { AuthContext, type User } from "@/context/AuthContext";
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ export function LoginPage() {
     },
   });
 
-  // 👉 Simulación de login
+  // Simulación de login
   async function onSubmit(values: LoginSchema) {
     console.log("Datos enviados:", values);
 
@@ -38,12 +38,16 @@ export function LoginPage() {
     // Guardar token
     localStorage.setItem("token", "demo");
 
-    // ...
+    const role: User["role"] = values.email.includes("admin")
+      ? "admin"
+      : values.email.includes("lectura")
+        ? "read-only"
+        : "user";
 
-    login(values.email);
+    login(values.email, role);
 
     // Redirigir
-    navigate("/", { replace: true });
+    navigate("/interacciones", { replace: true });
   }
 
   return (

@@ -1,3 +1,4 @@
+import { api, type Interaccion } from "@/api/api";
 import { BotonFlotante } from "@/components/BotonFlotante";
 import { FiltrosTabs, type FiltroID } from "@/components/FiltrosTabs";
 import { HeaderInteracciones } from "@/components/HeaderInteracciones";
@@ -7,11 +8,25 @@ import { NuevaInteraccionModal } from "@/components/NuevaInteraccionModal";
 import { SectionTitle } from "@/components/SectionTitle";
 
 import { Users, MessageSquare, NotebookText } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function InteraccionesPage() {
   const [open, setOpen] = useState(false);
   const [filtro, setFiltro] = useState<FiltroID>("todas");
+
+  const [interacciones, setInteracciones] = useState<Interaccion[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+
+    const tipoFiltrado = filtro === "todas" ? undefined : filtro;
+
+    api
+      .getInteracciones({ tipo: tipoFiltrado })
+      .then((data) => setInteracciones(data))
+      .finally(() => setLoading(false));
+  }, [filtro]);
 
   return (
     <div className="pb-20">
@@ -21,62 +36,44 @@ export default function InteraccionesPage() {
       <SectionTitle>Todas las Interacciones</SectionTitle>
 
       {/* Ejemplo de datos */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <InteraccionCard
-          tipo="Reunión"
-          titulo="Reunión con Marta el lunes a las 10 am para revisar errores"
-          usuario="Marta García"
-          fecha="Ayer, 10:00"
-          icono={<Users />}
-          color="green"
-        />
+      <div className="px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {loading && (
+            <p className="text-center text-gray-500">Cargando interacciones…</p>
+          )}
 
-        <InteraccionCard
-          tipo="Consulta"
-          titulo="Revisión del nuevo proyecto y plazos de entrega."
-          usuario="Juan Pérez"
-          fecha="2 feb, 14:30"
-          icono={<MessageSquare />}
-          color="purple"
-        />
+          {!loading && interacciones.length === 0 && (
+            <p className="text-center text-gray-500">No hay interacciones.</p>
+          )}
 
-        <InteraccionCard
-          tipo="Antecedente"
-          titulo="Cliente con problemas recurrentes"
-          usuario="Dolores Martínez"
-          fecha="5 ene, 09:10"
-          icono={<NotebookText />}
-          color="orange"
-        />
-
-        <InteraccionCard
-          tipo="Reunión"
-          titulo="Reunión con Marta el lunes a las 10 am para revisar errores"
-          usuario="Marta García"
-          fecha="Ayer, 10:00"
-          icono={<Users />}
-          color="green"
-        />
-
-        <InteraccionCard
-          tipo="Consulta"
-          titulo="Revisión del nuevo proyecto y plazos de entrega."
-          usuario="Juan Pérez"
-          fecha="2 feb, 14:30"
-          icono={<MessageSquare />}
-          color="purple"
-        />
-
-        <InteraccionCard
-          tipo="Antecedente"
-          titulo="Cliente con problemas recurrentes"
-          usuario="Dolores Martínez"
-          fecha="5 ene, 09:10"
-          icono={<NotebookText />}
-          color="orange"
-        />
+          {!loading &&
+            interacciones.map((item) => (
+              <InteraccionCard
+                key={item.id}
+                tipo={item.tipo}
+                titulo={item.descripcion}
+                usuario={item.usuario?.nombre ?? "Usuario desconocido"}
+                fecha={new Date(item.fecha).toLocaleString()}
+                icono={
+                  item.tipo === "reunion" ? (
+                    <Users />
+                  ) : item.tipo === "consulta" ? (
+                    <MessageSquare />
+                  ) : (
+                    <NotebookText />
+                  )
+                }
+                color={
+                  item.tipo === "reunion"
+                    ? "green"
+                    : item.tipo === "consulta"
+                      ? "purple"
+                      : "orange"
+                }
+              />
+            ))}
+        </div>
       </div>
-
       <BotonFlotante onClick={() => setOpen(true)} />
 
       <NuevaInteraccionModal open={open} onOpenChange={setOpen} />

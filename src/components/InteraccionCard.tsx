@@ -48,7 +48,7 @@ export function InteraccionCard({
   const c: ColorConfig = colorMap[color];
 
   return (
-    <Card className="mx-4 mb-4 rounded-2xl shadow-sm bg-white border">
+    <Card className=" rounded-2xl shadow-sm bg-white border">
       <CardContent className="p-4">
         {/* Header */}
         <div className="flex justify-between items-start w-full">
@@ -78,15 +78,16 @@ export function InteraccionCard({
             <Pencil className="h-5 w-5 text-gray-500 cursor-pointer" />
           </div>
         </div>
+        <div className="px-14">
+          {/* Descripción */}
+          <p className="text-gray-800 mt-2 text-sm leading-5">{titulo}</p>
 
-        {/* Descripción */}
-        <p className="text-gray-800 mt-2 text-sm leading-5">{titulo}</p>
-
-        {/* Información inferior */}
-        <div className="flex items-center gap-2 mt-3 text-gray-500 text-xs">
-          <span>{usuario}</span>
-          <span>•</span>
-          <span>{fecha}</span>
+          {/* Información inferior */}
+          <div className="flex items-center gap-2 mt-3 text-gray-500 text-xs">
+            <span>{usuario}</span>
+            <span></span>
+            <span>{fecha}</span>
+          </div>
         </div>
       </CardContent>
     </Card>
