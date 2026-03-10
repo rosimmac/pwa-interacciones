@@ -1,12 +1,14 @@
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -33,6 +35,9 @@ export function NuevaInteraccionModal({ open, onOpenChange }: Props) {
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>Nueva Interacción</DialogTitle>
+            <DialogDescription>
+              Rellena los datos para registrar una nueva interacción
+            </DialogDescription>
           </DialogHeader>
 
           <div className="max-w-md mx-auto w-full py-2">
@@ -52,6 +57,10 @@ export function NuevaInteraccionModal({ open, onOpenChange }: Props) {
       >
         <SheetHeader>
           <SheetTitle>Nueva Interacción</SheetTitle>
+
+          <SheetDescription aria-hidden="true">
+            Modal para registrar una nueva interacción
+          </SheetDescription>
         </SheetHeader>
 
         {/* El contenido sí lo estrechamos y centramos */}

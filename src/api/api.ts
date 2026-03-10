@@ -16,7 +16,11 @@ async function http<T>(path: string, options?: RequestInit): Promise<T> {
 }
 
 // Tipos (ajústalos a tus modelos)
-export type Cliente = { id: number; nombre: string };
+export type Cliente = {
+  id: number;
+  nombre: string;
+  interaccionesCount: number;
+};
 export type Usuario = {
   id: number;
   email: string;
@@ -39,11 +43,19 @@ export const api = {
   // Clientes
   getClientes: () => http<Cliente[]>("/clientes"),
 
+  createCliente: (payload: Omit<Cliente, "id">) =>
+    http<Cliente>("/clientes", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+
   // Usuarios
   findUsuarioByEmail: (email: string) =>
     http<Usuario[]>(`/usuarios?email=${encodeURIComponent(email)}`),
 
   // Interacciones
+  getAllInteracciones: () => http<Interaccion[]>("/interacciones"),
+
   getInteracciones: (params?: {
     tipo?: string;
     page?: number;
@@ -59,7 +71,6 @@ export const api = {
     if (params?.limit) q.set("_limit", String(params.limit));
     q.set("_sort", params?.sort ?? "fecha");
     q.set("_order", params?.order ?? "desc");
-    console.log(`/interacciones?${q.toString()}`);
     return http<Interaccion[]>(`/interacciones?${q.toString()}`);
   },
 

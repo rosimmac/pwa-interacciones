@@ -1,14 +1,18 @@
 import { api, type Interaccion } from "@/api/api";
 import { BotonFlotante } from "@/components/BotonFlotante";
-import { FiltrosTabs, type FiltroID } from "@/components/FiltrosTabs";
-import { HeaderInteracciones } from "@/components/HeaderInteracciones";
-import { InteraccionCard } from "@/components/InteraccionCard";
-import { NuevaInteraccionModal } from "@/components/NuevaInteraccionModal";
+import {
+  FiltrosTabs,
+  type FiltroID,
+} from "@/pages/interacciones/components/FiltrosTabs";
+
+import { InteraccionCard } from "@/pages/interacciones/components/InteraccionCard";
+import { NuevaInteraccionModal } from "@/pages/interacciones/components/NuevaInteraccionModal";
 
 import { SectionTitle } from "@/components/SectionTitle";
 
 import { Users, MessageSquare, NotebookText } from "lucide-react";
 import { useEffect, useState } from "react";
+import { AppHeader } from "@/components/AppHeader";
 
 export default function InteraccionesPage() {
   const [open, setOpen] = useState(false);
@@ -30,7 +34,7 @@ export default function InteraccionesPage() {
 
   return (
     <div className="pb-20">
-      <HeaderInteracciones />
+      <AppHeader title="Interacciones" />
 
       <FiltrosTabs value={filtro} onChange={setFiltro} />
       <SectionTitle>Todas las Interacciones</SectionTitle>

@@ -1,7 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router";
-import InteraccionesPage from "@/pages/InteraccionesPage";
-import { ClientesPage } from "@/pages/ClientesPage";
-import { LoginPage } from "@/pages/LoginPage";
+import InteraccionesPage from "@/pages/interacciones/InteraccionesPage";
+import { ClientesPage } from "@/pages/clientes/ClientesPage";
+import { LoginPage } from "@/pages/login/LoginPage";
 import { PrivateRoute } from "./PrivateRoute";
 
 export const appRouter = createBrowserRouter([
