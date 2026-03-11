@@ -154,7 +154,7 @@ export function NuevaInteraccionForm({
         {/* Tipo de Interacción (botonera/segmentado) */}
         <div className="space-y-2">
           <Label>Tipo de Interacción</Label>
-          <div className="inline-flex gap-2 rounded-lg bg-muted p-1">
+          <div className=" w-full justify-center inline-flex gap-2 rounded-lg bg-muted p-1">
             <Button
               type="button"
               variant={
@@ -260,7 +260,7 @@ export function NuevaInteraccionForm({
         </div>
 
         {/* Botones */}
-        <div className="flex items-center justify-between pt-2">
+        <div className="flex items-center justify-center gap-2 pt-2">
           <Button
             type="button"
             variant="outline"

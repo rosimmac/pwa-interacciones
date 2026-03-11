@@ -13,11 +13,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { NuevaInteraccionForm } from "./NuevaInteraccionForm";
+import { NuevoClienteForm } from "./NuevoClienteForm";
 
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  // Opcional: si también editas desde este modal
+  clienteToEdit?: { id: number; nombre: string } | null;
 };
 
 /**
@@ -25,7 +27,11 @@ type Props = {
  * - Móvil (ancho < 768px): Sheet desde abajo (bottom sheet)
  * - Desktop (ancho >= 768px): Dialog centrado y estrecho
  */
-export function NuevaInteraccionModal({ open, onOpenChange }: Props) {
+export function NuevoClienteModal({
+  open,
+  onOpenChange,
+  clienteToEdit,
+}: Props) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   if (isDesktop) {
@@ -34,14 +40,21 @@ export function NuevaInteraccionModal({ open, onOpenChange }: Props) {
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle>Nueva Interacción</DialogTitle>
+            <DialogTitle>
+              {clienteToEdit ? "Editar Cliente" : "Nuevo Cliente"}
+            </DialogTitle>
             <DialogDescription className="sr-only">
-              Rellena los datos para registrar una nueva interacción
+              {clienteToEdit
+                ? "Modifica el nombre del cliente y guarda los cambios"
+                : "Rellena el nombre para registrar un nuevo cliente"}
             </DialogDescription>
           </DialogHeader>
 
           <div className="max-w-md mx-auto w-full py-2">
-            <NuevaInteraccionForm onSuccess={() => onOpenChange(false)} />
+            <NuevoClienteForm
+              clienteToEdit={clienteToEdit ?? null}
+              onSuccess={() => onOpenChange(false)}
+            />
           </div>
         </DialogContent>
       </Dialog>
@@ -56,16 +69,22 @@ export function NuevaInteraccionModal({ open, onOpenChange }: Props) {
         className="max-h-[90vh] rounded-t-xl overflow-y-auto"
       >
         <SheetHeader>
-          <SheetTitle>Nueva Interacción</SheetTitle>
+          <SheetTitle>
+            {clienteToEdit ? "Editar Cliente" : "Nuevo Cliente"}
+          </SheetTitle>
 
           <SheetDescription className="sr-only">
-            Modal para registrar una nueva interacción
+            {clienteToEdit
+              ? "Hoja para editar un cliente existente"
+              : "Hoja para registrar un nuevo cliente"}
           </SheetDescription>
         </SheetHeader>
 
-        {/* El contenido sí lo estrechamos y centramos */}
         <div className="max-w-md mx-auto w-full py-6 px-4">
-          <NuevaInteraccionForm onSuccess={() => onOpenChange(false)} />
+          <NuevoClienteForm
+            clienteToEdit={clienteToEdit ?? null}
+            onSuccess={() => onOpenChange(false)}
+          />
         </div>
       </SheetContent>
     </Sheet>

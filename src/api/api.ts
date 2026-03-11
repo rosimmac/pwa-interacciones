@@ -41,12 +41,24 @@ export type Interaccion = {
 // Endpoints
 export const api = {
   // Clientes
+
   getClientes: () => http<Cliente[]>("/clientes"),
 
   createCliente: (payload: Omit<Cliente, "id">) =>
     http<Cliente>("/clientes", {
       method: "POST",
       body: JSON.stringify(payload),
+    }),
+
+  updateCliente: (id: number, payload: Partial<Omit<Cliente, "id">>) =>
+    http<Cliente>(`/clientes/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+    }),
+
+  deleteCliente: (id: number) =>
+    http<void>(`/clientes/${id}`, {
+      method: "DELETE",
     }),
 
   // Usuarios

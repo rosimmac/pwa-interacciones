@@ -11,7 +11,7 @@ import { NuevaInteraccionModal } from "@/pages/interacciones/components/NuevaInt
 import { SectionTitle } from "@/components/SectionTitle";
 
 import { Users, MessageSquare, NotebookText } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AppHeader } from "@/components/AppHeader";
 
 export default function InteraccionesPage() {
@@ -21,6 +21,14 @@ export default function InteraccionesPage() {
   const [interacciones, setInteracciones] = useState<Interaccion[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // ---------------------------
+  // 🔍 Estado del buscador
+  // ---------------------------
+  const [busqueda, setBusqueda] = useState("");
+
+  // ---------------------------
+  // 📡 Fetch de interacciones
+  // ---------------------------
   useEffect(() => {
     setLoading(true);
 
@@ -32,26 +40,57 @@ export default function InteraccionesPage() {
       .finally(() => setLoading(false));
   }, [filtro]);
 
+  // ---------------------------
+  // 🔎 Filtrado local (en memoria)
+  // ---------------------------
+  const texto = busqueda.toLowerCase().trim();
+
+  const interaccionesFiltradas = useMemo(() => {
+    if (!texto) return interacciones;
+
+    return interacciones.filter((i) => {
+      const tipo = i.tipo?.toLowerCase() ?? "";
+      const desc = i.descripcion?.toLowerCase() ?? "";
+      const cliente = i.cliente?.nombre?.toLowerCase() ?? "";
+      const usuario = i.usuario?.nombre?.toLowerCase() ?? "";
+
+      return (
+        tipo.includes(texto) ||
+        desc.includes(texto) ||
+        cliente.includes(texto) ||
+        usuario.includes(texto)
+      );
+    });
+  }, [interacciones, texto]);
+
   return (
     <div className="pb-20">
-      <AppHeader title="Interacciones" />
+      {/* ---------------------------
+          🔵 Header con buscador
+      --------------------------- */}
+      <AppHeader
+        title="Interacciones"
+        placeholder="Buscar interacción..."
+        searchValue={busqueda}
+        onSearchChange={setBusqueda}
+        onClearSearch={() => setBusqueda("")}
+      />
 
       <FiltrosTabs value={filtro} onChange={setFiltro} />
       <SectionTitle>Todas las Interacciones</SectionTitle>
 
-      {/* Ejemplo de datos */}
       <div className="px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {loading && (
             <p className="text-center text-gray-500">Cargando interacciones…</p>
           )}
 
-          {!loading && interacciones.length === 0 && (
+          {!loading && interaccionesFiltradas.length === 0 && (
             <p className="text-center text-gray-500">No hay interacciones.</p>
           )}
 
           {!loading &&
-            interacciones.map((item) => (
+            interaccionesFiltradas.map((item) => (
               <InteraccionCard
                 key={item.id}
                 tipo={item.tipo}
@@ -78,8 +117,8 @@ export default function InteraccionesPage() {
             ))}
         </div>
       </div>
-      <BotonFlotante onClick={() => setOpen(true)} />
 
+      <BotonFlotante onClick={() => setOpen(true)} />
       <NuevaInteraccionModal open={open} onOpenChange={setOpen} />
     </div>
   );

@@ -1,13 +1,33 @@
 import { SidebarMenu } from "@/components/SidebarMenu";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 
 type PageHeaderProps = {
   title: string;
   placeholder?: string;
+
+  /** Control del buscador (controlado desde la página) */
+  searchValue?: string;
+  onSearchChange?: (value: string) => void;
+
+  /** Opcional: acción al enviar (Enter) */
+  onSearchSubmit?: (value: string) => void;
+
+  /** Opcional: botón para limpiar */
+  onClearSearch?: () => void;
+
+  /** Ocultar buscador si no procede en alguna vista */
+  hideSearch?: boolean;
 };
 
-export function AppHeader({ title, placeholder }: PageHeaderProps) {
+export function AppHeader({
+  title,
+  placeholder,
+  searchValue = "",
+  onSearchChange,
+  onClearSearch,
+  hideSearch = false,
+}: PageHeaderProps) {
   return (
     <header className="w-full bg-blue-600 text-white px-4 py-6 flex flex-col gap-10 shadow-md">
       {/* Título + menú */}
@@ -17,28 +37,43 @@ export function AppHeader({ title, placeholder }: PageHeaderProps) {
       </div>
 
       {/* Buscador */}
-      <div className="w-full -mt-6">
-        <div className="relative w-full text-white">
-          <Search
-            size={18}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-white/70 z-20"
-          />
-          <Input
-            type="text"
-            placeholder={placeholder ?? `Buscar ${title.toLowerCase()}...`}
-            className="
-              w-full pl-10 pr-4 py-3
-              rounded-lg
-              bg-white/20
-              border border-white/10
-              text-white
-              placeholder:text-white/70
-              backdrop-blur-sm
-              focus-visible:ring-1 focus-visible:ring-white/50
-            "
-          />
+      {!hideSearch && (
+        <div className="w-full -mt-6">
+          <div className="relative w-full text-white">
+            <Search
+              size={18}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-white/70 z-20 pointer-events-none"
+            />
+
+            <Input
+              type="text"
+              value={searchValue}
+              onChange={(e) => onSearchChange?.(e.target.value)}
+              placeholder={placeholder ?? `Buscar ${title.toLowerCase()}...`}
+              className="
+                w-full pl-10 pr-10 py-3
+                rounded-lg
+                bg-white/20
+                border border-white/10
+                text-white
+                placeholder:text-white/70
+                backdrop-blur-sm
+                focus-visible:ring-1 focus-visible:ring-white/50
+              "
+            />
+
+            {!!searchValue && onClearSearch && (
+              <button
+                type="button"
+                onClick={onClearSearch}
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-white/80 hover:text-white"
+              >
+                <X size={18} />
+              </button>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </header>
   );
 }
