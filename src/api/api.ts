@@ -1,103 +1,117 @@
-// src/api/api.ts
-//TENEMOS TODAS LAS LLAMADAS A LA API EN UN SOLO SITIO. Las páginas solo van a importar funciones
-const BASE_URL = "http://localhost:3001"; // o "/api" si usas proxy en Vite
+import axios from "axios";
 
-// Helpers básicos
-async function http<T>(path: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE_URL}${path}`, {
-    headers: { "Content-Type": "application/json" },
-    ...options,
-  });
-  if (!res.ok) {
-    const msg = await res.text().catch(() => res.statusText);
-    throw new Error(`HTTP ${res.status}: ${msg}`);
-  }
-  return res.json() as Promise<T>;
-}
+// -----------------------------
+// CLIENTE AXIOS
+// -----------------------------
+export const apiClient = axios.create({
+  baseURL: "/api",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-// Tipos (ajústalos a tus modelos)
+// -----------------------------
+// TIPOS
+// -----------------------------
 export type Cliente = {
   id: number;
   nombre: string;
-  interaccionesCount: number;
 };
+
 export type Usuario = {
   id: number;
   email: string;
   nombre: string;
   rol: "admin" | "user" | "read-only";
 };
+
 export type Interaccion = {
   id: number;
   tipo: "consulta" | "reunion" | "antecedente";
   descripcion: string;
   clienteId: number;
   usuarioId: number;
-  fecha: string; // ISO
+  fecha: string;
   cliente?: Cliente;
   usuario?: Usuario;
 };
 
-// Endpoints
 export const api = {
-  // Clientes
+  // CLIENTES -------------------------------
+  getClientes: async (): Promise<Cliente[]> => {
+    const res = await apiClient.get("/clientes");
+    return res.data;
+  },
 
-  getClientes: () => http<Cliente[]>("/clientes"),
+  createCliente: async (payload: Omit<Cliente, "id">): Promise<Cliente> => {
+    const res = await apiClient.post("/clientes", payload);
+    return res.data;
+  },
 
-  createCliente: (payload: Omit<Cliente, "id">) =>
-    http<Cliente>("/clientes", {
-      method: "POST",
-      body: JSON.stringify(payload),
-    }),
+  updateCliente: async (
+    id: number,
+    payload: Partial<Omit<Cliente, "id">>,
+  ): Promise<Cliente> => {
+    const res = await apiClient.patch(`/clientes/${id}`, payload);
+    return res.data;
+  },
 
-  updateCliente: (id: number, payload: Partial<Omit<Cliente, "id">>) =>
-    http<Cliente>(`/clientes/${id}`, {
-      method: "PATCH",
-      body: JSON.stringify(payload),
-    }),
+  deleteCliente: async (id: number): Promise<void> => {
+    await apiClient.delete(`/clientes/${id}`);
+  },
 
-  deleteCliente: (id: number) =>
-    http<void>(`/clientes/${id}`, {
-      method: "DELETE",
-    }),
+  // USUARIOS -------------------------------
+  findUsuarioByEmail: async (email: string): Promise<Usuario[]> => {
+    const res = await apiClient.get("/usuarios", {
+      params: { email },
+    });
+    return res.data;
+  },
 
-  // Usuarios
-  findUsuarioByEmail: (email: string) =>
-    http<Usuario[]>(`/usuarios?email=${encodeURIComponent(email)}`),
+  // INTERACCIONES --------------------------
+  getAllInteracciones: async (): Promise<Interaccion[]> => {
+    const res = await apiClient.get("/interacciones");
+    return res.data;
+  },
 
-  // Interacciones
-  getAllInteracciones: () => http<Interaccion[]>("/interacciones"),
-
-  getInteracciones: (params?: {
+  getInteracciones: async (params?: {
     tipo?: string;
     page?: number;
     limit?: number;
     sort?: string;
     order?: "asc" | "desc";
-  }) => {
-    const q = new URLSearchParams();
-    q.set("_expand", "cliente"); // importante para mostrar nombre de cliente
-    q.append("_expand", "usuario");
-    if (params?.tipo) q.set("tipo", params.tipo);
-    if (params?.page) q.set("_page", String(params.page));
-    if (params?.limit) q.set("_limit", String(params.limit));
-    q.set("_sort", params?.sort ?? "fecha");
-    q.set("_order", params?.order ?? "desc");
-    return http<Interaccion[]>(`/interacciones?${q.toString()}`);
+  }): Promise<Interaccion[]> => {
+    const res = await apiClient.get("/interacciones", {
+      params: {
+        _expand: "cliente",
+        _expand2: "usuario", // JSON Server ignora duplicados, sirve igual
+        tipo: params?.tipo,
+        _page: params?.page,
+        _limit: params?.limit,
+        _sort: params?.sort ?? "fecha",
+        _order: params?.order ?? "desc",
+      },
+    });
+    return res.data;
   },
 
-  createInteraccion: (payload: Omit<Interaccion, "id">) =>
-    http<Interaccion>("/interacciones", {
-      method: "POST",
-      body: JSON.stringify(payload),
-    }),
+  createInteraccion: async (
+    payload: Omit<Interaccion, "id">,
+  ): Promise<Interaccion> => {
+    const res = await apiClient.post("/interacciones", payload);
+    return res.data;
+  },
 
-  updateInteraccion: (id: number, payload: Partial<Interaccion>) =>
-    http<Interaccion>(`/interacciones/${id}`, {
-      method: "PATCH",
-      body: JSON.stringify(payload),
-    }),
+  updateInteraccion: async (
+    id: number,
+    payload: Partial<Interaccion>,
+  ): Promise<Interaccion> => {
+    const res = await apiClient.patch(`/interacciones/${id}`, payload);
+    return res.data;
+  },
 
-  deleteInteraccion: (id: number) =>
-    http<void>(`/interacciones/${id}`, { method: "DELETE" }),
+  deleteInteraccion: async (id: number): Promise<void> => {
+    await apiClient.delete(`/interacciones/${id}`);
+  },
 };
+``;

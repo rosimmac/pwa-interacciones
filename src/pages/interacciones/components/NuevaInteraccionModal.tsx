@@ -18,20 +18,22 @@ import { NuevaInteraccionForm } from "./NuevaInteraccionForm";
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onCrear?: (data: any) => Promise<void>;
 };
 
-/**
- * Modal responsivo:
- * - Móvil (ancho < 768px): Sheet desde abajo (bottom sheet)
- * - Desktop (ancho >= 768px): Dialog centrado y estrecho
- */
-export function NuevaInteraccionModal({ open, onOpenChange }: Props) {
+export function NuevaInteraccionModal({ open, onOpenChange, onCrear }: Props) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
-  if (isDesktop) {
-    // Modal centrado para escritorio
-    return (
-      <Dialog open={open} onOpenChange={onOpenChange}>
+  const formContent = (
+    <NuevaInteraccionForm
+      onSuccess={() => onOpenChange(false)}
+      onCreate={onCrear}
+    />
+  );
+
+  return (
+    <>
+      <Dialog open={open && isDesktop} onOpenChange={onOpenChange}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>Nueva Interacción</DialogTitle>
@@ -39,35 +41,24 @@ export function NuevaInteraccionModal({ open, onOpenChange }: Props) {
               Rellena los datos para registrar una nueva interacción
             </DialogDescription>
           </DialogHeader>
-
-          <div className="max-w-md mx-auto w-full py-2">
-            <NuevaInteraccionForm onSuccess={() => onOpenChange(false)} />
-          </div>
+          <div className="max-w-md mx-auto w-full py-2">{formContent}</div>
         </DialogContent>
       </Dialog>
-    );
-  }
 
-  // Sheet móvil (ocupa ancho completo por diseño)
-  return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent
-        side="bottom"
-        className="max-h-[90vh] rounded-t-xl overflow-y-auto"
-      >
-        <SheetHeader>
-          <SheetTitle>Nueva Interacción</SheetTitle>
-
-          <SheetDescription className="sr-only">
-            Modal para registrar una nueva interacción
-          </SheetDescription>
-        </SheetHeader>
-
-        {/* El contenido sí lo estrechamos y centramos */}
-        <div className="max-w-md mx-auto w-full py-6 px-4">
-          <NuevaInteraccionForm onSuccess={() => onOpenChange(false)} />
-        </div>
-      </SheetContent>
-    </Sheet>
+      <Sheet open={open && !isDesktop} onOpenChange={onOpenChange}>
+        <SheetContent
+          side="bottom"
+          className="max-h-[90vh] rounded-t-xl overflow-y-auto"
+        >
+          <SheetHeader>
+            <SheetTitle>Nueva Interacción</SheetTitle>
+            <SheetDescription className="sr-only">
+              Modal para registrar una nueva interacción
+            </SheetDescription>
+          </SheetHeader>
+          <div className="max-w-md mx-auto w-full py-6 px-4">{formContent}</div>
+        </SheetContent>
+      </Sheet>
+    </>
   );
 }

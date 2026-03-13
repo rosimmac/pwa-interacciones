@@ -31,6 +31,13 @@ export function BaseCard({
     text: "text-gray-700",
   };
 
+  // Helper para acciones seguras
+  const handleSafe = (fn?: () => void) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    fn?.();
+  };
+
   return (
     <Card className="rounded-2xl shadow-sm bg-white border">
       <CardContent className="p-4">
@@ -51,12 +58,14 @@ export function BaseCard({
             {/* Acciones */}
             <div className="flex items-center gap-3">
               <Trash2
+                type="button"
                 className="h-5 w-5 text-red-500 cursor-pointer"
-                onClick={onDelete}
+                onClick={handleSafe(onDelete)}
               />
               <Pencil
+                type="button"
                 className="h-5 w-5 text-gray-500 cursor-pointer"
-                onClick={onEdit}
+                onClick={handleSafe(onEdit)}
               />
             </div>
           </div>
@@ -89,12 +98,14 @@ export function BaseCard({
 
               <div className="flex items-center gap-3">
                 <Trash2
+                  type="button"
                   className="h-5 w-5 text-red-500 cursor-pointer"
-                  onClick={onDelete}
+                  onClick={handleSafe(onDelete)}
                 />
                 <Pencil
+                  type="button"
                   className="h-5 w-5 text-gray-500 cursor-pointer"
-                  onClick={onEdit}
+                  onClick={handleSafe(onEdit)}
                 />
               </div>
             </div>

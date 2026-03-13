@@ -1,21 +1,12 @@
-import { use, type JSX } from "react";
-import { Navigate } from "react-router";
+import { useContext } from "react";
+import { Navigate, Outlet } from "react-router";
 import { AuthContext } from "@/context/AuthContext";
 
-interface Props {
-  element: JSX.Element;
-}
+export const PrivateRoute = () => {
+  console.log("🔵 PrivateRoute render");
+  const { authStatus } = useContext(AuthContext);
+  if (authStatus === "checking") return null;
 
-export const PrivateRoute = ({ element }: Props) => {
-  const { authStatus } = use(AuthContext);
-
-  if (authStatus === "checking") {
-    return null;
-  }
-
-  if (authStatus === "authenticated") {
-    return element;
-  }
-
+  if (authStatus === "authenticated") return <Outlet />;
   return <Navigate to="/login" replace />;
 };

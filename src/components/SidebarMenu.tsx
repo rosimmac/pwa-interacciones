@@ -9,9 +9,10 @@ import {
 } from "@/components/ui/sheet";
 import { useAuth } from "@/context/AuthContext";
 import { Menu } from "lucide-react";
+import { memo } from "react";
 import { Link } from "react-router";
 
-export function SidebarMenu() {
+export const SidebarMenu = memo(function SidebarMenu() {
   const { user } = useAuth();
   const isAdmin = user?.role === "admin";
 
@@ -79,4 +80,4 @@ export function SidebarMenu() {
       </SheetContent>
     </Sheet>
   );
-}
+});

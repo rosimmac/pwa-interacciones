@@ -10,12 +10,11 @@ export const appRouter = createBrowserRouter([
     element: <LoginPage />,
   },
   {
-    path: "/interacciones",
-    element: <PrivateRoute element={<InteraccionesPage />} />,
-  },
-  {
-    path: "/clientes",
-    element: <PrivateRoute element={<ClientesPage />} />,
+    element: <PrivateRoute />,
+    children: [
+      { path: "/interacciones", element: <InteraccionesPage /> },
+      { path: "/clientes", element: <ClientesPage /> },
+    ],
   },
   {
     path: "*",

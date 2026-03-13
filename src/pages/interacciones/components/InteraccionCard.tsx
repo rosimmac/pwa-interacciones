@@ -2,11 +2,13 @@ import { BaseCard } from "@/components/BaseCard";
 import type { ReactNode } from "react";
 
 interface InteraccionCardProps {
+  id: number;
   tipo: string;
   titulo: string;
   usuario: string;
   fecha: string;
   icono: ReactNode;
+  onDelete?: () => void;
   color: "green" | "purple" | "orange";
 }
 
@@ -35,9 +37,11 @@ export function InteraccionCard({
   fecha,
   icono,
   color,
+  onDelete,
 }: InteraccionCardProps) {
   return (
     <BaseCard
+      onDelete={onDelete}
       icon={icono}
       badge={tipo.toUpperCase()}
       colorClasses={colorMap[color]}

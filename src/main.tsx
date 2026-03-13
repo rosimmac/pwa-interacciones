@@ -6,7 +6,7 @@ import "./index.css";
 import { InteraccionesApp } from "./InteraccionesApp";
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <InteraccionesApp />
-  </StrictMode>,
+  // <StrictMode>
+  <InteraccionesApp />,
+  //</StrictMode>,
 );

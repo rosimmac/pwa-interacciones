@@ -78,7 +78,7 @@ export function NuevoClienteForm({
         id="cliente-nombre"
         {...register("nombre")}
         placeholder="ej: Marta García"
-        className="bg-white border rounded-lg h-11"
+        className="bg-white border rounded-lg h-11 mt-2"
       />
       {errors.nombre && (
         <p className="text-red-500 text-sm">{errors.nombre.message}</p>
@@ -89,14 +89,16 @@ export function NuevoClienteForm({
           type="button"
           variant="secondary"
           onClick={onSuccess}
-          className="h-11 px-6"
+          className="h-11 px-8 bg-white text-gray-700 shadow-[0_2px_10px_rgba(0,0,0,0.06)] ring-1 ring-black/5 
+               hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] hover:bg-gray-50"
         >
           Cancelar
         </Button>
 
         <Button
           type="submit"
-          className="h-11 px-6 bg-[#1677ff] text-white rounded-lg hover:bg-blue-600"
+          className="h-11 px-8 bg-blue-600 text-white shadow-[0_6px_20px_rgba(37,99,235,0.35)] 
+               hover:bg-blue-600/90 hover:shadow-[0_8px_26px_rgba(37,99,235,0.45)]"
           disabled={isSubmitting}
         >
           {clienteToEdit ? "Guardar cambios" : "Guardar"}

@@ -1,35 +1,5 @@
 {
-  "clientes": [
-    {
-      "id": 1,
-      "nombre": "Dolores Rodríguez Mata"
-    },
-    {
-      "id": 2,
-      "nombre": "Eurosol, S.L"
-    },
-    {
-      "id": 3,
-      "nombre": "Marcos Valenzuela Llamas"
-    },
-    {
-      "id": 4,
-      "nombre": "ByteLogic Consulting"
-    },
-    {
-      "id": 5,
-      "nombre": "NetVision Cloud Services"
-    },
-    {
-      "id": 6,
-      "nombre": "CyberNova Tech"
-    },
-    {
-      "nombre": "Rosario Giménez",
-      "interaccionesCount": 0,
-      "id": 7
-    }
-  ],
+  "clientes": [],
   "usuarios": [
     {
       "id": 1,
@@ -53,115 +23,243 @@
   "interacciones": [
     {
       "id": 1,
-      "tipo": "consulta",
-      "descripcion": "La clienta solicita información sobre los planes del software y sus límites de uso.",
       "clienteId": 1,
       "usuarioId": 2,
-      "fecha": "2026-03-01T10:30:00.000Z"
+      "tipo": "consulta",
+      "descripcion": "Consulta inicial sobre requisitos del proyecto.",
+      "fecha": "2025-12-11T10:15:00"
     },
     {
       "id": 2,
-      "tipo": "reunion",
-      "descripcion": "Demostración del panel de analítica avanzada y sus integraciones.",
       "clienteId": 2,
-      "usuarioId": 2,
-      "fecha": "2026-03-02T16:00:00.000Z"
+      "usuarioId": 1,
+      "tipo": "reunion",
+      "descripcion": "Reunión para revisar prototipo UX.",
+      "fecha": "2025-12-12T12:30:00"
     },
     {
       "id": 3,
-      "tipo": "antecedente",
-      "descripcion": "Se les envió una comparativa entre proveedores de autenticación SSO.",
       "clienteId": 3,
-      "usuarioId": 1,
-      "fecha": "2026-03-03T09:15:00.000Z"
+      "usuarioId": 2,
+      "tipo": "antecedente",
+      "descripcion": "Registro previo de conversaciones.",
+      "fecha": "2025-12-13T16:45:00"
     },
     {
       "id": 4,
-      "tipo": "consulta",
-      "descripcion": "Preguntan por disponibilidad del equipo técnico para una sesión de onboarding.",
       "clienteId": 2,
       "usuarioId": 1,
-      "fecha": "2026-03-03T12:45:00.000Z"
+      "tipo": "consulta",
+      "descripcion": "Dudas sobre integración con API.",
+      "fecha": "2025-12-14T09:20:00"
     },
     {
       "id": 5,
-      "tipo": "reunion",
-      "descripcion": "Revisión de propuesta económica y alineación del roadmap del proyecto.",
-      "clienteId": 1,
+      "clienteId": 4,
       "usuarioId": 2,
-      "fecha": "2026-03-04T09:00:00.000Z"
+      "tipo": "reunion",
+      "descripcion": "Reunión técnica para definir endpoints.",
+      "fecha": "2025-12-14T11:00:00"
     },
     {
       "id": 6,
-      "tipo": "antecedente",
-      "descripcion": "El cliente indicó que aún está evaluando herramientas de ticketing alternativas.",
-      "clienteId": 3,
-      "usuarioId": 1,
-      "fecha": "2026-03-02T11:20:00.000Z"
+      "clienteId": 1,
+      "usuarioId": 3,
+      "tipo": "consulta",
+      "descripcion": "Consulta sobre acceso de solo lectura.",
+      "fecha": "2025-12-15T15:10:00"
     },
     {
       "id": 7,
-      "tipo": "consulta",
-      "descripcion": "Solicitan documentación API para integrar su CRM con nuestro servicio.",
-      "clienteId": 4,
+      "clienteId": 5,
       "usuarioId": 2,
-      "fecha": "2026-03-05T10:10:00.000Z"
+      "tipo": "antecedente",
+      "descripcion": "Notas antiguas del cliente.",
+      "fecha": "2025-12-16T13:50:00"
     },
     {
       "id": 8,
-      "tipo": "reunion",
-      "descripcion": "Reunión técnica para revisar requisitos de integración con Azure AD.",
-      "clienteId": 4,
+      "clienteId": 6,
       "usuarioId": 1,
-      "fecha": "2026-03-06T15:00:00.000Z"
+      "tipo": "consulta",
+      "descripcion": "Petición de actualización del dashboard.",
+      "fecha": "2025-12-17T10:05:00"
     },
     {
       "id": 9,
-      "tipo": "antecedente",
-      "descripcion": "Pendientes de respuesta tras enviar el whitepaper de arquitectura.",
-      "clienteId": 4,
+      "clienteId": 3,
       "usuarioId": 2,
-      "fecha": "2026-03-04T08:40:00.000Z"
+      "tipo": "reunion",
+      "descripcion": "Reunión de avance mensual.",
+      "fecha": "2025-12-17T17:00:00"
     },
     {
       "id": 10,
+      "clienteId": 1,
+      "usuarioId": 1,
       "tipo": "consulta",
-      "descripcion": "Dudan sobre la compatibilidad con su plataforma de contenedores Kubernetes.",
-      "clienteId": 5,
-      "usuarioId": 2,
-      "fecha": "2026-03-07T13:25:00.000Z"
+      "descripcion": "Revisión de métricas solicitadas.",
+      "fecha": "2025-12-18T09:55:00"
     },
     {
       "id": 11,
+      "clienteId": 4,
+      "usuarioId": 2,
       "tipo": "reunion",
-      "descripcion": "Sesión de revisión de logs para detectar problemas de latencia en su entorno cloud.",
-      "clienteId": 5,
-      "usuarioId": 1,
-      "fecha": "2026-03-08T09:50:00.000Z"
+      "descripcion": "Reunión para validar wireframes.",
+      "fecha": "2025-12-19T11:40:00"
     },
     {
       "id": 12,
+      "clienteId": 2,
+      "usuarioId": 3,
       "tipo": "antecedente",
-      "descripcion": "Seguimiento tras la propuesta de auditoría de ciberseguridad.",
-      "clienteId": 6,
-      "usuarioId": 2,
-      "fecha": "2026-03-05T17:20:00.000Z"
+      "descripcion": "Documento previo de requerimientos.",
+      "fecha": "2025-12-19T14:15:00"
     },
     {
       "id": 13,
-      "tipo": "consulta",
-      "descripcion": "Preguntan si la plataforma permite alertas automáticas ante intentos de intrusión.",
-      "clienteId": 6,
+      "clienteId": 5,
       "usuarioId": 1,
-      "fecha": "2026-03-06T11:05:00.000Z"
+      "tipo": "consulta",
+      "descripcion": "Seguimiento de tareas pendientes.",
+      "fecha": "2025-12-20T10:30:00"
     },
     {
       "id": 14,
-      "tipo": "reunion",
-      "descripcion": "Reunión inicial para definir el alcance de un proyecto de monitorización SIEM.",
       "clienteId": 6,
       "usuarioId": 2,
-      "fecha": "2026-03-07T18:10:00.000Z"
+      "tipo": "reunion",
+      "descripcion": "Reunión para revisar cronograma.",
+      "fecha": "2025-12-20T12:10:00"
+    },
+    {
+      "id": 15,
+      "clienteId": 3,
+      "usuarioId": 2,
+      "tipo": "consulta",
+      "descripcion": "Consulta sobre entregables.",
+      "fecha": "2025-12-21T16:00:00"
+    },
+    {
+      "id": 16,
+      "clienteId": 1,
+      "usuarioId": 1,
+      "tipo": "reunion",
+      "descripcion": "Reunión de planificación del sprint.",
+      "fecha": "2025-12-22T09:30:00"
+    },
+    {
+      "id": 17,
+      "clienteId": 4,
+      "usuarioId": 3,
+      "tipo": "antecedente",
+      "descripcion": "Notas del proyecto anterior.",
+      "fecha": "2025-12-22T17:40:00"
+    },
+    {
+      "id": 18,
+      "clienteId": 2,
+      "usuarioId": 2,
+      "tipo": "consulta",
+      "descripcion": "Cambio solicitado en la UI.",
+      "fecha": "2025-12-23T11:25:00"
+    },
+    {
+      "id": 19,
+      "clienteId": 5,
+      "usuarioId": 1,
+      "tipo": "reunion",
+      "descripcion": "Revisión semanal del equipo.",
+      "fecha": "2025-12-23T18:20:00"
+    },
+    {
+      "id": 20,
+      "clienteId": 6,
+      "usuarioId": 2,
+      "tipo": "consulta",
+      "descripcion": "Pregunta sobre autenticación.",
+      "fecha": "2025-12-24T08:45:00"
+    },
+    {
+      "id": 21,
+      "clienteId": 3,
+      "usuarioId": 1,
+      "tipo": "reunion",
+      "descripcion": "Revisión de cambios finales.",
+      "fecha": "2025-12-26T12:00:00"
+    },
+    {
+      "id": 22,
+      "clienteId": 1,
+      "usuarioId": 3,
+      "tipo": "antecedente",
+      "descripcion": "Información previa del cliente.",
+      "fecha": "2025-12-27T15:30:00"
+    },
+    {
+      "id": 23,
+      "clienteId": 4,
+      "usuarioId": 2,
+      "tipo": "consulta",
+      "descripcion": "Nueva petición de ajustes menores.",
+      "fecha": "2025-12-28T10:20:00"
+    },
+    {
+      "id": 24,
+      "clienteId": 2,
+      "usuarioId": 1,
+      "tipo": "reunion",
+      "descripcion": "Sesión de revisión técnica.",
+      "fecha": "2025-12-28T13:00:00"
+    },
+    {
+      "id": 25,
+      "clienteId": 5,
+      "usuarioId": 2,
+      "tipo": "consulta",
+      "descripcion": "Consulta sobre exportación de datos.",
+      "fecha": "2025-12-29T09:40:00"
+    },
+    {
+      "id": 26,
+      "clienteId": 6,
+      "usuarioId": 1,
+      "tipo": "reunion",
+      "descripcion": "Reunión de inicio de proyecto.",
+      "fecha": "2025-12-29T17:15:00"
+    },
+    {
+      "id": 27,
+      "clienteId": 3,
+      "usuarioId": 2,
+      "tipo": "consulta",
+      "descripcion": "Dudas sobre funcionalidades nuevas.",
+      "fecha": "2025-12-30T11:00:00"
+    },
+    {
+      "id": 28,
+      "clienteId": 1,
+      "usuarioId": 1,
+      "tipo": "reunion",
+      "descripcion": "Revisión de backlog.",
+      "fecha": "2025-12-30T12:45:00"
+    },
+    {
+      "id": 29,
+      "clienteId": 4,
+      "usuarioId": 3,
+      "tipo": "antecedente",
+      "descripcion": "Notas históricas del cliente.",
+      "fecha": "2025-12-31T14:55:00"
+    },
+    {
+      "id": 30,
+      "clienteId": 2,
+      "usuarioId": 2,
+      "tipo": "consulta",
+      "descripcion": "Consulta final del año.",
+      "fecha": "2025-12-31T16:10:00"
     }
   ]
 }

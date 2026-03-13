@@ -1,6 +1,7 @@
 import { SidebarMenu } from "@/components/SidebarMenu";
 import { Input } from "@/components/ui/input";
 import { Search, X } from "lucide-react";
+import { memo } from "react";
 
 type PageHeaderProps = {
   title: string;
@@ -20,7 +21,7 @@ type PageHeaderProps = {
   hideSearch?: boolean;
 };
 
-export function AppHeader({
+export function AppHeaderRaw({
   title,
   placeholder,
   searchValue = "",
@@ -77,3 +78,5 @@ export function AppHeader({
     </header>
   );
 }
+
+export const AppHeader = memo(AppHeaderRaw);

@@ -1,5 +1,6 @@
 import { BaseCard } from "@/components/BaseCard";
 import { UserRound } from "lucide-react";
+import { memo } from "react";
 
 interface ClienteCardProps {
   id: number;
@@ -9,7 +10,7 @@ interface ClienteCardProps {
   onDelete?: (id: number) => void;
 }
 
-export function ClienteCard({
+export function ClienteCardRaw({
   id,
   nombre,
   interaccionesCount,
@@ -46,3 +47,5 @@ export function ClienteCard({
     </BaseCard>
   );
 }
+
+export const ClienteCard = memo(ClienteCardRaw);
