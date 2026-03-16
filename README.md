@@ -10,7 +10,7 @@ This project is in **active development** — new features and improvements are 
 
 ---
 
-# ⚡ FastLog — PWA for Sales Interaction Tracking
+# ⚡ PWA for Sales Interaction Tracking
 
 > Register a customer interaction in under 10 seconds.
 
