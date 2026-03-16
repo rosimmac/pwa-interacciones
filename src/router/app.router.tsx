@@ -1,5 +1,5 @@
 import { createBrowserRouter, Navigate } from "react-router";
-import InteraccionesPage from "@/pages/interacciones/InteraccionesPage";
+import { InteraccionesPage } from "@/pages/interacciones/InteraccionesPage";
 import { ClientesPage } from "@/pages/clientes/ClientesPage";
 import { LoginPage } from "@/pages/login/LoginPage";
 import { PrivateRoute } from "./PrivateRoute";

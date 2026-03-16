@@ -1,5 +1,30 @@
 {
-  "clientes": [],
+  "clientes": [
+    {
+      "nombre": "Miriam Medina",
+      "id": 4
+    },
+    {
+      "nombre": "Javier Soto ",
+      "id": 5
+    },
+    {
+      "nombre": "Antonio Gutiérrez",
+      "id": 6
+    },
+    {
+      "nombre": "Marta GarcíaED",
+      "id": 3
+    },
+    {
+      "nombre": "Francisco López",
+      "id": 2
+    },
+    {
+      "nombre": "Federico Mata",
+      "id": 1
+    }
+  ],
   "usuarios": [
     {
       "id": 1,
@@ -22,52 +47,12 @@
   ],
   "interacciones": [
     {
-      "id": 1,
-      "clienteId": 1,
-      "usuarioId": 2,
-      "tipo": "consulta",
-      "descripcion": "Consulta inicial sobre requisitos del proyecto.",
-      "fecha": "2025-12-11T10:15:00"
-    },
-    {
-      "id": 2,
-      "clienteId": 2,
-      "usuarioId": 1,
-      "tipo": "reunion",
-      "descripcion": "Reunión para revisar prototipo UX.",
-      "fecha": "2025-12-12T12:30:00"
-    },
-    {
-      "id": 3,
-      "clienteId": 3,
-      "usuarioId": 2,
-      "tipo": "antecedente",
-      "descripcion": "Registro previo de conversaciones.",
-      "fecha": "2025-12-13T16:45:00"
-    },
-    {
-      "id": 4,
-      "clienteId": 2,
-      "usuarioId": 1,
-      "tipo": "consulta",
-      "descripcion": "Dudas sobre integración con API.",
-      "fecha": "2025-12-14T09:20:00"
-    },
-    {
       "id": 5,
-      "clienteId": 4,
+      "clienteId": 1,
       "usuarioId": 2,
       "tipo": "reunion",
       "descripcion": "Reunión técnica para definir endpoints.",
       "fecha": "2025-12-14T11:00:00"
-    },
-    {
-      "id": 6,
-      "clienteId": 1,
-      "usuarioId": 3,
-      "tipo": "consulta",
-      "descripcion": "Consulta sobre acceso de solo lectura.",
-      "fecha": "2025-12-15T15:10:00"
     },
     {
       "id": 7,
@@ -86,36 +71,12 @@
       "fecha": "2025-12-17T10:05:00"
     },
     {
-      "id": 9,
-      "clienteId": 3,
-      "usuarioId": 2,
-      "tipo": "reunion",
-      "descripcion": "Reunión de avance mensual.",
-      "fecha": "2025-12-17T17:00:00"
-    },
-    {
-      "id": 10,
-      "clienteId": 1,
-      "usuarioId": 1,
-      "tipo": "consulta",
-      "descripcion": "Revisión de métricas solicitadas.",
-      "fecha": "2025-12-18T09:55:00"
-    },
-    {
       "id": 11,
       "clienteId": 4,
       "usuarioId": 2,
       "tipo": "reunion",
       "descripcion": "Reunión para validar wireframes.",
       "fecha": "2025-12-19T11:40:00"
-    },
-    {
-      "id": 12,
-      "clienteId": 2,
-      "usuarioId": 3,
-      "tipo": "antecedente",
-      "descripcion": "Documento previo de requerimientos.",
-      "fecha": "2025-12-19T14:15:00"
     },
     {
       "id": 13,
@@ -134,36 +95,12 @@
       "fecha": "2025-12-20T12:10:00"
     },
     {
-      "id": 15,
-      "clienteId": 3,
-      "usuarioId": 2,
-      "tipo": "consulta",
-      "descripcion": "Consulta sobre entregables.",
-      "fecha": "2025-12-21T16:00:00"
-    },
-    {
-      "id": 16,
-      "clienteId": 1,
-      "usuarioId": 1,
-      "tipo": "reunion",
-      "descripcion": "Reunión de planificación del sprint.",
-      "fecha": "2025-12-22T09:30:00"
-    },
-    {
       "id": 17,
       "clienteId": 4,
       "usuarioId": 3,
       "tipo": "antecedente",
       "descripcion": "Notas del proyecto anterior.",
       "fecha": "2025-12-22T17:40:00"
-    },
-    {
-      "id": 18,
-      "clienteId": 2,
-      "usuarioId": 2,
-      "tipo": "consulta",
-      "descripcion": "Cambio solicitado en la UI.",
-      "fecha": "2025-12-23T11:25:00"
     },
     {
       "id": 19,
@@ -182,36 +119,12 @@
       "fecha": "2025-12-24T08:45:00"
     },
     {
-      "id": 21,
-      "clienteId": 3,
-      "usuarioId": 1,
-      "tipo": "reunion",
-      "descripcion": "Revisión de cambios finales.",
-      "fecha": "2025-12-26T12:00:00"
-    },
-    {
-      "id": 22,
-      "clienteId": 1,
-      "usuarioId": 3,
-      "tipo": "antecedente",
-      "descripcion": "Información previa del cliente.",
-      "fecha": "2025-12-27T15:30:00"
-    },
-    {
       "id": 23,
       "clienteId": 4,
       "usuarioId": 2,
       "tipo": "consulta",
       "descripcion": "Nueva petición de ajustes menores.",
       "fecha": "2025-12-28T10:20:00"
-    },
-    {
-      "id": 24,
-      "clienteId": 2,
-      "usuarioId": 1,
-      "tipo": "reunion",
-      "descripcion": "Sesión de revisión técnica.",
-      "fecha": "2025-12-28T13:00:00"
     },
     {
       "id": 25,
@@ -230,36 +143,12 @@
       "fecha": "2025-12-29T17:15:00"
     },
     {
-      "id": 27,
-      "clienteId": 3,
-      "usuarioId": 2,
-      "tipo": "consulta",
-      "descripcion": "Dudas sobre funcionalidades nuevas.",
-      "fecha": "2025-12-30T11:00:00"
-    },
-    {
-      "id": 28,
-      "clienteId": 1,
-      "usuarioId": 1,
-      "tipo": "reunion",
-      "descripcion": "Revisión de backlog.",
-      "fecha": "2025-12-30T12:45:00"
-    },
-    {
       "id": 29,
       "clienteId": 4,
       "usuarioId": 3,
       "tipo": "antecedente",
       "descripcion": "Notas históricas del cliente.",
       "fecha": "2025-12-31T14:55:00"
-    },
-    {
-      "id": 30,
-      "clienteId": 2,
-      "usuarioId": 2,
-      "tipo": "consulta",
-      "descripcion": "Consulta final del año.",
-      "fecha": "2025-12-31T16:10:00"
     }
   ]
 }

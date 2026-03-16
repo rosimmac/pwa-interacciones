@@ -1,37 +1,34 @@
-// import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-import { MessageSquare, Users, NotebookText, Mic, MicOff } from "lucide-react";
-
-// --- Validación con Zod ---
-const schema = z.object({
-  tipo: z.enum(["consulta", "reunion", "antecedente"]),
-  descripcion: z
-    .string()
-    .min(3, { message: "La descripción es obligatoria (mín. 3 caracteres)." }),
-  cliente: z
-    .string()
-    .min(2, { message: "El cliente es obligatorio (mín. 2 caracteres)." }),
-  fecha: z.string().min(1, { message: "La fecha es obligatoria." }),
-  hora: z.string().min(1, { message: "La hora es obligatoria." }),
-});
-
-type FormValues = z.infer<typeof schema>;
+import { MessageSquare, Users, NotebookText, Mic } from "lucide-react";
+import { api, type Interaccion, type Cliente } from "@/api/api";
+import {
+  interaccionFormSchema,
+  type interaccionFormData,
+} from "@/schemas/interaccionFormSchema";
 
 type NuevaInteraccionFormProps = {
   onSuccess?: () => void;
   onCancel?: () => void;
-  onCreate?: (data: FormValues) => Promise<void> | void;
+  onCreate?: (data: interaccionFormData) => Promise<void> | void;
+  onUpdate?: (data: interaccionFormData) => Promise<void> | void;
+  interaccionToEdit?: Interaccion | null;
 };
 
-// Helpers para defaults (hoy, ahora)
 function formatDate(d: Date) {
   const yyyy = d.getFullYear();
   const mm = String(d.getMonth() + 1).padStart(2, "0");
@@ -49,8 +46,17 @@ export function NuevaInteraccionForm({
   onSuccess,
   onCancel,
   onCreate,
+  onUpdate,
+  interaccionToEdit,
 }: NuevaInteraccionFormProps) {
+  const isEditing = !!interaccionToEdit;
   const now = new Date();
+
+  const [clientes, setClientes] = useState<Cliente[]>([]);
+
+  useEffect(() => {
+    api.getClientes().then(setClientes).catch(console.error);
+  }, []);
 
   const {
     register,
@@ -59,84 +65,59 @@ export function NuevaInteraccionForm({
     watch,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<FormValues>({
-    resolver: zodResolver(schema),
+  } = useForm<interaccionFormData>({
+    resolver: zodResolver(interaccionFormSchema),
     defaultValues: {
       tipo: "consulta",
       descripcion: "",
-      cliente: "",
+      clienteId: undefined,
       fecha: formatDate(now),
       hora: formatTime(now),
     },
   });
 
-  // Para el botón de voz (opcional)
-  //   const [isRecording, setIsRecording] = useState(false);
-  //   const recognitionRef = useRef<any>(null);
-
-  const currentTipo = watch("tipo");
-  //   const currentDescripcion = watch("descripcion");
-
-  //   const startVoice = () => {
-  //     if (typeof window === "undefined") return;
-
-  //     const SpeechRecognition =
-  //       (window as any).SpeechRecognition ||
-  //       (window as any).webkitSpeechRecognition;
-
-  //     if (!SpeechRecognition) {
-  //       alert("Reconocimiento de voz no soportado en este navegador.");
-  //       return;
-  //     }
-
-  //     const recognition = new SpeechRecognition();
-  //     recognition.lang = "es-ES";
-  //     recognition.continuous = false;
-  //     recognition.interimResults = false;
-
-  //     recognition.onstart = () => setIsRecording(true);
-  //     recognition.onend = () => setIsRecording(false);
-  //     recognition.onerror = () => setIsRecording(false);
-
-  //     recognition.onresult = (event: any) => {
-  //       const transcript = event.results[0][0].transcript;
-  //       const merged =
-  //         (currentDescripcion ? currentDescripcion + " " : "") + transcript;
-  //       setValue("descripcion", merged, {
-  //         shouldValidate: true,
-  //         shouldDirty: true,
-  //       });
-  //     };
-
-  //     recognitionRef.current = recognition;
-  //     recognition.start();
-  //   };
-
-  //   const stopVoice = () => {
-  //     recognitionRef.current?.stop?.();
-  //     setIsRecording(false);
-  //   };
-
-  const handleTipoClick = (tipo: FormValues["tipo"]) => {
-    setValue("tipo", tipo, { shouldValidate: true });
-  };
-
-  const onSubmit = async (data: FormValues) => {
-    try {
-      // Si te pasan onCreate, úsalo para guardar en backend; si no, simula.
-      if (onCreate) {
-        await onCreate(data);
-      } else {
-        // Simulación de guardado
-        await new Promise((r) => setTimeout(r, 400));
-        console.log("Nueva interacción guardada:", data);
-      }
-
-      // Reset y cerrar
+  // Rellenar formulario en modo edición
+  useEffect(() => {
+    if (interaccionToEdit) {
+      const fecha = new Date(interaccionToEdit.fecha);
+      reset({
+        tipo: interaccionToEdit.tipo,
+        descripcion: interaccionToEdit.descripcion,
+        clienteId: interaccionToEdit.clienteId,
+        fecha: formatDate(fecha),
+        hora: formatTime(fecha),
+      });
+    } else {
+      const n = new Date();
       reset({
         tipo: "consulta",
         descripcion: "",
-        cliente: "",
+        clienteId: undefined,
+        fecha: formatDate(n),
+        hora: formatTime(n),
+      });
+    }
+  }, [interaccionToEdit, reset]);
+
+  const currentTipo = watch("tipo");
+  const currentClienteId = watch("clienteId");
+
+  const handleTipoClick = (tipo: interaccionFormData["tipo"]) => {
+    setValue("tipo", tipo, { shouldValidate: true });
+  };
+
+  const onSubmit = async (data: interaccionFormData) => {
+    try {
+      if (isEditing && onUpdate) {
+        await onUpdate(data);
+      } else if (onCreate) {
+        await onCreate(data);
+      }
+
+      reset({
+        tipo: "consulta",
+        descripcion: "",
+        clienteId: undefined,
         fecha: formatDate(new Date()),
         hora: formatTime(new Date()),
       });
@@ -144,17 +125,16 @@ export function NuevaInteraccionForm({
       onSuccess?.();
     } catch (e) {
       console.error("Error guardando la interacción:", e);
-      // Aquí podrías mostrar un toast de error si usas sonner/toast de shadcn
     }
   };
 
   return (
     <div className="max-w-md mx-auto w-full">
       <form className="space-y-4 pt-2" onSubmit={handleSubmit(onSubmit)}>
-        {/* Tipo de Interacción (botonera/segmentado) */}
+        {/* Tipo de Interacción */}
         <div className="space-y-2">
           <Label>Tipo de Interacción</Label>
-          <div className=" w-full justify-center inline-flex gap-2 rounded-lg bg-muted p-1">
+          <div className="w-full justify-center inline-flex gap-2 rounded-lg bg-muted p-1">
             <Button
               type="button"
               variant={
@@ -194,7 +174,7 @@ export function NuevaInteraccionForm({
           )}
         </div>
 
-        {/* Descripción + mic */}
+        {/* Descripción */}
         <div className="space-y-2">
           <Label htmlFor="descripcion">Descripción</Label>
           <div className="relative">
@@ -208,16 +188,9 @@ export function NuevaInteraccionForm({
               type="button"
               variant="ghost"
               size="icon"
-              // aria-label={isRecording ? "Detener dictado" : "Iniciar dictado"}
-              // onClick={isRecording ? stopVoice : startVoice}
               className="absolute right-2 top-2 h-8 w-8"
               title="Dictado por voz"
             >
-              {/* {isRecording ? (
-              <MicOff className="h-4 w-4 text-red-600" />
-            ) : (
-              <Mic className="h-4 w-4 text-muted-foreground" />
-            )} */}
               <Mic className="h-4 w-4 text-muted-foreground" />
             </Button>
           </div>
@@ -228,20 +201,34 @@ export function NuevaInteraccionForm({
           )}
         </div>
 
-        {/* Cliente (texto libre por ahora) */}
+        {/* Cliente (selector) */}
         <div className="space-y-2">
-          <Label htmlFor="cliente">Cliente</Label>
-          <Input
-            id="cliente"
-            placeholder="ej: Marta García"
-            {...register("cliente")}
-          />
-          {errors.cliente && (
-            <p className="text-sm text-destructive">{errors.cliente.message}</p>
+          <Label htmlFor="clienteId">Cliente</Label>
+          <Select
+            value={currentClienteId ? String(currentClienteId) : ""}
+            onValueChange={(val) =>
+              setValue("clienteId", Number(val), { shouldValidate: true })
+            }
+          >
+            <SelectTrigger id="clienteId">
+              <SelectValue placeholder="Selecciona un cliente…" />
+            </SelectTrigger>
+            <SelectContent>
+              {clientes.map((c) => (
+                <SelectItem key={c.id} value={String(c.id)}>
+                  {c.nombre}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {errors.clienteId && (
+            <p className="text-sm text-destructive">
+              {errors.clienteId.message}
+            </p>
           )}
         </div>
 
-        {/* Fecha y hora (inputs nativos, rápidos para móvil) */}
+        {/* Fecha y hora */}
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="fecha">Fecha</Label>
@@ -261,17 +248,15 @@ export function NuevaInteraccionForm({
 
         {/* Botones */}
         <div className="flex items-center justify-center gap-2 pt-2">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => {
-              onCancel?.();
-            }}
-          >
+          <Button type="button" variant="outline" onClick={() => onCancel?.()}>
             Cancelar
           </Button>
           <Button type="submit" variant="primaryBlue" disabled={isSubmitting}>
-            {isSubmitting ? "Guardando…" : "Guardar"}
+            {isSubmitting
+              ? "Guardando…"
+              : isEditing
+                ? "Guardar cambios"
+                : "Guardar"}
           </Button>
         </div>
       </form>

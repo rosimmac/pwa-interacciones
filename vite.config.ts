@@ -11,6 +11,7 @@ export default defineConfig({
     },
   },
   server: {
+    hmr: false, // desactivamos HMR para evitar parpadeo de la página en desarrollo
     proxy: {
       "/api": {
         target: "http://localhost:3001",

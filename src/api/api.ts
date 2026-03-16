@@ -61,12 +61,16 @@ export const api = {
   },
 
   // USUARIOS -------------------------------
-  findUsuarioByEmail: async (email: string): Promise<Usuario[]> => {
-    const res = await apiClient.get("/usuarios", {
-      params: { email },
-    });
+  getUsuarios: async (): Promise<Usuario[]> => {
+    const res = await apiClient.get("/usuarios");
     return res.data;
   },
+  // findUsuarioByEmail: async (email: string): Promise<Usuario[]> => {
+  //   const res = await apiClient.get("/usuarios", {
+  //     params: { email },
+  //   });
+  //   return res.data;
+  // },
 
   // INTERACCIONES --------------------------
   getAllInteracciones: async (): Promise<Interaccion[]> => {

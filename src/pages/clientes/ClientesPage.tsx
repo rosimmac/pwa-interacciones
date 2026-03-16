@@ -96,9 +96,7 @@ export function ClientesPage() {
     if (!confirmar) return;
 
     try {
-      const xhr = new XMLHttpRequest();
-      xhr.open("DELETE", `http://localhost:3001/clientes/${id}`);
-      xhr.send();
+      await api.deleteCliente(id); // 👈 usa api, no XMLHttpRequest
       setClientes((prev) => prev.filter((c) => c.id !== id));
       toastCliente.okEliminado();
     } catch (e) {

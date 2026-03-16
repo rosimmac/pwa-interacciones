@@ -1,59 +1,165 @@
-import { api, type Interaccion } from "@/api/api";
-import { BotonFlotante } from "@/components/BotonFlotante";
-import {
-  FiltrosTabs,
-  type FiltroID,
-} from "@/pages/interacciones/components/FiltrosTabs";
-import { InteraccionCard } from "@/pages/interacciones/components/InteraccionCard";
-import { NuevaInteraccionModal } from "@/pages/interacciones/components/NuevaInteraccionModal";
-import { SectionTitle } from "@/components/SectionTitle";
-import { Users, MessageSquare, NotebookText } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { AppHeader } from "@/components/AppHeader";
+import { api, type Interaccion, type Usuario, type Cliente } from "@/api/api";
 
-export default function InteraccionesPage() {
-  const [open, setOpen] = useState(false);
-  const [filtro, setFiltro] = useState<FiltroID>("todas");
+import { BotonFlotante } from "@/components/BotonFlotante";
+import { InteraccionCard } from "./components/InteraccionCard";
+import { SectionTitle } from "@/components/SectionTitle";
+import { AppHeader } from "@/components/AppHeader";
+import { NuevaInteraccionModal } from "./components/NuevaInteraccionModal";
+import { FiltrosTabs, type FiltroID } from "./components/FiltrosTabs";
+import { toastInteraccion } from "@/components/toast";
+import { toast } from "sonner";
+import { confirmDeleteToast } from "@/components/confirmToast";
+import { Users, MessageSquare, NotebookText } from "lucide-react";
+
+export function InteraccionesPage() {
   const [interacciones, setInteracciones] = useState<Interaccion[]>([]);
+  const [usuarios, setUsuarios] = useState<Record<number, Usuario>>({});
+  const [clientes, setClientes] = useState<Record<number, Cliente>>({});
   const [loading, setLoading] = useState(true);
+  const [filtro, setFiltro] = useState<FiltroID>("todas");
   const [busqueda, setBusqueda] = useState("");
+  const [modalState, setModalState] = useState<{
+    open: boolean;
+    interaccion: Interaccion | null;
+  }>({ open: false, interaccion: null });
 
   useEffect(() => {
-    setLoading(true);
-    const tipoFiltrado = filtro === "todas" ? undefined : filtro;
-    api
-      .getInteracciones({ tipo: tipoFiltrado })
-      .then((data) => setInteracciones(data))
-      .finally(() => setLoading(false));
-  }, [filtro]);
+    async function cargar() {
+      try {
+        const [interaccionesData, usuariosData, clientesData] =
+          await Promise.all([
+            api.getAllInteracciones(),
+            api.getUsuarios(),
+            api.getClientes(),
+          ]);
+
+        const usuariosMap: Record<number, Usuario> = {};
+        usuariosData.forEach((u) => {
+          usuariosMap[u.id] = u;
+        });
+
+        const clientesMap: Record<number, Cliente> = {};
+        clientesData.forEach((c) => {
+          clientesMap[c.id] = c;
+        });
+
+        setInteracciones(interaccionesData);
+        setUsuarios(usuariosMap);
+        setClientes(clientesMap);
+      } catch (error) {
+        console.error("Error cargando interacciones", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    cargar();
+  }, []);
 
   const texto = busqueda.toLowerCase().trim();
+
   const interaccionesFiltradas = useMemo(() => {
-    if (!texto) return interacciones;
-    return interacciones.filter((i) => {
-      const tipo = i.tipo?.toLowerCase() ?? "";
-      const desc = i.descripcion?.toLowerCase() ?? "";
-      const cliente = i.cliente?.nombre?.toLowerCase() ?? "";
-      const usuario = i.usuario?.nombre?.toLowerCase() ?? "";
-      return (
-        tipo.includes(texto) ||
-        desc.includes(texto) ||
-        cliente.includes(texto) ||
-        usuario.includes(texto)
+    let resultado = interacciones;
+
+    if (filtro !== "todas") {
+      resultado = resultado.filter((i) => i.tipo === filtro);
+    }
+
+    if (texto) {
+      resultado = resultado.filter((i) => {
+        const tipo = i.tipo?.toLowerCase() ?? "";
+        const desc = i.descripcion?.toLowerCase() ?? "";
+        const usuario = usuarios[i.usuarioId]?.nombre?.toLowerCase() ?? "";
+        const cliente = clientes[i.clienteId]?.nombre?.toLowerCase() ?? "";
+        return (
+          tipo.includes(texto) ||
+          desc.includes(texto) ||
+          usuario.includes(texto) ||
+          cliente.includes(texto)
+        );
+      });
+    }
+
+    return resultado;
+  }, [interacciones, filtro, texto, usuarios, clientes]);
+
+  const handleAdd = () => {
+    setModalState({ open: true, interaccion: null });
+  };
+
+  const handleEdit = (interaccion: Interaccion) => {
+    setModalState({ open: true, interaccion });
+  };
+
+  const handleCreateInteraccion = async (data: any) => {
+    try {
+      const payload = {
+        tipo: data.tipo,
+        descripcion: data.descripcion,
+        clienteId: data.clienteId,
+        usuarioId: 1, // TODO: usuario logueado
+        fecha: `${data.fecha}T${data.hora}:00`,
+      };
+      const nueva = await api.createInteraccion(payload);
+      setInteracciones((prev) => [nueva, ...prev]);
+      toastInteraccion.okGuardado();
+    } catch (e) {
+      console.error(e);
+      toastInteraccion.errorGuardar(
+        async () => await handleCreateInteraccion(data),
       );
-    });
-  }, [interacciones, texto]);
+    }
+  };
+
+  const handleUpdateInteraccion = async (id: number, data: any) => {
+    try {
+      const payload = {
+        tipo: data.tipo,
+        descripcion: data.descripcion,
+        clienteId: data.clienteId,
+        fecha: `${data.fecha}T${data.hora}:00`,
+      };
+      const actualizada = await api.updateInteraccion(id, payload);
+      setInteracciones((prev) =>
+        prev.map((i) => (i.id === id ? actualizada : i)),
+      );
+      toast.success("Cambios guardados correctamente");
+    } catch (e) {
+      toast.error("No se pudo actualizar la interacción.", {
+        description: "Problema de conexión. Inténtalo de nuevo.",
+        action: {
+          label: "Reintentar",
+          onClick: () => handleUpdateInteraccion(id, data),
+        },
+      });
+    }
+  };
 
   const handleDeleteInteraccion = async (id: number) => {
-    console.log("🗑️ Eliminando interacción con id:", id);
-    await api.deleteInteraccion(id);
-    setInteracciones((prev) => prev.filter((i) => i.id !== id));
+    const confirmar = await confirmDeleteToast(
+      "¿Seguro que deseas eliminar la interacción?",
+      "Si la eliminas, no la podrás recuperar",
+    );
+    if (!confirmar) return;
+
+    try {
+      await api.deleteInteraccion(id);
+      setInteracciones((prev) => prev.filter((i) => i.id !== id));
+      toastInteraccion.okEliminado();
+    } catch (e) {
+      toast.error("No se pudo eliminar la interacción.", {
+        description: "Problema de conexión. Inténtalo de nuevo.",
+        action: {
+          label: "Reintentar",
+          onClick: () => handleDeleteInteraccion(id),
+        },
+      });
+    }
   };
 
-  const handleCrearInteraccion = async (data: Omit<Interaccion, "id">) => {
-    const nueva = await api.createInteraccion(data);
-    setInteracciones((prev) => [nueva, ...prev]);
-  };
+  if (loading && interacciones.length === 0) {
+    return <p className="px-4 mt-6">Cargando interacciones...</p>;
+  }
 
   return (
     <div className="pb-20">
@@ -66,16 +172,15 @@ export default function InteraccionesPage() {
       />
 
       <FiltrosTabs value={filtro} onChange={setFiltro} />
-      <SectionTitle>Todas las Interacciones</SectionTitle>
+
+      <SectionTitle>Todas las interacciones</SectionTitle>
 
       <div className="px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {loading && interacciones.length === 0 && (
-            <p className="text-center text-gray-500">Cargando interacciones…</p>
-          )}
-
           {!loading && interaccionesFiltradas.length === 0 && (
-            <p className="text-center text-gray-500">No hay interacciones.</p>
+            <p className="text-center text-gray-500 col-span-2">
+              No hay interacciones.
+            </p>
           )}
 
           {interaccionesFiltradas.map((item) => (
@@ -84,7 +189,9 @@ export default function InteraccionesPage() {
               id={item.id}
               tipo={item.tipo}
               titulo={item.descripcion}
-              usuario={item.usuario?.nombre ?? "Usuario desconocido"}
+              cliente={
+                clientes[item.clienteId]?.nombre ?? "Cliente desconocido"
+              }
               fecha={new Date(item.fecha).toLocaleString()}
               icono={
                 item.tipo === "reunion" ? (
@@ -102,16 +209,26 @@ export default function InteraccionesPage() {
                     ? "purple"
                     : "orange"
               }
+              onEdit={() => handleEdit(item)}
               onDelete={() => handleDeleteInteraccion(item.id)}
             />
           ))}
         </div>
       </div>
-      <BotonFlotante onClick={() => setOpen(true)} />
+
+      <BotonFlotante onClick={handleAdd} />
+
       <NuevaInteraccionModal
-        open={open}
-        onOpenChange={setOpen}
-        onCrear={handleCrearInteraccion}
+        open={modalState.open}
+        onOpenChange={(o) =>
+          setModalState((prev) => ({
+            open: o,
+            interaccion: o ? prev.interaccion : null,
+          }))
+        }
+        interaccionToEdit={modalState.interaccion}
+        onCreate={handleCreateInteraccion}
+        onUpdate={handleUpdateInteraccion}
       />
     </div>
   );
