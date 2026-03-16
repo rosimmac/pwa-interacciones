@@ -15,19 +15,19 @@ interface InteraccionCardProps {
 
 const colorMap = {
   green: {
-    iconBg: "bg-green-500",
+    iconBg: "bg-teal-600",
     badgeBg: "bg-gray-300/20",
     text: "text-green-700",
   },
   purple: {
-    iconBg: "bg-purple-500",
+    iconBg: "bg-violet-600",
     badgeBg: "bg-gray-300/20",
-    text: "text-purple-700",
+    text: "text-violet-700",
   },
   orange: {
-    iconBg: "bg-orange-500",
+    iconBg: "bg-amber-600",
     badgeBg: "bg-gray-300/20",
-    text: "text-orange-700",
+    text: "text-amber-700",
   },
 };
 

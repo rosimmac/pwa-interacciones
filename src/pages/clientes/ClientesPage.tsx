@@ -8,8 +8,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { NuevoClienteModal } from "./components/NuevoClienteModal";
 import type { ClienteFormData } from "@/schemas/clientesSchema";
 import { toastCliente } from "@/components/toast";
-import { toast } from "sonner";
-import { confirmDeleteToast } from "@/components/confirmToast";
+import { confirmDeleteToast } from "@/components/ConfirmToast";
 
 export function ClientesPage() {
   const [clientes, setClientes] = useState<Cliente[]>([]);
@@ -80,8 +79,9 @@ export function ClientesPage() {
     try {
       const actualizado = await api.updateCliente(id, data);
       setClientes((prev) => prev.map((c) => (c.id === id ? actualizado : c)));
-      toast.success("Cambios guardados correctamente");
+      toastCliente.okActualizado();
     } catch (e) {
+      console.error(e);
       toastCliente.errorActualizar(async () => {
         if (ultimoPayload) await handleUpdateCliente(id, ultimoPayload);
       });
@@ -96,17 +96,12 @@ export function ClientesPage() {
     if (!confirmar) return;
 
     try {
-      await api.deleteCliente(id); // 👈 usa api, no XMLHttpRequest
+      await api.deleteCliente(id);
       setClientes((prev) => prev.filter((c) => c.id !== id));
       toastCliente.okEliminado();
     } catch (e) {
-      toast.error("No se pudo eliminar el cliente.", {
-        description: "Problema de conexión. Inténtalo de nuevo.",
-        action: {
-          label: "Reintentar",
-          onClick: () => handleDeleteCliente(id),
-        },
-      });
+      console.error(e);
+      toastCliente.errorEliminar(() => handleDeleteCliente(id));
     }
   };
 

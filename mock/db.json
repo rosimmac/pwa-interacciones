@@ -1,7 +1,7 @@
 {
   "clientes": [
     {
-      "nombre": "Miriam Medina",
+      "nombre": "Miriam MedinaSWS",
       "id": 4
     },
     {
@@ -13,16 +13,16 @@
       "id": 6
     },
     {
-      "nombre": "Marta GarcíaED",
-      "id": 3
-    },
-    {
       "nombre": "Francisco López",
       "id": 2
     },
     {
-      "nombre": "Federico Mata",
-      "id": 1
+      "nombre": "Marta García",
+      "id": 7
+    },
+    {
+      "nombre": " ",
+      "id": 8
     }
   ],
   "usuarios": [
@@ -47,14 +47,6 @@
   ],
   "interacciones": [
     {
-      "id": 5,
-      "clienteId": 1,
-      "usuarioId": 2,
-      "tipo": "reunion",
-      "descripcion": "Reunión técnica para definir endpoints.",
-      "fecha": "2025-12-14T11:00:00"
-    },
-    {
       "id": 7,
       "clienteId": 5,
       "usuarioId": 2,
@@ -77,22 +69,6 @@
       "tipo": "reunion",
       "descripcion": "Reunión para validar wireframes.",
       "fecha": "2025-12-19T11:40:00"
-    },
-    {
-      "id": 13,
-      "clienteId": 5,
-      "usuarioId": 1,
-      "tipo": "consulta",
-      "descripcion": "Seguimiento de tareas pendientes.",
-      "fecha": "2025-12-20T10:30:00"
-    },
-    {
-      "id": 14,
-      "clienteId": 6,
-      "usuarioId": 2,
-      "tipo": "reunion",
-      "descripcion": "Reunión para revisar cronograma.",
-      "fecha": "2025-12-20T12:10:00"
     },
     {
       "id": 17,
@@ -141,14 +117,6 @@
       "tipo": "reunion",
       "descripcion": "Reunión de inicio de proyecto.",
       "fecha": "2025-12-29T17:15:00"
-    },
-    {
-      "id": 29,
-      "clienteId": 4,
-      "usuarioId": 3,
-      "tipo": "antecedente",
-      "descripcion": "Notas históricas del cliente.",
-      "fecha": "2025-12-31T14:55:00"
     }
   ]
 }

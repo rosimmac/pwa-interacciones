@@ -24,15 +24,15 @@ const buttonVariants = cva(
 
         // Reunión (verde)
         reunionGreen:
-          "bg-green-600 text-white hover:bg-green-700 dark:hover:bg-green-500",
+          "bg-teal-600 text-white hover:bg-teal-700 dark:hover:bg-green-500",
 
         // Consulta (lila)
         consultaLilac:
-          "bg-purple-600 text-white hover:bg-purple-700 dark:hover:bg-purple-500",
+          "bg-violet-600 text-white hover:bg-violet-700 dark:hover:bg-purple-500",
 
         // Antecedente (naranja)
         antecedenteOrange:
-          "bg-orange-600 text-white hover:bg-orange-700 dark:hover:bg-orange-500",
+          "bg-amber-600 text-white hover:bg-amber-700 dark:hover:bg-orange-500",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

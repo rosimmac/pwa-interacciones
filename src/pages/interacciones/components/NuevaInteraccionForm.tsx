@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { MessageSquare, Users, NotebookText, Mic } from "lucide-react";
+import { Mic } from "lucide-react";
 import { api, type Interaccion, type Cliente } from "@/api/api";
 import {
   interaccionFormSchema,
@@ -68,7 +68,7 @@ export function NuevaInteraccionForm({
   } = useForm<interaccionFormData>({
     resolver: zodResolver(interaccionFormSchema),
     defaultValues: {
-      tipo: "consulta",
+      tipo: "reunion",
       descripcion: "",
       clienteId: undefined,
       fecha: formatDate(now),
@@ -76,7 +76,6 @@ export function NuevaInteraccionForm({
     },
   });
 
-  // Rellenar formulario en modo edición
   useEffect(() => {
     if (interaccionToEdit) {
       const fecha = new Date(interaccionToEdit.fecha);
@@ -90,7 +89,7 @@ export function NuevaInteraccionForm({
     } else {
       const n = new Date();
       reset({
-        tipo: "consulta",
+        tipo: "reunion",
         descripcion: "",
         clienteId: undefined,
         fecha: formatDate(n),
@@ -115,7 +114,7 @@ export function NuevaInteraccionForm({
       }
 
       reset({
-        tipo: "consulta",
+        tipo: "reunion",
         descripcion: "",
         clienteId: undefined,
         fecha: formatDate(new Date()),
@@ -133,26 +132,24 @@ export function NuevaInteraccionForm({
       <form className="space-y-4 pt-2" onSubmit={handleSubmit(onSubmit)}>
         {/* Tipo de Interacción */}
         <div className="space-y-2">
-          <Label>Tipo de Interacción</Label>
-          <div className="w-full justify-center inline-flex gap-2 rounded-lg bg-muted p-1">
+          <Label className="text-muted-foreground">Tipo de Interacción</Label>
+          <div className="flex w-full rounded-lg bg-muted p-1 gap-1">
             <Button
               type="button"
               variant={
                 currentTipo === "consulta" ? "consultaLilac" : "secondary"
               }
               onClick={() => handleTipoClick("consulta")}
-              className="gap-2"
+              className="flex-1 text-sm px-2 py-1 h-8"
             >
-              <MessageSquare className="h-4 w-4" />
               Consulta
             </Button>
             <Button
               type="button"
               variant={currentTipo === "reunion" ? "reunionGreen" : "secondary"}
               onClick={() => handleTipoClick("reunion")}
-              className="gap-2"
+              className="flex-1 text-sm px-2 py-1 h-8"
             >
-              <Users className="h-4 w-4" />
               Reunión
             </Button>
             <Button
@@ -163,9 +160,8 @@ export function NuevaInteraccionForm({
                   : "secondary"
               }
               onClick={() => handleTipoClick("antecedente")}
-              className="gap-2"
+              className="flex-1 text-sm px-2 py-1 h-8"
             >
-              <NotebookText className="h-4 w-4" />
               Antecedente
             </Button>
           </div>
@@ -176,19 +172,21 @@ export function NuevaInteraccionForm({
 
         {/* Descripción */}
         <div className="space-y-2">
-          <Label htmlFor="descripcion">Descripción</Label>
+          <Label htmlFor="descripcion" className="text-muted-foreground">
+            Descripción
+          </Label>
           <div className="relative">
             <Textarea
               id="descripcion"
               placeholder="ej: Reunión con Guillermo Cervantes el jueves a las 9:00 a.m"
               {...register("descripcion")}
-              className="min-h-[110px] pr-12"
+              className="min-h-[110px] pr-12 pb-10"
             />
             <Button
               type="button"
               variant="ghost"
               size="icon"
-              className="absolute right-2 top-2 h-8 w-8"
+              className="absolute right-2 bottom-2 h-8 w-8"
               title="Dictado por voz"
             >
               <Mic className="h-4 w-4 text-muted-foreground" />
@@ -201,16 +199,18 @@ export function NuevaInteraccionForm({
           )}
         </div>
 
-        {/* Cliente (selector) */}
+        {/* Cliente (selector ancho completo) */}
         <div className="space-y-2">
-          <Label htmlFor="clienteId">Cliente</Label>
+          <Label htmlFor="clienteId" className="text-muted-foreground">
+            Cliente
+          </Label>
           <Select
             value={currentClienteId ? String(currentClienteId) : ""}
             onValueChange={(val) =>
               setValue("clienteId", Number(val), { shouldValidate: true })
             }
           >
-            <SelectTrigger id="clienteId">
+            <SelectTrigger id="clienteId" className="w-full">
               <SelectValue placeholder="Selecciona un cliente…" />
             </SelectTrigger>
             <SelectContent>
@@ -231,14 +231,18 @@ export function NuevaInteraccionForm({
         {/* Fecha y hora */}
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="fecha">Fecha</Label>
+            <Label htmlFor="fecha" className="text-muted-foreground">
+              Fecha
+            </Label>
             <Input id="fecha" type="date" {...register("fecha")} />
             {errors.fecha && (
               <p className="text-sm text-destructive">{errors.fecha.message}</p>
             )}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="hora">Hora</Label>
+            <Label htmlFor="hora" className="text-muted-foreground">
+              Hora
+            </Label>
             <Input id="hora" type="time" {...register("hora")} />
             {errors.hora && (
               <p className="text-sm text-destructive">{errors.hora.message}</p>

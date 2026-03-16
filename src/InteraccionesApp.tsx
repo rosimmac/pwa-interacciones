@@ -4,7 +4,6 @@ import { AuthProvider } from "./context/AuthContext";
 import { Toaster } from "sonner";
 
 export const InteraccionesApp = () => {
-  console.log("🔴 InteraccionesApp render");
   return (
     <>
       <AuthProvider>
@@ -12,10 +11,8 @@ export const InteraccionesApp = () => {
           <RouterProvider router={appRouter} />
         </div>
       </AuthProvider>
-      <Toaster // ✅ fuera de AuthProvider
+      <Toaster
         position="bottom-center"
-        richColors
-        closeButton
         duration={3000}
         toastOptions={{
           classNames: {

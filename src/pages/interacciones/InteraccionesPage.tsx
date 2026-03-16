@@ -8,9 +8,9 @@ import { AppHeader } from "@/components/AppHeader";
 import { NuevaInteraccionModal } from "./components/NuevaInteraccionModal";
 import { FiltrosTabs, type FiltroID } from "./components/FiltrosTabs";
 import { toastInteraccion } from "@/components/toast";
-import { toast } from "sonner";
-import { confirmDeleteToast } from "@/components/confirmToast";
+
 import { Users, MessageSquare, NotebookText } from "lucide-react";
+import { confirmDeleteToast } from "@/components/ConfirmToast";
 
 export function InteraccionesPage() {
   const [interacciones, setInteracciones] = useState<Interaccion[]>([]);
@@ -123,15 +123,10 @@ export function InteraccionesPage() {
       setInteracciones((prev) =>
         prev.map((i) => (i.id === id ? actualizada : i)),
       );
-      toast.success("Cambios guardados correctamente");
+      toastInteraccion.okActualizado();
     } catch (e) {
-      toast.error("No se pudo actualizar la interacción.", {
-        description: "Problema de conexión. Inténtalo de nuevo.",
-        action: {
-          label: "Reintentar",
-          onClick: () => handleUpdateInteraccion(id, data),
-        },
-      });
+      console.error(e);
+      toastInteraccion.errorActualizar(() => handleUpdateInteraccion(id, data));
     }
   };
 
@@ -147,13 +142,8 @@ export function InteraccionesPage() {
       setInteracciones((prev) => prev.filter((i) => i.id !== id));
       toastInteraccion.okEliminado();
     } catch (e) {
-      toast.error("No se pudo eliminar la interacción.", {
-        description: "Problema de conexión. Inténtalo de nuevo.",
-        action: {
-          label: "Reintentar",
-          onClick: () => handleDeleteInteraccion(id),
-        },
-      });
+      console.error(e);
+      toastInteraccion.errorEliminar(() => handleDeleteInteraccion(id));
     }
   };
 
