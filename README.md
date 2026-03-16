@@ -79,8 +79,8 @@ src/
 ### Installation
 
 ```bash
-git clone https://github.com/tu-usuario/fastlog.git
-cd fastlog
+git clone https://github.com/rosimmac/pwa-interacciones.git
+cd pwa-interacciones
 npm install
 ```
 
