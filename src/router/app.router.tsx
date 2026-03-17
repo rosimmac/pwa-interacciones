@@ -4,6 +4,8 @@ import { ClientesPage } from "@/pages/clientes/ClientesPage";
 import { LoginPage } from "@/pages/login/LoginPage";
 import { PrivateRoute } from "./PrivateRoute";
 import { RegistroPage } from "@/pages/login/RegistroPage";
+import { ForgotPasswordPage } from "@/pages/login/ForgotPasswordPage";
+import { ResetPasswordPage } from "@/pages/login/ResetPasswordPage";
 
 export const appRouter = createBrowserRouter([
   {
@@ -13,6 +15,14 @@ export const appRouter = createBrowserRouter([
   {
     path: "/registro",
     element: <RegistroPage />,
+  },
+  {
+    path: "/recuperar",
+    element: <ForgotPasswordPage />,
+  },
+  {
+    path: "/restablecer",
+    element: <ResetPasswordPage />,
   },
   {
     element: <PrivateRoute />,

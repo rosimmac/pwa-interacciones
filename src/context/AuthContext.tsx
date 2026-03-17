@@ -28,7 +28,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
     const role = localStorage.getItem("authRole");
     return email && role ? "authenticated" : "not-authenticated";
   });
-  console.log("🟡 AuthProvider render, authStatus:", authStatus);
   const [user, setUser] = useState<User | null>(() => {
     const email = localStorage.getItem("authEmail");
     const role = localStorage.getItem("authRole") as User["role"] | null;

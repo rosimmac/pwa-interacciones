@@ -1,5 +1,4 @@
 // src/pages/RegistroPage.tsx
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -28,28 +27,42 @@ export function RegistroPage() {
       confirmarPassword: "",
     },
   });
+
   async function onSubmit(values: RegistroSchema) {
     await new Promise((resolve) => setTimeout(resolve, 800));
-    login(values.email, "user"); //establece la sesión
+    login(values.email, "user");
     toastRegistro.okGuardado();
     navigate("/interacciones", { replace: true });
   }
 
   return (
-    <div className="min-h-screen grid place-items-center bg-[#e8f0ff]">
-      <div className="bg-white shadow-lg rounded-xl p-6 w-full max-w-sm space-y-4">
-        <h1 className="text-xl font-semibold mb-6">
+    <div className="min-h-[100svh] flex flex-col bg-[#e8f0ff] sm:grid sm:place-items-center sm:px-3 sm:py-6">
+      {/* Espaciador proporcional en móvil */}
+      <div className="flex-none sm:hidden" style={{ height: "15svh" }} />
+
+      {/* Contenedor: sin card en móvil, card blanca en escritorio */}
+      <div
+        className={[
+          "w-full space-y-6 px-5",
+          "sm:max-w-md sm:bg-white sm:rounded-2xl sm:shadow-lg sm:p-8",
+        ].join(" ")}
+      >
+        <h1 className="text-4xl sm:text-3xl font-semibold leading-tight [text-wrap:balance]">
           Crea tu cuenta y empieza a gestionar tus interacciones
         </h1>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Nombre */}
-          <div>
-            <Label htmlFor="nombre">Nombre</Label>
+          <div className="space-y-2">
+            <Label htmlFor="nombre" className="mb-1">
+              Nombre
+            </Label>
             <Input
               id="nombre"
               type="text"
               placeholder="Ana López"
+              aria-invalid={!!errors.nombre || undefined}
+              className="h-11 bg-white"
               {...register("nombre")}
             />
             {errors.nombre && (
@@ -60,12 +73,18 @@ export function RegistroPage() {
           </div>
 
           {/* Email */}
-          <div>
-            <Label htmlFor="email">E-mail</Label>
+          <div className="space-y-2">
+            <Label htmlFor="email" className="mb-1">
+              E-mail
+            </Label>
             <Input
               id="email"
               type="email"
+              inputMode="email"
+              autoComplete="email"
               placeholder="example@sales.com"
+              aria-invalid={!!errors.email || undefined}
+              className="h-11 bg-white"
               {...register("email")}
             />
             {errors.email && (
@@ -76,12 +95,17 @@ export function RegistroPage() {
           </div>
 
           {/* Password */}
-          <div>
-            <Label htmlFor="password">Contraseña</Label>
+          <div className="space-y-2">
+            <Label htmlFor="password" className="mb-1">
+              Contraseña
+            </Label>
             <Input
               id="password"
               type="password"
+              autoComplete="new-password"
               placeholder="Contraseña"
+              aria-invalid={!!errors.password || undefined}
+              className="h-11 bg-white"
               {...register("password")}
             />
             {errors.password && (
@@ -92,12 +116,17 @@ export function RegistroPage() {
           </div>
 
           {/* Confirmar Password */}
-          <div>
-            <Label htmlFor="confirmarPassword">Confirmar contraseña</Label>
+          <div className="space-y-2">
+            <Label htmlFor="confirmarPassword" className="mb-1">
+              Confirmar contraseña
+            </Label>
             <Input
               id="confirmarPassword"
               type="password"
+              autoComplete="new-password"
               placeholder="Repite tu contraseña"
+              aria-invalid={!!errors.confirmarPassword || undefined}
+              className="h-11 bg-white"
               {...register("confirmarPassword")}
             />
             {errors.confirmarPassword && (
@@ -108,11 +137,11 @@ export function RegistroPage() {
           </div>
 
           {/* Botones */}
-          <div className="flex gap-2 pt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
             <Button
               type="button"
               variant="outline"
-              className="flex-1 min-w-0"
+              className="h-11"
               onClick={() => navigate("/login")}
             >
               Volver
@@ -121,7 +150,7 @@ export function RegistroPage() {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 min-w-0 bg-blue-600 hover:bg-blue-700"
+              className="h-11 bg-blue-600 hover:bg-blue-700"
             >
               {isSubmitting ? "Registrando..." : "Crear cuenta"}
             </Button>

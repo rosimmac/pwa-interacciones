@@ -3,7 +3,6 @@ import { Navigate, Outlet } from "react-router";
 import { AuthContext } from "@/context/AuthContext";
 
 export const PrivateRoute = () => {
-  console.log("🔵 PrivateRoute render");
   const { authStatus } = useContext(AuthContext);
   if (authStatus === "checking") return null;
 

@@ -1,5 +1,4 @@
 // src/pages/LoginPage.tsx
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -13,7 +12,6 @@ import { AuthContext, type User } from "@/context/AuthContext";
 
 export function LoginPage() {
   const navigate = useNavigate();
-
   const { login } = useContext(AuthContext);
 
   const {
@@ -28,14 +26,8 @@ export function LoginPage() {
     },
   });
 
-  // Simulación de login
   async function onSubmit(values: LoginSchema) {
-    console.log("Datos enviados:", values);
-
-    // Simular petición a API
     await new Promise((resolve) => setTimeout(resolve, 800));
-
-    // Guardar token
     localStorage.setItem("token", "demo");
 
     const role: User["role"] = values.email.includes("admin")
@@ -45,26 +37,37 @@ export function LoginPage() {
         : "user";
 
     login(values.email, role);
-
-    // Redirigir
     navigate("/interacciones", { replace: true });
   }
 
   return (
-    <div className="min-h-screen grid place-items-center bg-[#e8f0ff]">
-      <div className="bg-white shadow-lg rounded-xl p-6 w-full max-w-sm space-y-4">
-        <h1 className="text-xl font-semibold mb-6">
+    <div className="min-h-[100svh] flex flex-col bg-[#e8f0ff] sm:grid sm:place-items-center sm:px-3 sm:py-6">
+      <div className="flex-none sm:hidden" style={{ height: "25svh" }} />
+
+      <div
+        className={[
+          "w-full space-y-6 px-5",
+          "sm:max-w-md sm:bg-white sm:rounded-2xl sm:shadow-lg sm:p-8 sm:px-8",
+        ].join(" ")}
+      >
+        <h1 className="text-4xl sm:text-3xl font-semibold leading-tight [text-wrap:balance]">
           Inicia sesión y gestiona tus interacciones
         </h1>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Email */}
-          <div>
-            <Label htmlFor="email">E-mail</Label>
+          <div className="space-y-4">
+            <Label htmlFor="email" className="mb-1">
+              E-mail
+            </Label>
             <Input
               id="email"
               type="email"
+              inputMode="email"
+              autoComplete="email"
               placeholder="admin@sales.com"
+              aria-invalid={!!errors.email || undefined}
+              className="h-11 bg-white"
               {...register("email")}
             />
             {errors.email && (
@@ -75,12 +78,17 @@ export function LoginPage() {
           </div>
 
           {/* Password */}
-          <div>
-            <Label htmlFor="password">Contraseña</Label>
+          <div className="space-y-4">
+            <Label htmlFor="password" className="mb-1">
+              Contraseña
+            </Label>
             <Input
               id="password"
               type="password"
+              autoComplete="current-password"
               placeholder="Contraseña"
+              aria-invalid={!!errors.password || undefined}
+              className="h-11 bg-white"
               {...register("password")}
             />
             {errors.password && (
@@ -90,21 +98,22 @@ export function LoginPage() {
             )}
           </div>
 
-          <div className="text-right">
+          {/* Enlace */}
+          <div className="flex justify-end">
             <Link
               to="/recuperar"
-              className="text-sm text-blue-600 hover:underline"
+              className="text-sm text-blue-600 hover:underline active:opacity-80"
             >
               ¿Has olvidado tu contraseña?
             </Link>
           </div>
 
           {/* Botones */}
-          <div className="flex gap-2 pt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
             <Button
               type="button"
               variant="outline"
-              className="flex-1 min-w-0"
+              className="h-11"
               onClick={() => navigate("/registro")}
             >
               Registro
@@ -113,7 +122,7 @@ export function LoginPage() {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 min-w-0 bg-blue-600 hover:bg-blue-700"
+              className="h-11 bg-blue-600 hover:bg-blue-700"
             >
               {isSubmitting ? "Entrando..." : "Iniciar sesión"}
             </Button>
