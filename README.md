@@ -121,6 +121,16 @@ When the real backend is integrated, the following will need to be updated:
 | `read-only` | View only                   |
 
 ---
+<img width="370" height="804" alt="image" src="https://github.com/user-attachments/assets/8e98e458-b661-4031-9310-a44773a72595" />
+<img width="366" height="799" alt="image" src="https://github.com/user-attachments/assets/5f09243a-38ed-4e29-b259-6d29ee6c71b4" />
+<img width="369" height="797" alt="image" src="https://github.com/user-attachments/assets/cca31eb4-3b95-4a89-8df3-a610f285785f" />
+<img width="365" height="805" alt="image" src="https://github.com/user-attachments/assets/f068eb5d-aeea-4534-bb94-4aeadd654783" />
+<img width="364" height="799" alt="image" src="https://github.com/user-attachments/assets/6f228781-89ef-4a9a-bcd3-47a31183b225" />
+<img width="367" height="810" alt="image" src="https://github.com/user-attachments/assets/b0831c65-a622-4015-8c97-d471a7c33e07" />
+<img width="366" height="804" alt="image" src="https://github.com/user-attachments/assets/acc6da54-5384-4517-a98d-1fb113723823" />
+<img width="368" height="806" alt="image" src="https://github.com/user-attachments/assets/c6bba7c1-9f7a-40d5-ba20-de4bfa8b11d3" />
+
+
 
 ## 👨‍💻 Author
 
