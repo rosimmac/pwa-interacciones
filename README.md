@@ -128,7 +128,8 @@ When the real backend is integrated, the following will need to be updated:
 <img width="364" height="799" alt="image" src="https://github.com/user-attachments/assets/6f228781-89ef-4a9a-bcd3-47a31183b225" />
 <img width="367" height="810" alt="image" src="https://github.com/user-attachments/assets/b0831c65-a622-4015-8c97-d471a7c33e07" />
 <img width="366" height="804" alt="image" src="https://github.com/user-attachments/assets/acc6da54-5384-4517-a98d-1fb113723823" />
-<img width="368" height="806" alt="image" src="https://github.com/user-attachments/assets/c6bba7c1-9f7a-40d5-ba20-de4bfa8b11d3" />
+<img width="369" height="803" alt="image" src="https://github.com/user-attachments/assets/5bd33ea1-1b2a-48ac-a35b-e3dd7a0a054e" />
+
 
 
 
