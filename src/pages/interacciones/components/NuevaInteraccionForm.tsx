@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+
+import { toast } from "sonner";
+
 import {
   Select,
   SelectContent,
@@ -13,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useSpeechToText } from "@/hooks/useSpeechToText";
 
 import { Mic } from "lucide-react";
 import { api, type Interaccion, type Cliente } from "@/api/api";
@@ -101,6 +105,46 @@ export function NuevaInteraccionForm({
   const currentTipo = watch("tipo");
   const currentClienteId = watch("clienteId");
 
+  // --- Dictado por voz ---
+  const {
+    supported,
+    listening,
+    transcript,
+    finalTranscript,
+    error,
+    start,
+    stop,
+    reset: resetVoice,
+  } = useSpeechToText({
+    lang: "es-ES",
+    continuous: false,
+    interimResults: true,
+  });
+
+  useEffect(() => {
+    if (finalTranscript) {
+      const prev = watch("descripcion") || "";
+      const sep = prev && !prev.endsWith(" ") ? " " : "";
+      setValue("descripcion", `${prev}${sep}${finalTranscript}`, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+      toast.success("Texto añadido desde dictado");
+      resetVoice();
+    }
+  }, [finalTranscript, resetVoice, setValue, watch]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error("Error de voz", {
+        description:
+          error === "not-allowed"
+            ? "Permiso de micrófono denegado"
+            : "No se pudo procesar la voz",
+      });
+    }
+  }, [error]);
+
   const handleTipoClick = (tipo: interaccionFormData["tipo"]) => {
     setValue("tipo", tipo, { shouldValidate: true });
   };
@@ -182,14 +226,38 @@ export function NuevaInteraccionForm({
               {...register("descripcion")}
               className="min-h-[110px] pr-12 pb-10"
             />
+
+            {listening && (
+              <p className="text-xs text-muted-foreground italic">
+                Escuchando… habla ahora
+              </p>
+            )}
+
+            {transcript && listening && (
+              <p className="text-xs text-muted-foreground italic line-clamp-2">
+                {transcript}
+              </p>
+            )}
+
             <Button
               type="button"
               variant="ghost"
               size="icon"
               className="absolute right-2 bottom-2 h-8 w-8"
               title="Dictado por voz"
+              onClick={() => {
+                if (!supported) {
+                  toast.error("El dictado no es compatible en este navegador");
+                  return;
+                }
+                listening ? stop() : start();
+              }}
             >
-              <Mic className="h-4 w-4 text-muted-foreground" />
+              <Mic
+                className={`h-4 w-4 ${
+                  listening ? "text-red-500" : "text-muted-foreground"
+                }`}
+              />
             </Button>
           </div>
           {errors.descripcion && (
