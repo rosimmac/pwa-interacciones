@@ -79,7 +79,9 @@ export function NuevaInteraccionModal({
                 : "Modal para registrar una nueva interacción"}
             </SheetDescription>
           </SheetHeader>
-          <div className="max-w-md mx-auto w-full py-6 px-4">{formContent}</div>
+          <div className="max-w-md mx-auto w-full pt-1 pb-6 px-4">
+            {formContent}
+          </div>
         </SheetContent>
       </Sheet>
     </>
