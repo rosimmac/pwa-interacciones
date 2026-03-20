@@ -7,8 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
-import { toast } from "sonner";
-
 import {
   Select,
   SelectContent,
@@ -24,6 +22,7 @@ import {
   interaccionFormSchema,
   type interaccionFormData,
 } from "@/schemas/interaccionFormSchema";
+import { toastVoz } from "@/components/toast";
 
 type NuevaInteraccionFormProps = {
   onSuccess?: () => void;
@@ -129,19 +128,14 @@ export function NuevaInteraccionForm({
         shouldValidate: true,
         shouldDirty: true,
       });
-      toast.success("Texto añadido desde dictado");
+      toastVoz.okDictado();
       resetVoice();
     }
   }, [finalTranscript, resetVoice, setValue, watch]);
 
   useEffect(() => {
     if (error) {
-      toast.error("Error de voz", {
-        description:
-          error === "not-allowed"
-            ? "Permiso de micrófono denegado"
-            : "No se pudo procesar la voz",
-      });
+      toastVoz.errorMicrofono(error === "not-allowed");
     }
   }, [error]);
 
@@ -247,7 +241,7 @@ export function NuevaInteraccionForm({
               title="Dictado por voz"
               onClick={() => {
                 if (!supported) {
-                  toast.error("El dictado no es compatible en este navegador");
+                  toastVoz.errorNoSoportado();
                   return;
                 }
                 listening ? stop() : start();

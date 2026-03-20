@@ -101,3 +101,31 @@ export const toastRegistro = {
       cancelButtonStyle,
     }),
 };
+
+export const toastVoz = {
+  okDictado: () =>
+    toast.success("Texto añadido desde dictado", {
+      style: successStyle,
+      cancel: closeButton,
+      cancelButtonStyle,
+    }),
+  errorMicrofono: (denegado: boolean) =>
+    errorToast(
+      "Error de voz",
+      denegado ? "Permiso de micrófono denegado" : "No se pudo procesar la voz",
+    ),
+  errorNoSoportado: () =>
+    errorToast(
+      "Dictado no disponible",
+      "El dictado por voz no es compatible con este navegador",
+    ),
+};
+
+export const toastAuth = {
+  okCerrarSesion: () =>
+    toast.success("Sesión cerrada correctamente", {
+      style: successStyle,
+      cancel: closeButton,
+      cancelButtonStyle,
+    }),
+};
