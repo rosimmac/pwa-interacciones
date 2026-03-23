@@ -9,8 +9,16 @@ import { NuevoClienteModal } from "./components/NuevoClienteModal";
 import type { ClienteFormData } from "@/schemas/clientesSchema";
 import { toastCliente } from "@/components/toast";
 import { confirmDeleteToast } from "@/components/ConfirmToast";
+import { usePermisos } from "@/hooks/usePermisos";
+import { useAuth } from "@/context/AuthContext";
 
 export function ClientesPage() {
+  const { puedeCrear, puedeEditar, puedeEliminar } = usePermisos();
+  const { user } = useAuth(); // importa useAuth de @/context/AuthContext
+  console.log("user:", user);
+  console.log("puedeEditar:", puedeEditar);
+  console.log("puedeEliminar:", puedeEliminar);
+
   const [clientes, setClientes] = useState<Cliente[]>([]);
   const [conteo, setConteo] = useState<Record<number, number>>({});
   const [loading, setLoading] = useState(true);
@@ -125,6 +133,8 @@ export function ClientesPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {clientesFiltrados.map((cliente) => {
             const count = conteo[cliente.id] ?? 0;
+            console.log("onEdit:", puedeEditar ? "función" : undefined);
+            console.log("onDelete:", puedeEliminar ? "función" : undefined);
 
             return (
               <ClienteCard
@@ -132,15 +142,19 @@ export function ClientesPage() {
                 id={cliente.id}
                 nombre={cliente.nombre}
                 interaccionesCount={count}
-                onEdit={() => handleEdit(cliente)}
-                onDelete={() => handleDeleteCliente(cliente.id)}
+                onEdit={puedeEditar ? () => handleEdit(cliente) : undefined}
+                onDelete={
+                  puedeEliminar
+                    ? () => handleDeleteCliente(cliente.id)
+                    : undefined
+                }
               />
             );
           })}
         </div>
       </div>
 
-      <BotonFlotante onClick={handleAdd} />
+      {puedeCrear && <BotonFlotante onClick={handleAdd} />}
 
       <NuevoClienteModal
         open={modalState.open}

@@ -129,3 +129,42 @@ export const toastAuth = {
       cancelButtonStyle,
     }),
 };
+
+export const toastUsuario = {
+  okGuardado: () =>
+    toast.success("Usuario guardado correctamente", {
+      style: successStyle,
+      cancel: closeButton,
+      cancelButtonStyle,
+    }),
+  okActualizado: () =>
+    toast.success("Usuario actualizado correctamente", {
+      style: successStyle,
+      cancel: closeButton,
+      cancelButtonStyle,
+    }),
+  okEliminado: () =>
+    toast.success("Usuario eliminado correctamente", {
+      style: successStyle,
+      cancel: closeButton,
+      cancelButtonStyle,
+    }),
+  errorGuardar: (onRetry?: () => void) =>
+    errorToast(
+      "Error al guardar el usuario.",
+      "Problema de conexión. Inténtalo de nuevo.",
+      onRetry,
+    ),
+  errorActualizar: (onRetry?: () => void) =>
+    errorToast(
+      "Error al actualizar el usuario.",
+      "Problema de conexión. Inténtalo de nuevo.",
+      onRetry,
+    ),
+  errorEliminar: (onRetry?: () => void) =>
+    errorToast(
+      "No se pudo eliminar el usuario.",
+      "Problema de conexión. Inténtalo de nuevo.",
+      onRetry,
+    ),
+};

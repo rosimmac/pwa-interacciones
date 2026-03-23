@@ -111,5 +111,19 @@ export const api = {
   deleteInteraccion: async (id: number): Promise<void> => {
     await apiClient.delete(`/interacciones/${id}`);
   },
+
+  createUsuario: async (payload: Omit<Usuario, "id">): Promise<Usuario> => {
+    const res = await apiClient.post("/usuarios", payload);
+    return res.data;
+  },
+  updateUsuario: async (
+    id: number,
+    payload: Partial<Usuario>,
+  ): Promise<Usuario> => {
+    const res = await apiClient.patch(`/usuarios/${id}`, payload);
+    return res.data;
+  },
+  deleteUsuario: async (id: number): Promise<void> => {
+    await apiClient.delete(`/usuarios/${id}`);
+  },
 };
-``;

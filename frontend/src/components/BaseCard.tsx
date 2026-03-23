@@ -55,18 +55,22 @@ export function BaseCard({
               <div className="flex flex-col">{children}</div>
             </div>
 
-            {/* Acciones */}
+            {/* Acciones - layout horizontal */}
             <div className="flex items-center gap-3">
-              <Trash2
-                type="button"
-                className="h-5 w-5 text-red-500 cursor-pointer"
-                onClick={handleSafe(onDelete)}
-              />
-              <Pencil
-                type="button"
-                className="h-5 w-5 text-gray-500 cursor-pointer"
-                onClick={handleSafe(onEdit)}
-              />
+              {onDelete && (
+                <Trash2
+                  type="button"
+                  className="h-5 w-5 text-red-500 cursor-pointer"
+                  onClick={handleSafe(onDelete)}
+                />
+              )}
+              {onEdit && (
+                <Pencil
+                  type="button"
+                  className="h-5 w-5 text-gray-500 cursor-pointer"
+                  onClick={handleSafe(onEdit)}
+                />
+              )}
             </div>
           </div>
         )}
@@ -96,17 +100,22 @@ export function BaseCard({
                 )}
               </div>
 
+              {/* Acciones - layout vertical */}
               <div className="flex items-center gap-3">
-                <Trash2
-                  type="button"
-                  className="h-5 w-5 text-red-500 cursor-pointer"
-                  onClick={handleSafe(onDelete)}
-                />
-                <Pencil
-                  type="button"
-                  className="h-5 w-5 text-gray-500 cursor-pointer"
-                  onClick={handleSafe(onEdit)}
-                />
+                {onDelete && (
+                  <Trash2
+                    type="button"
+                    className="h-5 w-5 text-red-500 cursor-pointer"
+                    onClick={handleSafe(onDelete)}
+                  />
+                )}
+                {onEdit && (
+                  <Pencil
+                    type="button"
+                    className="h-5 w-5 text-gray-500 cursor-pointer"
+                    onClick={handleSafe(onEdit)}
+                  />
+                )}
               </div>
             </div>
 

@@ -39,6 +39,13 @@
       "email": "readonly@demo.com",
       "nombre": "Invitado",
       "rol": "read-only"
+    },
+    {
+      "nombre": "Ana López",
+      "email": "ana@empresa.com",
+      "password": "contraseña",
+      "rol": "user",
+      "id": 4
     }
   ],
   "interacciones": [

@@ -8,11 +8,17 @@ import { AppHeader } from "@/components/AppHeader";
 import { NuevaInteraccionModal } from "./components/NuevaInteraccionModal";
 import { FiltrosTabs, type FiltroID } from "./components/FiltrosTabs";
 import { toastInteraccion } from "@/components/toast";
+import { useAuth } from "@/context/AuthContext";
+import { usePermisos } from "@/hooks/usePermisos";
 
 import { Users, MessageSquare, NotebookText } from "lucide-react";
 import { confirmDeleteToast } from "@/components/ConfirmToast";
 
 export function InteraccionesPage() {
+  const { user } = useAuth();
+  const { puedeCrear, puedeEditar, puedeEliminar, puedeVerTodo } =
+    usePermisos();
+
   const [interacciones, setInteracciones] = useState<Interaccion[]>([]);
   const [usuarios, setUsuarios] = useState<Record<number, Usuario>>({});
   const [clientes, setClientes] = useState<Record<number, Cliente>>({});
@@ -59,14 +65,16 @@ export function InteraccionesPage() {
   const texto = busqueda.toLowerCase().trim();
 
   const interaccionesFiltradas = useMemo(() => {
-    let resultado = interacciones;
+    let porRol = puedeVerTodo
+      ? interacciones
+      : interacciones.filter((i) => i.usuarioId === user?.id);
 
     if (filtro !== "todas") {
-      resultado = resultado.filter((i) => i.tipo === filtro);
+      porRol = porRol.filter((i) => i.tipo === filtro);
     }
 
     if (texto) {
-      resultado = resultado.filter((i) => {
+      porRol = porRol.filter((i) => {
         const tipo = i.tipo?.toLowerCase() ?? "";
         const desc = i.descripcion?.toLowerCase() ?? "";
         const usuario = usuarios[i.usuarioId]?.nombre?.toLowerCase() ?? "";
@@ -80,8 +88,16 @@ export function InteraccionesPage() {
       });
     }
 
-    return resultado;
-  }, [interacciones, filtro, texto, usuarios, clientes]);
+    return porRol;
+  }, [
+    interacciones,
+    filtro,
+    texto,
+    usuarios,
+    clientes,
+    puedeVerTodo,
+    user?.id,
+  ]);
 
   const handleAdd = () => {
     setModalState({ open: true, interaccion: null });
@@ -163,7 +179,9 @@ export function InteraccionesPage() {
 
       <FiltrosTabs value={filtro} onChange={setFiltro} />
 
-      <SectionTitle>Todas las interacciones</SectionTitle>
+      <SectionTitle>
+        {puedeVerTodo ? "Todas las interacciones" : "Mis interacciones"}
+      </SectionTitle>
 
       <div className="px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -199,14 +217,18 @@ export function InteraccionesPage() {
                     ? "purple"
                     : "orange"
               }
-              onEdit={() => handleEdit(item)}
-              onDelete={() => handleDeleteInteraccion(item.id)}
+              onEdit={puedeEditar ? () => handleEdit(item) : undefined}
+              onDelete={
+                puedeEliminar
+                  ? () => handleDeleteInteraccion(item.id)
+                  : undefined
+              }
             />
           ))}
         </div>
       </div>
 
-      <BotonFlotante onClick={handleAdd} />
+      {puedeCrear && <BotonFlotante onClick={handleAdd} />}
 
       <NuevaInteraccionModal
         open={modalState.open}

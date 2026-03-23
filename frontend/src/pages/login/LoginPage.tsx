@@ -36,7 +36,7 @@ export function LoginPage() {
         ? "read-only"
         : "user";
 
-    login(values.email, role);
+    login(1, values.email, role); // id mockeado por ahora, el real vendrá del backend
     navigate("/interacciones", { replace: true });
   }
 

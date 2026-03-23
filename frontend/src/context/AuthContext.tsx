@@ -8,6 +8,7 @@ import {
 type AuthStatus = "checking" | "authenticated" | "not-authenticated";
 
 export interface User {
+  id: number;
   email: string;
   role: "admin" | "user" | "read-only";
 }
@@ -16,7 +17,7 @@ interface AuthContextProps {
   authStatus: AuthStatus;
   user: User | null;
   isAuthenticated: boolean;
-  login: (email: string, role: User["role"]) => void;
+  login: (id: number, email: string, role: User["role"]) => void;
   logout: () => void;
 }
 
@@ -29,14 +30,16 @@ export function AuthProvider({ children }: PropsWithChildren) {
     return email && role ? "authenticated" : "not-authenticated";
   });
   const [user, setUser] = useState<User | null>(() => {
+    const id = localStorage.getItem("authId");
     const email = localStorage.getItem("authEmail");
     const role = localStorage.getItem("authRole") as User["role"] | null;
-    return email && role ? { email, role } : null;
+    return id && email && role ? { id: Number(id), email, role } : null;
   });
 
-  const login = (email: string, role: User["role"]) => {
-    setUser({ email, role });
+  const login = (id: number, email: string, role: User["role"]) => {
+    setUser({ id, email, role });
     setAuthStatus("authenticated");
+    localStorage.setItem("authId", String(id));
     localStorage.setItem("authEmail", email);
     localStorage.setItem("authRole", role);
   };
@@ -44,6 +47,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const logout = () => {
     setAuthStatus("not-authenticated");
     setUser(null);
+    localStorage.removeItem("authId");
     localStorage.removeItem("authEmail");
     localStorage.removeItem("authRole");
   };
