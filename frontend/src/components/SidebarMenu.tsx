@@ -78,7 +78,7 @@ export const SidebarMenu = memo(function SidebarMenu() {
               <SheetClose asChild>
                 <Link
                   to="/usuarios"
-                  className="text-lg md:text-xl font-semibold text-gray-700 hover:text-gray-900 transition-colors"
+                  className="text-xl md:text-2xl font-semibold text-gray-700 hover:text-gray-900 transition-colors"
                 >
                   Usuarios
                 </Link>

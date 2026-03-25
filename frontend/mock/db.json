@@ -37,8 +37,9 @@
     {
       "id": 3,
       "email": "readonly@demo.com",
-      "nombre": "Invitado",
-      "rol": "read-only"
+      "nombre": "InvitadoEDITADO2",
+      "rol": "read-only",
+      "password": ""
     },
     {
       "nombre": "Ana López",
