@@ -4,11 +4,33 @@ import axios from "axios";
 // CLIENTE AXIOS
 // -----------------------------
 export const apiClient = axios.create({
-  baseURL: "/api",
+  baseURL: "http://localhost:3000/api",
   headers: {
     "Content-Type": "application/json",
   },
 });
+
+// Interceptor: añade el token JWT en cada petición automáticamente
+apiClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Interceptor: si el backend devuelve 401, limpia la sesión
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("authUser");
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
+  },
+);
 
 // -----------------------------
 // TIPOS
@@ -37,6 +59,24 @@ export type Interaccion = {
 };
 
 export const api = {
+  // AUTH -----------------------------------
+  login: async (email: string, password: string) => {
+    const res = await apiClient.post("/auth/login", { email, password });
+    return res.data as {
+      token: string;
+      usuario: {
+        id: number;
+        nombre: string;
+        email: string;
+        rol: "admin" | "user" | "read-only";
+      };
+    };
+  },
+
+  logout: async () => {
+    await apiClient.post("/auth/logout");
+  },
+
   // CLIENTES -------------------------------
   getClientes: async (): Promise<Cliente[]> => {
     const res = await apiClient.get("/clientes");
@@ -66,30 +106,28 @@ export const api = {
     return res.data;
   },
 
-  // INTERACCIONES --------------------------
-  getAllInteracciones: async (): Promise<Interaccion[]> => {
-    const res = await apiClient.get("/interacciones");
+  createUsuario: async (
+    payload: Omit<Usuario, "id"> & { password: string },
+  ): Promise<Usuario> => {
+    const res = await apiClient.post("/usuarios", payload);
     return res.data;
   },
 
-  getInteracciones: async (params?: {
-    tipo?: string;
-    page?: number;
-    limit?: number;
-    sort?: string;
-    order?: "asc" | "desc";
-  }): Promise<Interaccion[]> => {
-    const res = await apiClient.get("/interacciones", {
-      params: {
-        _expand: "cliente",
-        _expand2: "usuario", // JSON Server ignora duplicados, sirve igual
-        tipo: params?.tipo,
-        _page: params?.page,
-        _limit: params?.limit,
-        _sort: params?.sort ?? "fecha",
-        _order: params?.order ?? "desc",
-      },
-    });
+  updateUsuario: async (
+    id: number,
+    payload: Partial<Usuario> & { password?: string },
+  ): Promise<Usuario> => {
+    const res = await apiClient.patch(`/usuarios/${id}`, payload);
+    return res.data;
+  },
+
+  deleteUsuario: async (id: number): Promise<void> => {
+    await apiClient.delete(`/usuarios/${id}`);
+  },
+
+  // INTERACCIONES --------------------------
+  getInteracciones: async (): Promise<Interaccion[]> => {
+    const res = await apiClient.get("/interacciones");
     return res.data;
   },
 
@@ -110,20 +148,5 @@ export const api = {
 
   deleteInteraccion: async (id: number): Promise<void> => {
     await apiClient.delete(`/interacciones/${id}`);
-  },
-
-  createUsuario: async (payload: Omit<Usuario, "id">): Promise<Usuario> => {
-    const res = await apiClient.post("/usuarios", payload);
-    return res.data;
-  },
-  updateUsuario: async (
-    id: number,
-    payload: Partial<Usuario>,
-  ): Promise<Usuario> => {
-    const res = await apiClient.patch(`/usuarios/${id}`, payload);
-    return res.data;
-  },
-  deleteUsuario: async (id: number): Promise<void> => {
-    await apiClient.delete(`/usuarios/${id}`);
   },
 };

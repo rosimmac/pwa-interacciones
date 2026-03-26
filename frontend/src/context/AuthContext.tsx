@@ -9,6 +9,7 @@ type AuthStatus = "checking" | "authenticated" | "not-authenticated";
 
 export interface User {
   id: number;
+  nombre: string;
   email: string;
   role: "admin" | "user" | "read-only";
 }
@@ -17,7 +18,7 @@ interface AuthContextProps {
   authStatus: AuthStatus;
   user: User | null;
   isAuthenticated: boolean;
-  login: (id: number, email: string, role: User["role"]) => void;
+  login: (user: User, token: string) => void;
   logout: () => void;
 }
 
@@ -25,31 +26,27 @@ export const AuthContext = createContext({} as AuthContextProps);
 
 export function AuthProvider({ children }: PropsWithChildren) {
   const [authStatus, setAuthStatus] = useState<AuthStatus>(() => {
-    const email = localStorage.getItem("authEmail");
-    const role = localStorage.getItem("authRole");
-    return email && role ? "authenticated" : "not-authenticated";
-  });
-  const [user, setUser] = useState<User | null>(() => {
-    const id = localStorage.getItem("authId");
-    const email = localStorage.getItem("authEmail");
-    const role = localStorage.getItem("authRole") as User["role"] | null;
-    return id && email && role ? { id: Number(id), email, role } : null;
+    const token = localStorage.getItem("token");
+    return token ? "authenticated" : "not-authenticated";
   });
 
-  const login = (id: number, email: string, role: User["role"]) => {
-    setUser({ id, email, role });
+  const [user, setUser] = useState<User | null>(() => {
+    const raw = localStorage.getItem("authUser");
+    return raw ? JSON.parse(raw) : null;
+  });
+
+  const login = (user: User, token: string) => {
+    setUser(user);
     setAuthStatus("authenticated");
-    localStorage.setItem("authId", String(id));
-    localStorage.setItem("authEmail", email);
-    localStorage.setItem("authRole", role);
+    localStorage.setItem("token", token);
+    localStorage.setItem("authUser", JSON.stringify(user));
   };
 
   const logout = () => {
     setAuthStatus("not-authenticated");
     setUser(null);
-    localStorage.removeItem("authId");
-    localStorage.removeItem("authEmail");
-    localStorage.removeItem("authRole");
+    localStorage.removeItem("token");
+    localStorage.removeItem("authUser");
   };
 
   return (

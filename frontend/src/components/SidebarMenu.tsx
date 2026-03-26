@@ -21,6 +21,7 @@ import { Menu } from "lucide-react";
 import { memo, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { toastAuth } from "./toast";
+import { api } from "@/api/api";
 
 export const SidebarMenu = memo(function SidebarMenu() {
   const { user, logout } = useAuth();
@@ -28,10 +29,14 @@ export const SidebarMenu = memo(function SidebarMenu() {
   const navigate = useNavigate();
   const [confirmOpen, setConfirmOpen] = useState(false);
 
-  const handleConfirm = () => {
-    logout();
-    toastAuth.okCerrarSesion();
-    navigate("/login");
+  const handleLogout = async () => {
+    try {
+      await api.logout();
+    } finally {
+      logout(); // limpia el contexto y localStorage aunque falle la llamada
+      toastAuth.okCerrarSesion();
+      navigate("/login", { replace: true });
+    }
   };
 
   return (
@@ -111,7 +116,7 @@ export const SidebarMenu = memo(function SidebarMenu() {
             <Button variant="outline" onClick={() => setConfirmOpen(false)}>
               Cancelar
             </Button>
-            <Button variant="primaryBlue" onClick={handleConfirm}>
+            <Button variant="primaryBlue" onClick={handleLogout}>
               Cerrar sesión
             </Button>
           </DialogFooter>

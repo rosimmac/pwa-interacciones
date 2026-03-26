@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router";
 import { loginSchema, type LoginSchema } from "@/schemas/loginSchema";
 import { useContext } from "react";
 import { AuthContext, type User } from "@/context/AuthContext";
+import { api } from "@/api/api";
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -27,19 +28,26 @@ export function LoginPage() {
   });
 
   async function onSubmit(values: LoginSchema) {
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    localStorage.setItem("token", "demo");
+    try {
+      const { token, usuario } = await api.login(values.email, values.password);
 
-    const role: User["role"] = values.email.includes("admin")
-      ? "admin"
-      : values.email.includes("lectura")
-        ? "read-only"
-        : "user";
+      login(
+        {
+          id: usuario.id,
+          nombre: usuario.nombre,
+          email: usuario.email,
+          role: usuario.rol, // backend usa "rol", el contexto usa "role"
+        },
+        token,
+      );
 
-    login(1, values.email, role); // id mockeado por ahora, el real vendrá del backend
-    navigate("/interacciones", { replace: true });
+      navigate("/interacciones", { replace: true });
+    } catch {
+      // El interceptor de 401 ya gestiona tokens inválidos,
+      // aquí capturamos credenciales incorrectas
+      alert("Email o contraseña incorrectos"); // luego lo cambiamos por un toast
+    }
   }
-
   return (
     <div className="min-h-[100svh] flex flex-col bg-[#e8f0ff] sm:grid sm:place-items-center sm:px-3 sm:py-6">
       <div className="flex-none sm:hidden" style={{ height: "25svh" }} />
