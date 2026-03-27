@@ -23,7 +23,10 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    if (
+      error.response?.status === 401 &&
+      !window.location.pathname.includes("/login") // ← añade esta condición
+    ) {
       localStorage.removeItem("token");
       localStorage.removeItem("authUser");
       window.location.href = "/login";
@@ -49,7 +52,7 @@ export type Usuario = {
 
 export type Interaccion = {
   id: number;
-  tipo: "consulta" | "reunion" | "antecedente";
+  tipo: { id: number; nombre: string };
   descripcion: string;
   clienteId: number;
   usuarioId: number;

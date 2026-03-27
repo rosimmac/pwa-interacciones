@@ -35,8 +35,8 @@ export function InteraccionesPage() {
       try {
         const [interaccionesData, usuariosData, clientesData] =
           await Promise.all([
-            api.getAllInteracciones(),
-            api.getUsuarios(),
+            api.getInteracciones(),
+            puedeVerTodo ? api.getUsuarios() : Promise.resolve([]),
             api.getClientes(),
           ]);
 
@@ -70,12 +70,12 @@ export function InteraccionesPage() {
       : interacciones.filter((i) => i.usuarioId === user?.id);
 
     if (filtro !== "todas") {
-      porRol = porRol.filter((i) => i.tipo === filtro);
+      porRol = porRol.filter((i) => i.tipo.nombre === filtro);
     }
 
     if (texto) {
       porRol = porRol.filter((i) => {
-        const tipo = i.tipo?.toLowerCase() ?? "";
+        const tipo = i.tipo.nombre?.toLowerCase() ?? "";
         const desc = i.descripcion?.toLowerCase() ?? "";
         const usuario = usuarios[i.usuarioId]?.nombre?.toLowerCase() ?? "";
         const cliente = clientes[i.clienteId]?.nombre?.toLowerCase() ?? "";
@@ -113,7 +113,7 @@ export function InteraccionesPage() {
         tipo: data.tipo,
         descripcion: data.descripcion,
         clienteId: data.clienteId,
-        usuarioId: 1, // TODO: usuario logueado
+        usuarioId: user!.id,
         fecha: `${data.fecha}T${data.hora}:00`,
       };
       const nueva = await api.createInteraccion(payload);
@@ -195,25 +195,25 @@ export function InteraccionesPage() {
             <InteraccionCard
               key={item.id}
               id={item.id}
-              tipo={item.tipo}
+              tipo={item.tipo.nombre}
               titulo={item.descripcion}
               cliente={
                 clientes[item.clienteId]?.nombre ?? "Cliente desconocido"
               }
               fecha={new Date(item.fecha).toLocaleString()}
               icono={
-                item.tipo === "reunion" ? (
+                item.tipo.nombre === "reunion" ? (
                   <Users />
-                ) : item.tipo === "consulta" ? (
+                ) : item.tipo.nombre === "consulta" ? (
                   <MessageSquare />
                 ) : (
                   <NotebookText />
                 )
               }
               color={
-                item.tipo === "reunion"
+                item.tipo.nombre === "reunion"
                   ? "green"
-                  : item.tipo === "consulta"
+                  : item.tipo.nombre === "consulta"
                     ? "purple"
                     : "orange"
               }

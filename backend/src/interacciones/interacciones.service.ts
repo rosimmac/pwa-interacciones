@@ -12,21 +12,21 @@ export class InteraccionesService {
 
   findAll(): Promise<Interaccion[]> {
     return this.interaccionesRepository.find({
-      relations: ['cliente', 'usuario'],
+      relations: ['cliente', 'usuario', 'tipo'],
     });
   }
 
   findByUsuario(usuarioId: number): Promise<Interaccion[]> {
     return this.interaccionesRepository.find({
       where: { usuarioId },
-      relations: ['cliente', 'usuario'],
+      relations: ['cliente', 'usuario', 'tipo'],
     });
   }
 
   async findOne(id: number): Promise<Interaccion> {
     const interaccion = await this.interaccionesRepository.findOne({
       where: { id },
-      relations: ['cliente', 'usuario'],
+      relations: ['cliente', 'usuario', 'tipo'],
     });
     if (!interaccion)
       throw new NotFoundException(`Interaccion ${id} no encontrada`);
