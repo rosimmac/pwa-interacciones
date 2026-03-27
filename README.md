@@ -1,34 +1,27 @@
-# PWA – Fast Interaction Logging
-
-## Overview
-
-This Progressive Web App allows sales teams to quickly register customer interactions — meetings, inquiries, follow‑ups — in under **10 seconds**. It focuses on speed, usability and a clean, modern UX.
-
-## 📍 Project Status
-
-This project is in **active development** — new features and improvements are added daily as the app evolves toward a production-ready state.
-
----
-
-# ⚡ PWA for Sales Interaction Tracking
+# ⚡ PWA – Fast Interaction Logging
 
 > Register a customer interaction in under 10 seconds.
 
----
+A Progressive Web App for sales teams to quickly log customer interactions — meetings, inquiries, follow-ups — with a focus on speed, usability and clean UX. Built as a full-stack project with a real NestJS backend and MySQL database.
+
+## 📍 Project Status
+
+**Active development** — new features and improvements added continuously.
 
 ---
 
 ## ✨ Features
 
-| Feature               | Detail                                     |
-| --------------------- | ------------------------------------------ |
-| ⚡ Ultra-fast logging | Full interaction registered in <10 seconds |
-| 👥 Role-based access  | `admin` / `user` / `read-only` permissions |
-| 🎤 Voice input        | Hands-free field dictation                 |
-| 📊 Client dashboard   | Interaction history and key metrics        |
-| 📱 Mobile-first       | Fully responsive, installable as PWA       |
-| 🛡 Type-safe forms    | React Hook Form + Zod validation           |
-| 🎨 Figma-designed     | UI built from custom design system         |
+| Feature               | Detail                                        |
+| --------------------- | --------------------------------------------- |
+| ⚡ Ultra-fast logging | Full interaction registered in <10 seconds    |
+| 👥 Role-based access  | `admin` / `user` / `read-only` permissions    |
+| 🎤 Voice input        | Hands-free field dictation via Web Speech API |
+| 📊 Client dashboard   | Interaction history and key metrics           |
+| 📱 Mobile-first       | Fully responsive, installable as PWA          |
+| 🛡 Type-safe forms    | React Hook Form + Zod validation              |
+| 🔐 JWT auth           | Real authentication with access logging       |
+| 🎨 Figma-designed     | UI built from custom design system            |
 
 ---
 
@@ -36,35 +29,49 @@ This project is in **active development** — new features and improvements are 
 
 ### Frontend
 
-|               |                          |
-| ------------- | ------------------------ |
-| Framework     | React 18 + TypeScript    |
-| Build tool    | Vite                     |
-| Styling       | Tailwind CSS + shadcn/ui |
-| Routing       | React Router v7          |
-| Forms         | React Hook Form + Zod    |
-| Notifications | Sonner                   |
+|               |                               |
+| ------------- | ----------------------------- |
+| Framework     | React 18 + TypeScript         |
+| Build tool    | Vite                          |
+| Styling       | Tailwind CSS v4 + shadcn/ui   |
+| Routing       | React Router v7               |
+| Forms         | React Hook Form + Zod         |
+| HTTP client   | Axios (with JWT interceptors) |
+| Notifications | Sonner                        |
 
-### Mock Backend
+### Backend
 
-|           |                                         |
-| --------- | --------------------------------------- |
-| Server    | JSON Server                             |
-| Resources | `clientes`, `interacciones`, `usuarios` |
-| Port      | `3001`                                  |
+|           |                                |
+| --------- | ------------------------------ |
+| Framework | NestJS                         |
+| Language  | TypeScript                     |
+| ORM       | TypeORM                        |
+| Database  | MySQL (Docker)                 |
+| Auth      | JWT + bcrypt                   |
+| API       | REST with global `/api` prefix |
 
 ---
 
 ## 🏗 Architecture
 
 ```
-src/
-├── components/      # Shared UI components
-├── context/         # Auth context (role-based)
-├── pages/           # Route-level views
-├── schemas/         # Zod validation schemas
-├── hooks/           # Custom hooks
-└── router/          # Route definitions + guards
+pwa-interacciones/
+├── frontend/
+│   └── src/
+│       ├── components/      # Shared UI components
+│       ├── context/         # AuthContext (JWT + role persistence)
+│       ├── pages/           # Route-level views
+│       ├── schemas/         # Zod validation schemas
+│       ├── hooks/           # Custom hooks (usePermisos, useSpeechRecognition...)
+│       ├── api/             # Axios instance + JWT interceptors
+│       └── router/          # Route definitions + role guards
+└── backend/
+    └── src/
+        ├── auth/            # JWT strategy, guards, login/logout
+        ├── usuarios/        # Users module + CRUD
+        ├── clientes/        # Clients module + CRUD
+        ├── interacciones/   # Interactions module + CRUD
+        └── entities/        # TypeORM entities
 ```
 
 ---
@@ -75,52 +82,67 @@ src/
 
 - Node.js ≥ 18
 - npm ≥ 9
+- Docker (for MySQL)
 
 ### Installation
 
 ```bash
 git clone https://github.com/rosimmac/pwa-interacciones.git
 cd pwa-interacciones
-npm install
+```
+
+```bash
+# Frontend
+cd frontend && npm install
+
+# Backend
+cd ../backend && npm install
 ```
 
 ### Development
 
 ```bash
-# Terminal 1 — Frontend
-npm run dev
+# Terminal 1 — MySQL via Docker
+docker compose up -d
 
-# Terminal 2 — Mock backend
-npx json-server --watch mock/db.json --port 3001
+# Terminal 2 — Backend (NestJS)
+cd backend
+npm run start:dev
+
+# Terminal 3 — Frontend (Vite)
+cd frontend
+npm run dev
 ```
 
-| Service  | URL                   |
-| -------- | --------------------- |
-| Frontend | http://localhost:5173 |
-| API      | http://localhost:3001 |
+| Service  | URL                       |
+| -------- | ------------------------- |
+| Frontend | http://localhost:5173     |
+| API      | http://localhost:3000/api |
+| MySQL    | localhost:3306            |
 
 ---
 
-## 🔐 Auth (current)
+## 🔐 Authentication
 
-Authentication is currently mocked via `localStorage` + React Context, simulating a JWT-based flow.
+Authentication is handled by the NestJS backend using **JWT tokens** and **bcrypt** password hashing.
 
-When the real backend is integrated, the following will need to be updated:
-
-- `AuthContext` — store and attach the JWT token to every request
-- `onSubmit` handlers — replace mock delays with real API calls
-- All API calls — point to the real backend and handle auth headers
-- Role assignment — driven by the server response instead of hardcoded values
+- Login returns a signed JWT token stored in `localStorage`
+- Every request includes the token via an **Axios interceptor**
+- Protected routes use a `JwtAuthGuard` on the backend
+- Access attempts are logged to a `registro_accesos` table
 
 **Roles:**
 
-| Role        | Permissions                 |
-| ----------- | --------------------------- |
-| `admin`     | Full access                 |
-| `user`      | Create and view own records |
-| `read-only` | View only                   |
+| Role        | Permissions                                          |
+| ----------- | ---------------------------------------------------- |
+| `admin`     | Full access — manage users, clients and interactions |
+| `user`      | Create and view own records                          |
+| `read-only` | View only                                            |
 
 ---
+
+## 📸 Screenshots
+
 <img width="370" height="804" alt="image" src="https://github.com/user-attachments/assets/8e98e458-b661-4031-9310-a44773a72595" />
 <img width="366" height="799" alt="image" src="https://github.com/user-attachments/assets/5f09243a-38ed-4e29-b259-6d29ee6c71b4" />
 <img width="369" height="797" alt="image" src="https://github.com/user-attachments/assets/cca31eb4-3b95-4a89-8df3-a610f285785f" />
@@ -130,9 +152,8 @@ When the real backend is integrated, the following will need to be updated:
 <img width="366" height="804" alt="image" src="https://github.com/user-attachments/assets/acc6da54-5384-4517-a98d-1fb113723823" />
 <img width="369" height="803" alt="image" src="https://github.com/user-attachments/assets/5bd33ea1-1b2a-48ac-a35b-e3dd7a0a054e" />
 
+---
 
-
-
-## 👨‍💻 Author
+## 👩‍💻 Author
 
 Built by **Rosa María Martín Castillo** · [LinkedIn](https://www.linkedin.com/in/rosa-maria-martin-castillo/)
