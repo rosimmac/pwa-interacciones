@@ -10,6 +10,10 @@ export class RegistroAccesosService {
     private registroRepository: Repository<RegistroAcceso>,
   ) {}
 
+  findAll() {
+    return this.registroRepository.find({ order: { fecha: 'DESC' } });
+  }
+
   registrar(
     usuarioId: number,
     tipo: 'login' | 'logout',
