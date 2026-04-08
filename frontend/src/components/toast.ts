@@ -100,6 +100,11 @@ export const toastRegistro = {
       cancel: closeButton,
       cancelButtonStyle,
     }),
+  errorRegistro: () =>
+    errorToast(
+      "Error en el registro",
+      "El usuario no ha podido ser registrado",
+    ),
 };
 
 export const toastVoz = {

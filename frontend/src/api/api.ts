@@ -1,3 +1,5 @@
+import type { RegistroSchema } from "@/schemas/registroSchema";
+import type { UsuarioFormData } from "@/schemas/usuarioSchema";
 import axios from "axios";
 
 // -----------------------------
@@ -41,6 +43,7 @@ apiClient.interceptors.response.use(
 export type Cliente = {
   id: number;
   nombre: string;
+  fechaCreacion: Date;
 };
 
 export type Usuario = {
@@ -53,6 +56,18 @@ export type Usuario = {
 export type Interaccion = {
   id: number;
   tipo: { id: number; nombre: string };
+  descripcion: string;
+  clienteId: number;
+  usuarioId: number;
+  fecha: string;
+  cliente?: Cliente;
+  usuario?: Usuario;
+};
+
+export type InteraccionRequest = {
+  id: number;
+  tipoId: number;
+  estadoId: number;
   descripcion: string;
   clienteId: number;
   usuarioId: number;
@@ -76,6 +91,19 @@ export const api = {
     };
   },
 
+  registrarUsuario: async (
+    payload: Omit<RegistroSchema, "id"> & { password: string },
+  ): Promise<Usuario> => {
+    const nuevoUsuario: UsuarioFormData = {
+      nombre: payload.nombre,
+      email: payload.email,
+      password: payload.password,
+      rol: "user",
+    };
+    const res = await apiClient.post("/auth/registro", nuevoUsuario);
+    return res.data;
+  },
+
   logout: async () => {
     await apiClient.post("/auth/logout");
   },
@@ -86,7 +114,9 @@ export const api = {
     return res.data;
   },
 
-  createCliente: async (payload: Omit<Cliente, "id">): Promise<Cliente> => {
+  createCliente: async (
+    payload: Partial<Omit<Cliente, "id">>,
+  ): Promise<Cliente> => {
     const res = await apiClient.post("/clientes", payload);
     return res.data;
   },
@@ -110,7 +140,7 @@ export const api = {
   },
 
   createUsuario: async (
-    payload: Omit<Usuario, "id"> & { password: string },
+    payload: Omit<UsuarioFormData, "id"> & { password: string },
   ): Promise<Usuario> => {
     const res = await apiClient.post("/usuarios", payload);
     return res.data;
@@ -135,7 +165,7 @@ export const api = {
   },
 
   createInteraccion: async (
-    payload: Omit<Interaccion, "id">,
+    payload: Omit<InteraccionRequest, "id">,
   ): Promise<Interaccion> => {
     const res = await apiClient.post("/interacciones", payload);
     return res.data;

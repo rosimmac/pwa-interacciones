@@ -15,6 +15,7 @@ import { usuarioSchema, type UsuarioFormData } from "@/schemas/usuarioSchema";
 import type { Usuario } from "@/api/api";
 
 type Props = {
+  open: boolean;
   onSuccess: () => void;
   usuarioToEdit?: Usuario | null;
   onCreate?: (data: UsuarioFormData) => Promise<void> | void;
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export function NuevoUsuarioForm({
+  open,
   onSuccess,
   usuarioToEdit = null,
   onCreate,
@@ -42,17 +44,20 @@ export function NuevoUsuarioForm({
   const currentRol = watch("rol");
 
   useEffect(() => {
+    if (!open) return;
     if (usuarioToEdit) {
-      reset({
-        nombre: usuarioToEdit.nombre,
-        email: usuarioToEdit.email,
-        password: "",
-        rol: usuarioToEdit.rol,
-      });
+      setTimeout(() => {
+        reset({
+          nombre: usuarioToEdit.nombre,
+          email: usuarioToEdit.email,
+          password: "",
+          rol: usuarioToEdit.rol,
+        });
+      }, 0);
     } else {
       reset({ nombre: "", email: "", password: "", rol: "user" });
     }
-  }, [usuarioToEdit, reset]);
+  }, [open, usuarioToEdit, reset]);
 
   const onSubmit = async (data: UsuarioFormData) => {
     try {

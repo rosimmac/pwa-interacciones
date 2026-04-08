@@ -40,8 +40,9 @@ export function NuevaInteraccionModal({
       ? (data: any) => onUpdate(interaccionToEdit.id, data)
       : undefined;
 
-  const formContent = (
+  const renderForm = () => (
     <NuevaInteraccionForm
+      open={open}
       onSuccess={() => onOpenChange(false)}
       onCancel={() => onOpenChange(false)}
       onCreate={onCreate}
@@ -62,7 +63,7 @@ export function NuevaInteraccionModal({
                 : "Rellena los datos para registrar una nueva interacción"}
             </DialogDescription>
           </DialogHeader>
-          <div className="max-w-md mx-auto w-full py-2">{formContent}</div>
+          <div className="max-w-md mx-auto w-full py-2">{renderForm()}</div>
         </DialogContent>
       </Dialog>
 
@@ -80,7 +81,7 @@ export function NuevaInteraccionModal({
             </SheetDescription>
           </SheetHeader>
           <div className="max-w-md mx-auto w-full pt-1 pb-6 px-4">
-            {formContent}
+            {renderForm()}
           </div>
         </SheetContent>
       </Sheet>

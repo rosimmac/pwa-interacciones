@@ -25,6 +25,7 @@ import {
 import { toastVoz } from "@/components/toast";
 
 type NuevaInteraccionFormProps = {
+  open?: boolean;
   onSuccess?: () => void;
   onCancel?: () => void;
   onCreate?: (data: interaccionFormData) => Promise<void> | void;
@@ -80,15 +81,19 @@ export function NuevaInteraccionForm({
   });
 
   useEffect(() => {
+    if (!open) return;
     if (interaccionToEdit) {
+      if (clientes.length === 0) return;
       const fecha = new Date(interaccionToEdit.fecha);
-      reset({
-        tipo: interaccionToEdit.tipo,
-        descripcion: interaccionToEdit.descripcion,
-        clienteId: interaccionToEdit.clienteId,
-        fecha: formatDate(fecha),
-        hora: formatTime(fecha),
-      });
+      setTimeout(() => {
+        reset({
+          tipo: interaccionToEdit.tipo.nombre.toLowerCase() as interaccionFormData["tipo"],
+          descripcion: interaccionToEdit.descripcion,
+          clienteId: interaccionToEdit.clienteId,
+          fecha: formatDate(fecha),
+          hora: formatTime(fecha),
+        });
+      }, 50);
     } else {
       const n = new Date();
       reset({
@@ -99,7 +104,7 @@ export function NuevaInteraccionForm({
         hora: formatTime(n),
       });
     }
-  }, [interaccionToEdit, reset]);
+  }, [open, interaccionToEdit, reset, clientes]);
 
   const currentTipo = watch("tipo");
   const currentClienteId = watch("clienteId");

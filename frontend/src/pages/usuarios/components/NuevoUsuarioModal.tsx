@@ -38,8 +38,10 @@ export function NuevoUsuarioModal({
     ? "Modifica los datos del usuario y guarda los cambios"
     : "Rellena los datos para registrar un nuevo usuario";
 
-  const formContent = (
+  const renderForm = () => (
     <NuevoUsuarioForm
+      key={usuarioToEdit?.id ?? "nuevo"}
+      open={open}
       usuarioToEdit={usuarioToEdit ?? null}
       onCreate={onCreate}
       onUpdate={onUpdate}
@@ -57,7 +59,7 @@ export function NuevoUsuarioModal({
               {descripcion}
             </DialogDescription>
           </DialogHeader>
-          <div className="max-w-md mx-auto w-full py-2">{formContent}</div>
+          <div className="max-w-md mx-auto w-full py-2">{renderForm()}</div>
         </DialogContent>
       </Dialog>
 
@@ -73,7 +75,7 @@ export function NuevoUsuarioModal({
             </SheetDescription>
           </SheetHeader>
           <div className="max-w-md mx-auto w-full pt-2 pb-6 px-4">
-            {formContent}
+            {renderForm()}
           </div>
         </SheetContent>
       </Sheet>

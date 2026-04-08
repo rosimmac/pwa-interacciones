@@ -10,10 +10,17 @@ export class InteraccionesService {
     private interaccionesRepository: Repository<Interaccion>,
   ) {}
 
-  findAll(): Promise<Interaccion[]> {
-    return this.interaccionesRepository.find({
-      relations: ['cliente', 'usuario', 'tipo'],
-    });
+  findAll(usuarioId?: number): Promise<Interaccion[]> {
+    if (usuarioId) {
+      return this.interaccionesRepository.find({
+        relations: ['cliente', 'usuario', 'tipo'],
+        where: { usuarioId },
+      });
+    } else {
+      return this.interaccionesRepository.find({
+        relations: ['cliente', 'usuario', 'tipo'],
+      });
+    }
   }
 
   findByUsuario(usuarioId: number): Promise<Interaccion[]> {
@@ -33,9 +40,11 @@ export class InteraccionesService {
     return interaccion;
   }
 
-  create(data: Partial<Interaccion>): Promise<Interaccion> {
+  async create(data: Partial<Interaccion>): Promise<Interaccion> {
     const interaccion = this.interaccionesRepository.create(data);
-    return this.interaccionesRepository.save(interaccion);
+    const saved = await this.interaccionesRepository.save(interaccion);
+
+    return this.findOne(saved.id);
   }
 
   async update(id: number, data: Partial<Interaccion>): Promise<Interaccion> {

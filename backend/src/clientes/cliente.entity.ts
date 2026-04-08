@@ -15,7 +15,7 @@ export class Cliente {
   @Column()
   nombre: string;
 
-  @Column({ name: 'fecha_creacion', type: 'date' })
+  @Column({ name: 'fecha_creacion' })
   fechaCreacion: Date;
 
   @ManyToOne(() => Usuario)

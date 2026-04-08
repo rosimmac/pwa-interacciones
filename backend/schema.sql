@@ -1,5 +1,5 @@
 DROP DATABASE IF EXISTS pwa_interacciones;
-CREATE DATABASE pwa_interacciones;
+CREATE DATABASE pwa_interacciones CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE pwa_interacciones;
 
 CREATE TABLE usuario (
@@ -8,26 +8,26 @@ CREATE TABLE usuario (
     email VARCHAR(150) NOT NULL UNIQUE,
     password VARCHAR(200) NOT NULL,
     rol ENUM('user','read-only','admin') NOT NULL
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE cliente (
     id_cliente INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(150) NOT NULL,
-    fecha_creacion DATE NOT NULL,
+    fecha_creacion DATETIME NOT NULL,
     id_usuario INT NOT NULL,
     FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
         ON DELETE CASCADE ON UPDATE CASCADE
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE tipo_interaccion (
     id_tipo INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE estado_interaccion (
     id_estado INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE interaccion (
     id_interaccion INT AUTO_INCREMENT PRIMARY KEY,
@@ -43,7 +43,7 @@ CREATE TABLE interaccion (
         ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (id_tipo) REFERENCES tipo_interaccion(id_tipo),
     FOREIGN KEY (id_estado) REFERENCES estado_interaccion(id_estado)
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE registro_accesos (
     id_acceso INT AUTO_INCREMENT PRIMARY KEY,
@@ -52,14 +52,14 @@ CREATE TABLE registro_accesos (
     id_usuario INT NOT NULL,
     FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
         ON DELETE CASCADE
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 INSERT INTO usuario (nombre, email, password, rol) VALUES
-('Ana Torres', 'ana@example.com', 'pass123', 'user'),
-('Luis Pérez', 'luis@example.com', 'pass123', 'user'),
-('Mario Díaz', 'mario@example.com', 'pass123', 'read-only'),
-('Elena Ruiz', 'elena@example.com', 'pass123', 'admin'),
-('Carlos López', 'carlos@example.com', 'pass123', 'user');
+('Ana Torres', 'ana@example.com', '$2b$10$bzpWYAFKQZVJEnYzDG3VC.ygVDzHeuCDDgicHE5KYoRF.AoQS4LZ.', 'user'),
+('Luis Pérez', 'luis@example.com', '$2b$10$bzpWYAFKQZVJEnYzDG3VC.ygVDzHeuCDDgicHE5KYoRF.AoQS4LZ.', 'user'),
+('Mario Díaz', 'mario@example.com', '$2b$10$bzpWYAFKQZVJEnYzDG3VC.ygVDzHeuCDDgicHE5KYoRF.AoQS4LZ.', 'read-only'),
+('Elena Ruiz', 'elena@example.com', '$2b$10$bzpWYAFKQZVJEnYzDG3VC.ygVDzHeuCDDgicHE5KYoRF.AoQS4LZ.', 'admin'),
+('Carlos López', 'carlos@example.com', '$2b$10$bzpWYAFKQZVJEnYzDG3VC.ygVDzHeuCDDgicHE5KYoRF.AoQS4LZ.', 'user');
 
 INSERT INTO cliente (nombre, fecha_creacion, id_usuario) VALUES
 ('Cliente A', '2024-01-10', 1),
@@ -70,7 +70,7 @@ INSERT INTO cliente (nombre, fecha_creacion, id_usuario) VALUES
 
 INSERT INTO tipo_interaccion (nombre) VALUES
 ('Consulta'),
-('Reunión'),
+('Reunion'),
 ('Antecedente');
 
 INSERT INTO estado_interaccion (nombre) VALUES

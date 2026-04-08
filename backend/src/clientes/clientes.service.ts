@@ -10,8 +10,12 @@ export class ClientesService {
     private clientesRepository: Repository<Cliente>,
   ) {}
 
-  findAll(): Promise<Cliente[]> {
-    return this.clientesRepository.find();
+  findAll(usuarioId?: number): Promise<Cliente[]> {
+    if (usuarioId) {
+      return this.clientesRepository.find({ where: { usuarioId } });
+    } else {
+      return this.clientesRepository.find();
+    }
   }
 
   async findOne(id: number): Promise<Cliente> {
@@ -20,8 +24,13 @@ export class ClientesService {
     return cliente;
   }
 
-  create(data: Partial<Cliente>): Promise<Cliente> {
-    const cliente = this.clientesRepository.create(data);
+  create(data: Partial<Cliente>, usuarioId: number): Promise<Cliente> {
+    const newCliente = {
+      nombre: data.nombre,
+      fechaCreacion: new Date(),
+      usuarioId: usuarioId,
+    };
+    const cliente = this.clientesRepository.create(newCliente);
     return this.clientesRepository.save(cliente);
   }
 

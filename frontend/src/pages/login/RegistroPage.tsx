@@ -9,10 +9,11 @@ import { useNavigate } from "react-router";
 import { registroSchema, type RegistroSchema } from "@/schemas/registroSchema";
 import { toastRegistro } from "@/components/toast";
 import { useAuth } from "@/context/AuthContext";
+import type { UsuarioFormData } from "@/schemas/usuarioSchema";
+import { api, type Usuario } from "@/api/api";
 
 export function RegistroPage() {
   const navigate = useNavigate();
-  const { login } = useAuth();
 
   const {
     register,
@@ -29,10 +30,13 @@ export function RegistroPage() {
   });
 
   async function onSubmit(values: RegistroSchema) {
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    login(values.email, "user");
-    toastRegistro.okGuardado();
-    navigate("/interacciones", { replace: true });
+    const nuevo: Usuario = await api.registrarUsuario(values);
+    if (nuevo.id) {
+      toastRegistro.okGuardado();
+      navigate("/login", { replace: true });
+    } else {
+      toastRegistro.errorRegistro();
+    }
   }
 
   return (

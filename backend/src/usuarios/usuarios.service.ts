@@ -41,13 +41,16 @@ export class UsuariosService {
     id: number,
     data: Partial<Usuario>,
   ): Promise<Omit<Usuario, 'password'>> {
-    await this.findOne(id);
+    const usuario = await this.findOne(id);
+
     if (data.password) {
       data.password = await bcrypt.hash(data.password, 10);
     }
-    await this.usuariosRepository.update(id, data);
-    const actualizado = await this.findOne(id);
-    const { password: _, ...resto } = actualizado;
+
+    const actualizado = this.usuariosRepository.merge(usuario, data);
+    const guardado = await this.usuariosRepository.save(actualizado);
+
+    const { password: _, ...resto } = guardado;
     return resto;
   }
 

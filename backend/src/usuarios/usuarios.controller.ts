@@ -8,6 +8,7 @@ import {
   Body,
   UseGuards,
   ParseIntPipe,
+  Patch,
 } from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
 import { Usuario } from './usuario.entity';
@@ -38,8 +39,7 @@ export class UsuariosController {
     return this.usuariosService.create(body);
   }
 
-  @Roles('admin')
-  @Put(':id')
+  @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() body: Partial<Usuario>,

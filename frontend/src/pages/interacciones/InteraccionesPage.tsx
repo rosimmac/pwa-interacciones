@@ -70,7 +70,7 @@ export function InteraccionesPage() {
       : interacciones.filter((i) => i.usuarioId === user?.id);
 
     if (filtro !== "todas") {
-      porRol = porRol.filter((i) => i.tipo.nombre === filtro);
+      porRol = porRol.filter((i) => i.tipo.nombre.toLowerCase() === filtro);
     }
 
     if (texto) {
@@ -107,16 +107,34 @@ export function InteraccionesPage() {
     setModalState({ open: true, interaccion });
   };
 
+  const idtipoFromTipoString = (tipo: string) => {
+    let tipoId: number = 0;
+    switch (tipo) {
+      case "consulta":
+        tipoId = 1;
+        break;
+      case "reunion":
+        tipoId = 2;
+        break;
+      case "antecedente":
+        tipoId = 2;
+        break;
+    }
+    return tipoId;
+  };
+
   const handleCreateInteraccion = async (data: any) => {
     try {
       const payload = {
-        tipo: data.tipo,
+        tipoId: idtipoFromTipoString(data.tipo),
+        estadoId: 1,
         descripcion: data.descripcion,
         clienteId: data.clienteId,
         usuarioId: user!.id,
         fecha: `${data.fecha}T${data.hora}:00`,
       };
       const nueva = await api.createInteraccion(payload);
+
       setInteracciones((prev) => [nueva, ...prev]);
       toastInteraccion.okGuardado();
     } catch (e) {
@@ -130,7 +148,8 @@ export function InteraccionesPage() {
   const handleUpdateInteraccion = async (id: number, data: any) => {
     try {
       const payload = {
-        tipo: data.tipo,
+        tipoId: idtipoFromTipoString(data.tipo),
+        estadoId: 2,
         descripcion: data.descripcion,
         clienteId: data.clienteId,
         fecha: `${data.fecha}T${data.hora}:00`,
@@ -202,18 +221,18 @@ export function InteraccionesPage() {
               }
               fecha={new Date(item.fecha).toLocaleString()}
               icono={
-                item.tipo.nombre === "reunion" ? (
+                item.tipo.nombre.toLowerCase() === "reunion" ? (
                   <Users />
-                ) : item.tipo.nombre === "consulta" ? (
+                ) : item.tipo.nombre.toLowerCase() === "consulta" ? (
                   <MessageSquare />
                 ) : (
                   <NotebookText />
                 )
               }
               color={
-                item.tipo.nombre === "reunion"
+                item.tipo.nombre.toLowerCase() === "reunion"
                   ? "green"
-                  : item.tipo.nombre === "consulta"
+                  : item.tipo.nombre.toLowerCase() === "consulta"
                     ? "purple"
                     : "orange"
               }
