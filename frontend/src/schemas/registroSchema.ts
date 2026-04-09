@@ -8,10 +8,16 @@ export const registroSchema = z
     email: z.string().email({ message: "Introduce un email válido." }),
     password: z
       .string()
-      .min(6, { message: "La contraseña debe tener al menos 6 caracteres." }),
+      .min(8, { message: "Mínimo 8 caracteres." })
+      .regex(/(?=.*[A-Z])/, {
+        message: "Debe contener al menos una mayúscula.",
+      })
+      .regex(/(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/, {
+        message: "Debe contener al menos un carácter especial.",
+      }),
     confirmarPassword: z
       .string()
-      .min(6, { message: "Confirma tu contraseña." }),
+      .min(8, { message: "Confirma tu contraseña." }),
   })
   .refine((data) => data.password === data.confirmarPassword, {
     message: "Las contraseñas no coinciden.",

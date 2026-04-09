@@ -12,6 +12,7 @@ import {
 import { InteraccionesService } from './interacciones.service';
 import { Interaccion } from './interaccion.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { CreateInteraccionDto } from './create-interaccion.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('interacciones')
@@ -33,14 +34,14 @@ export class InteraccionesController {
   }
 
   @Post()
-  create(@Body() data: Partial<Interaccion>): Promise<Interaccion> {
+  create(@Body() data: CreateInteraccionDto): Promise<Interaccion> {
     return this.interaccionesService.create(data);
   }
 
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() data: Partial<Interaccion>,
+    @Body() data: Partial<CreateInteraccionDto>,
   ): Promise<Interaccion> {
     return this.interaccionesService.update(+id, data);
   }

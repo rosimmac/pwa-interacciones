@@ -6,7 +6,15 @@ export const usuarioSchema = z.object({
     .min(1, "El nombre es obligatorio")
     .max(50, "Máximo 50 caracteres"),
   email: z.string().email("Email no válido"),
-  password: z.string().min(6, "Mínimo 6 caracteres").or(z.literal("")),
+  password: z
+    .string()
+    .min(8, "Mínimo 8 caracteres")
+    .regex(/(?=.*[A-Z])/, "Debe contener al menos una mayúscula")
+    .regex(
+      /(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/,
+      "Debe contener al menos un carácter especial",
+    )
+    .or(z.literal("")),
   rol: z.enum(["admin", "user", "read-only"], {
     required_error: "El rol es obligatorio",
   }),

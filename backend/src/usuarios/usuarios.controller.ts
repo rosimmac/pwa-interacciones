@@ -11,10 +11,10 @@ import {
   Patch,
 } from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
-import { Usuario } from './usuario.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
+import { CreateUsuarioDto } from './create.usuario.dto';
 
 @UseGuards(JwtAuthGuard, RolesGuard) // aplica a todo el controller
 @Controller('usuarios')
@@ -35,14 +35,14 @@ export class UsuariosController {
 
   @Roles('admin')
   @Post()
-  create(@Body() body: Partial<Usuario>) {
+  create(@Body() body: CreateUsuarioDto) {
     return this.usuariosService.create(body);
   }
 
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() body: Partial<Usuario>,
+    @Body() body: Partial<CreateUsuarioDto>,
   ) {
     return this.usuariosService.update(id, body);
   }

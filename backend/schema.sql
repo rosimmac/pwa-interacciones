@@ -55,11 +55,11 @@ CREATE TABLE registro_accesos (
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 INSERT INTO usuario (nombre, email, password, rol) VALUES
-('Ana Torres', 'ana@example.com', '$2b$10$bzpWYAFKQZVJEnYzDG3VC.ygVDzHeuCDDgicHE5KYoRF.AoQS4LZ.', 'user'),
-('Luis Pérez', 'luis@example.com', '$2b$10$bzpWYAFKQZVJEnYzDG3VC.ygVDzHeuCDDgicHE5KYoRF.AoQS4LZ.', 'user'),
-('Mario Díaz', 'mario@example.com', '$2b$10$bzpWYAFKQZVJEnYzDG3VC.ygVDzHeuCDDgicHE5KYoRF.AoQS4LZ.', 'read-only'),
-('Elena Ruiz', 'elena@example.com', '$2b$10$bzpWYAFKQZVJEnYzDG3VC.ygVDzHeuCDDgicHE5KYoRF.AoQS4LZ.', 'admin'),
-('Carlos López', 'carlos@example.com', '$2b$10$bzpWYAFKQZVJEnYzDG3VC.ygVDzHeuCDDgicHE5KYoRF.AoQS4LZ.', 'user');
+('Ana Torres', 'ana@example.com', '$2b$10$03DUitWsZbQVAKkfb6ycUeiTN53OAndkMblZy1fVJ241oMRd7sXka', 'user'),
+('Luis Pérez', 'luis@example.com', '$2b$10$03DUitWsZbQVAKkfb6ycUeiTN53OAndkMblZy1fVJ241oMRd7sXka', 'user'),
+('Mario Díaz', 'mario@example.com', '$2b$10$03DUitWsZbQVAKkfb6ycUeiTN53OAndkMblZy1fVJ241oMRd7sXka', 'read-only'),
+('Elena Ruiz', 'elena@example.com', '$2b$10$03DUitWsZbQVAKkfb6ycUeiTN53OAndkMblZy1fVJ241oMRd7sXka', 'admin'),
+('Carlos López', 'carlos@example.com', '$2b$10$03DUitWsZbQVAKkfb6ycUeiTN53OAndkMblZy1fVJ241oMRd7sXka', 'user');
 
 INSERT INTO cliente (nombre, fecha_creacion, id_usuario) VALUES
 ('Cliente A', '2024-01-10', 1),
