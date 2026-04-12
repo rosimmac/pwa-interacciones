@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router";
 import { loginSchema, type LoginSchema } from "@/schemas/loginSchema";
 import { useContext } from "react";
-import { AuthContext, type User } from "@/context/AuthContext";
+import { AuthContext } from "@/context/AuthContext";
 import { api } from "@/api/api";
 
 export function LoginPage() {

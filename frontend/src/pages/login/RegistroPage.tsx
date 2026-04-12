@@ -8,8 +8,6 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
 import { registroSchema, type RegistroSchema } from "@/schemas/registroSchema";
 import { toastRegistro } from "@/components/toast";
-import { useAuth } from "@/context/AuthContext";
-import type { UsuarioFormData } from "@/schemas/usuarioSchema";
 import { api, type Usuario } from "@/api/api";
 
 export function RegistroPage() {
