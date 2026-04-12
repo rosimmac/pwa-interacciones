@@ -2,11 +2,18 @@
 // Los servicios en NestJS son clases inyectables que separan la lógica
 // de los controladores, que solo gestionan las peticiones HTTP.
 
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt'; // Servicio de NestJS para firmar y verificar tokens JWT
 import { UsuariosService } from '../usuarios/usuarios.service'; // Para buscar usuarios en la BD
 import { RegistroAccesosService } from '../registro_accesos/registro-accesos.service'; // Para registrar eventos de login/logout
 import * as bcrypt from 'bcryptjs'; // Librería para comparar contraseñas con su hash
+
+import * as crypto from 'crypto';
+import * as nodemailer from 'nodemailer';
 
 // @Injectable() marca esta clase como un proveedor de NestJS,
 // lo que permite que el sistema de inyección de dependencias
@@ -75,5 +82,64 @@ export class AuthService {
     await this.registroAccesosService.registrar(usuarioId, 'logout');
 
     return { message: 'Sesión cerrada correctamente' };
+  }
+
+  async forgotPassword(email: string) {
+    const usuario = await this.usuariosService.findByEmail(email);
+
+    if (!usuario) return { message: 'Si el email existe, recibirás un enlace' };
+
+    const token = crypto.randomBytes(32).toString('hex');
+    const expiry = new Date(Date.now() + 60 * 60 * 1000);
+
+    await this.usuariosService.guardarResetToken(email, token, expiry);
+
+    console.log('Token guardado, enviando email a:', email);
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
+      },
+    });
+
+    const resetUrl = `http://localhost:5173/restablecer?token=${token}`;
+
+    try {
+      await transporter.sendMail({
+        from: process.env.MAIL_USER,
+        to: email,
+        subject: 'Recuperación de contraseña',
+        html: `<p>Haz clic en el enlace para restablecer tu contraseña. Caduca en 1 hora.</p>
+             <a href="${resetUrl}">${resetUrl}</a>`,
+      });
+      console.log('Email enviado correctamente');
+    } catch (error) {
+      console.error('Error al enviar email:', error);
+    }
+
+    return { message: 'Si el email existe, recibirás un enlace' };
+  }
+  async resetPassword(token: string, newPassword: string) {
+    const usuario = await this.usuariosService.findByResetToken(token);
+
+    if (!usuario) throw new BadRequestException('Token inválido');
+
+    if (
+      !usuario.reset_token_expiry ||
+      usuario.reset_token_expiry < new Date()
+    ) {
+      throw new BadRequestException('El token ha caducado');
+    }
+
+    const hashed = await bcrypt.hash(newPassword, 10);
+
+    await this.usuariosService.update(usuario.id, { password: hashed });
+
+    // Limpiamos el token para que no se pueda reutilizar
+    await this.usuariosService.guardarResetToken(usuario.email, null, null);
+
+    return { message: 'Contraseña actualizada correctamente' };
   }
 }

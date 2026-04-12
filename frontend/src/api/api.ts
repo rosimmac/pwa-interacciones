@@ -91,6 +91,14 @@ export const api = {
     };
   },
 
+  forgotPassword: async (email: string): Promise<void> => {
+    await apiClient.post("/auth/forgot-password", { email });
+  },
+
+  resetPassword: async (token: string, password: string): Promise<void> => {
+    await apiClient.post("/auth/reset-password", { token, password });
+  },
+
   registrarUsuario: async (
     payload: Omit<RegistroSchema, "id"> & { password: string },
   ): Promise<Usuario> => {

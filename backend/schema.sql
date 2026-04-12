@@ -7,7 +7,9 @@ CREATE TABLE usuario (
     nombre VARCHAR(100) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
     password VARCHAR(200) NOT NULL,
-    rol ENUM('user','read-only','admin') NOT NULL
+    rol ENUM('user','read-only','admin') NOT NULL,
+    reset_token VARCHAR(255) NULL,
+    reset_token_expiry DATETIME NULL
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE cliente (
@@ -58,7 +60,7 @@ INSERT INTO usuario (nombre, email, password, rol) VALUES
 ('Ana Torres', 'ana@example.com', '$2b$10$03DUitWsZbQVAKkfb6ycUeiTN53OAndkMblZy1fVJ241oMRd7sXka', 'user'),
 ('Luis Pérez', 'luis@example.com', '$2b$10$03DUitWsZbQVAKkfb6ycUeiTN53OAndkMblZy1fVJ241oMRd7sXka', 'user'),
 ('Mario Díaz', 'mario@example.com', '$2b$10$03DUitWsZbQVAKkfb6ycUeiTN53OAndkMblZy1fVJ241oMRd7sXka', 'read-only'),
-('Elena Ruiz', 'elena@example.com', '$2b$10$03DUitWsZbQVAKkfb6ycUeiTN53OAndkMblZy1fVJ241oMRd7sXka', 'admin'),
+('Rosa Martín', 'rosamartn98@gmail.com', '$2b$10$03DUitWsZbQVAKkfb6ycUeiTN53OAndkMblZy1fVJ241oMRd7sXka', 'admin'),
 ('Carlos López', 'carlos@example.com', '$2b$10$03DUitWsZbQVAKkfb6ycUeiTN53OAndkMblZy1fVJ241oMRd7sXka', 'user');
 
 INSERT INTO cliente (nombre, fecha_creacion, id_usuario) VALUES

@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
 import { useState } from "react";
+import { api } from "@/api/api";
+import { toastRecuperacion } from "@/components/toast";
 
 const forgotSchema = z.object({
   email: z.string().email("Email inválido"),
@@ -28,10 +30,13 @@ export function ForgotPasswordPage() {
   });
 
   async function onSubmit(values: ForgotSchema) {
-    // Simulación: en producción aquí haríamos POST /api/auth/forgot-password
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    console.log("Email de recuperación enviado a:", values.email);
-    setSent(true);
+    try {
+      await api.forgotPassword(values.email);
+      toastRecuperacion.okEnviado();
+      setSent(true);
+    } catch {
+      toastRecuperacion.errorEnlace();
+    }
   }
 
   if (sent) {

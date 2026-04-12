@@ -16,4 +16,10 @@ export class Usuario {
 
   @Column({ type: 'enum', enum: ['user', 'read-only', 'admin'] })
   rol: 'user' | 'read-only' | 'admin';
+
+  @Column({ nullable: true })
+  reset_token: string;
+
+  @Column({ nullable: true })
+  reset_token_expiry: Date;
 }

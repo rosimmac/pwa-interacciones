@@ -173,3 +173,23 @@ export const toastUsuario = {
       onRetry,
     ),
 };
+
+export const toastRecuperacion = {
+  okEnviado: () =>
+    toast.success("Enlace enviado correctamente", {
+      style: successStyle,
+      cancel: closeButton,
+      cancelButtonStyle,
+    }),
+  okRestablecido: () =>
+    toast.success("Contraseña actualizada correctamente", {
+      style: successStyle,
+      cancel: closeButton,
+      cancelButtonStyle,
+    }),
+  errorEnlace: () =>
+    errorToast(
+      "Enlace inválido o caducado",
+      "Solicita un nuevo enlace de recuperación.",
+    ),
+};

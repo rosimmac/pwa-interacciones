@@ -8,10 +8,16 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { useState } from "react";
+import { api } from "@/api/api";
+import { toastRecuperacion } from "@/components/toast";
 
 const resetSchema = z
   .object({
-    password: z.string().min(8, "Mínimo 8 caracteres"),
+    password: z
+      .string()
+      .min(8, "Mínimo 8 caracteres")
+      .regex(/[A-Z]/, "Debe contener al menos una mayúscula")
+      .regex(/[^a-zA-Z0-9]/, "Debe contener al menos un carácter especial"),
     confirm: z.string(),
   })
   .refine((data) => data.password === data.confirm, {
@@ -57,11 +63,13 @@ export function ResetPasswordPage() {
   }
 
   async function onSubmit(values: ResetSchema) {
-    // En producción: POST /api/auth/reset-password { token, newPassword: values.password }
-    console.log("Nueva contraseña:", values.password);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    console.log("Contraseña restablecida con token:", token);
-    setDone(true);
+    try {
+      await api.resetPassword(token!, values.password);
+      toastRecuperacion.okRestablecido();
+      setDone(true);
+    } catch {
+      toastRecuperacion.errorEnlace();
+    }
   }
 
   if (done) {
@@ -89,7 +97,8 @@ export function ResetPasswordPage() {
       <div className="bg-white shadow-lg rounded-xl p-6 w-full max-w-sm space-y-4">
         <h1 className="text-xl font-semibold">Nueva contraseña</h1>
         <p className="text-sm text-gray-500">
-          Elige una contraseña segura de al menos 8 caracteres.
+          Elige una contraseña segura de al menos 8 caracteres, una mayúscula y
+          un carácter especial.
         </p>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

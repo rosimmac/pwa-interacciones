@@ -59,4 +59,21 @@ export class UsuariosService {
     await this.findOne(id);
     await this.usuariosRepository.delete(id);
   }
+
+  async guardarResetToken(
+    email: string,
+    token: string | null,
+    expiry: Date | null,
+  ): Promise<void> {
+    await this.usuariosRepository
+      .createQueryBuilder()
+      .update(Usuario)
+      .set({ reset_token: token, reset_token_expiry: expiry } as any)
+      .where('email = :email', { email })
+      .execute();
+  }
+
+  async findByResetToken(token: string): Promise<Usuario | null> {
+    return this.usuariosRepository.findOneBy({ reset_token: token });
+  }
 }
