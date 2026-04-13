@@ -66,6 +66,7 @@ export function UsuariosPage() {
       if (data.password !== "") {
         body.password = data.password;
       }
+      debugger;
       const actualizado = await api.updateUsuario(id, body);
       setUsuarios((prev) => prev.map((u) => (u.id === id ? actualizado : u)));
       toastUsuario.okActualizado();
