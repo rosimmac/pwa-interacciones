@@ -58,7 +58,15 @@ export function UsuariosPage() {
 
   const handleUpdateUsuario = async (id: number, data: UsuarioFormData) => {
     try {
-      const actualizado = await api.updateUsuario(id, data);
+      const body: Partial<Usuario> & { password?: string } = {
+        nombre: data.nombre,
+        email: data.email,
+        rol: data.rol,
+      };
+      if (data.password !== "") {
+        body.password = data.password;
+      }
+      const actualizado = await api.updateUsuario(id, body);
       setUsuarios((prev) => prev.map((u) => (u.id === id ? actualizado : u)));
       toastUsuario.okActualizado();
     } catch (e) {

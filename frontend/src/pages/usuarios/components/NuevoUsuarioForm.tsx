@@ -111,7 +111,7 @@ export function NuevoUsuarioForm({
           id="password"
           type="password"
           {...register("password")}
-          placeholder="Mínimo 6 caracteres"
+          placeholder="Mínimo 8 caracteres, una mayúscula, y un carácter especial"
         />
         {errors.password && (
           <p className="text-sm text-destructive">{errors.password.message}</p>
