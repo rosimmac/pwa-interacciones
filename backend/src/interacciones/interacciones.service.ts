@@ -43,6 +43,7 @@ export class InteraccionesService {
 
   async create(data: CreateInteraccionDto): Promise<Interaccion> {
     const parsed = { ...data, fecha: new Date(data.fecha) };
+    debugger;
     const interaccion = this.interaccionesRepository.create(parsed);
     const saved = await this.interaccionesRepository.save(interaccion);
     return this.findOne(saved.id);

@@ -16,4 +16,7 @@ export class CreateInteraccionDto {
 
   @IsNumber()
   estadoId: number;
+
+  @IsNumber()
+  usuarioId: number;
 }
