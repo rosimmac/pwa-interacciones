@@ -1,88 +1,92 @@
-# ⚡ PWA – Fast Interaction Logging
+# PWA – Fast Interaction Logging
+Register a customer interaction in under 10 seconds.
 
-> Register a customer interaction in under 10 seconds.
+A Progressive Web App for sales teams to quickly log customer interactions — meetings, inquiries, follow-ups — with a focus on speed, usability and clean UX. Built as a full-stack project with a real NestJS backend and MySQL database, fully deployed to production.
 
-A Progressive Web App for sales teams to quickly log customer interactions — meetings, inquiries, follow-ups — with a focus on speed, usability and clean UX. Built as a full-stack project with a real NestJS backend and MySQL database.
+## Live Demo
 
-## 📍 Project Status
+🔗 [pwa-interacciones.vercel.app](https://pwa-interacciones.vercel.app/)
 
-**Active development** — new features and improvements added continuously.
+| Field    | Value              |
+|----------|--------------------|
+| Email    | carlos@example.com |
+| Password | Pass1234           |
+| Role     | `user`             |
 
----
+## Project Status
 
-## ✨ Features
+Deployed and live — frontend on Vercel, backend on Railway.
 
-| Feature               | Detail                                        |
-| --------------------- | --------------------------------------------- |
-| ⚡ Ultra-fast logging | Full interaction registered in <10 seconds    |
-| 👥 Role-based access  | `admin` / `user` / `read-only` permissions    |
-| 🎤 Voice input        | Hands-free field dictation via Web Speech API |
-| 📊 Client dashboard   | Interaction history and key metrics           |
-| 📱 Mobile-first       | Fully responsive, installable as PWA          |
-| 🛡 Type-safe forms    | React Hook Form + Zod validation              |
-| 🔐 JWT auth           | Real authentication with access logging       |
-| 🎨 Figma-designed     | UI built from custom design system            |
+## Features
 
----
+| Feature | Detail |
+|---|---|
+| ⚡ Ultra-fast logging | Full interaction registered in <10 seconds |
+| 👥 Role-based access | `admin` / `user` / `read-only` permissions |
+| 🎤 Voice input | Hands-free field dictation via Web Speech API |
+| 📊 Client dashboard | Interaction history and key metrics |
+| 📱 Mobile-first | Fully responsive, installable as PWA |
+| 🛡 Type-safe forms | React Hook Form + Zod validation |
+| 🔐 JWT auth | Real authentication with access logging |
+| 🔑 Password recovery | Email-based reset flow via Nodemailer |
+| 🎨 Figma-designed | UI built from custom design system |
 
-## 🛠 Tech Stack
+## Tech Stack
 
 ### Frontend
 
-|               |                               |
-| ------------- | ----------------------------- |
-| Framework     | React 18 + TypeScript         |
-| Build tool    | Vite                          |
-| Styling       | Tailwind CSS v4 + shadcn/ui   |
-| Routing       | React Router v7               |
-| Forms         | React Hook Form + Zod         |
-| HTTP client   | Axios (with JWT interceptors) |
-| Notifications | Sonner                        |
+| | |
+|---|---|
+| Framework | React 18 + TypeScript |
+| Build tool | Vite |
+| Styling | Tailwind CSS v4 + shadcn/ui |
+| Routing | React Router v7 |
+| Forms | React Hook Form + Zod |
+| HTTP client | Axios (with JWT interceptors) |
+| Notifications | Sonner |
 
 ### Backend
 
-|           |                                |
-| --------- | ------------------------------ |
-| Framework | NestJS                         |
-| Language  | TypeScript                     |
-| ORM       | TypeORM                        |
-| Database  | MySQL (Docker)                 |
-| Auth      | JWT + bcrypt                   |
-| API       | REST with global `/api` prefix |
+| | |
+|---|---|
+| Framework | NestJS |
+| Language | TypeScript |
+| ORM | TypeORM |
+| Database | MySQL (Docker local / Railway in production) |
+| Auth | JWT + bcrypt |
+| Email | Nodemailer + Gmail App Passwords |
+| API | REST with global `/api` prefix |
 
----
-
-## 🏗 Architecture
+## Architecture
 
 ```
 pwa-interacciones/
 ├── frontend/
 │   └── src/
-│       ├── components/      # Shared UI components
-│       ├── context/         # AuthContext (JWT + role persistence)
-│       ├── pages/           # Route-level views
-│       ├── schemas/         # Zod validation schemas
-│       ├── hooks/           # Custom hooks (usePermisos, useSpeechRecognition...)
-│       ├── api/             # Axios instance + JWT interceptors
-│       └── router/          # Route definitions + role guards
+│       ├── components/       # Shared UI components
+│       ├── context/          # AuthContext (JWT + role persistence)
+│       ├── pages/            # Route-level views
+│       ├── schemas/          # Zod validation schemas
+│       ├── hooks/            # Custom hooks (usePermisos, useSpeechRecognition...)
+│       ├── api/              # Axios instance + JWT interceptors
+│       └── router/           # Route definitions + role guards
 └── backend/
     └── src/
-        ├── auth/            # JWT strategy, guards, login/logout
-        ├── usuarios/        # Users module + CRUD
-        ├── clientes/        # Clients module + CRUD
-        ├── interacciones/   # Interactions module + CRUD
-        └── entities/        # TypeORM entities
+        ├── auth/             # JWT strategy, guards, login/logout
+        ├── usuarios/         # Users module + CRUD
+        ├── clientes/         # Clients module + CRUD
+        ├── interacciones/    # Interactions module + CRUD
+        ├── registro-accesos/ # Login/logout access log
+        └── entities/         # TypeORM entities
 ```
 
----
-
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
 - Node.js ≥ 18
 - npm ≥ 9
-- Docker (for MySQL)
+- Docker (for local MySQL)
 
 ### Installation
 
@@ -114,34 +118,31 @@ cd frontend
 npm run dev
 ```
 
-| Service  | URL                       |
-| -------- | ------------------------- |
-| Frontend | http://localhost:5173     |
+| Service  | URL |
+|----------|-----|
+| Frontend | http://localhost:5173 |
 | API      | http://localhost:3000/api |
-| MySQL    | localhost:3306            |
+| MySQL    | localhost:3306 |
 
----
+## Authentication
 
-## 🔐 Authentication
-
-Authentication is handled by the NestJS backend using **JWT tokens** and **bcrypt** password hashing.
+Authentication is handled by the NestJS backend using JWT tokens and bcrypt password hashing.
 
 - Login returns a signed JWT token stored in `localStorage`
-- Every request includes the token via an **Axios interceptor**
+- Every request includes the token via an Axios interceptor
 - Protected routes use a `JwtAuthGuard` on the backend
 - Access attempts are logged to a `registro_accesos` table
+- Password recovery via email token with expiry
 
-**Roles:**
+### Roles
 
-| Role        | Permissions                                          |
-| ----------- | ---------------------------------------------------- |
-| `admin`     | Full access — manage users, clients and interactions |
-| `user`      | Create and view own records                          |
-| `read-only` | View only                                            |
+| Role | Permissions |
+|---|---|
+| `admin` | Full access — manage users, clients and interactions |
+| `user` | Create and view own records |
+| `read-only` | View only |
 
----
-
-## 📸 Screenshots
+## Screenshots
 
 <img width="370" height="804" alt="image" src="https://github.com/user-attachments/assets/8e98e458-b661-4031-9310-a44773a72595" />
 <img width="366" height="799" alt="image" src="https://github.com/user-attachments/assets/5f09243a-38ed-4e29-b259-6d29ee6c71b4" />
@@ -154,6 +155,6 @@ Authentication is handled by the NestJS backend using **JWT tokens** and **bcryp
 
 ---
 
-## 👩‍💻 Author
+## Author
 
 Built by **Rosa María Martín Castillo** · [LinkedIn](https://www.linkedin.com/in/rosa-maria-martin-castillo/)
