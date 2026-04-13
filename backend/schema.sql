@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS pwa_interacciones;
-CREATE DATABASE pwa_interacciones CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE pwa_interacciones;
+DROP DATABASE IF EXISTS railway;
+CREATE DATABASE railway CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE railway;
 
 CREATE TABLE usuario (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
