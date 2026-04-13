@@ -23,17 +23,17 @@ export default defineConfig({
         start_url: "/",
         icons: [
           {
-            src: "icono 192x192.png",
+            src: "icon-192x192.png",
             sizes: "192x192",
             type: "image/png",
           },
           {
-            src: "icono 512x512.png",
+            src: "icon-512x512.png",
             sizes: "512x512",
             type: "image/png",
           },
           {
-            src: "iconoDefinitivo.png",
+            src: "icono.png",
             sizes: "512x512",
             type: "image/png",
             purpose: "any maskable",
