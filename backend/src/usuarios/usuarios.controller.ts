@@ -13,7 +13,7 @@ import { UsuariosService } from './usuarios.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
-import { CreateUsuarioDto } from './create.usuario.dto';
+import { CreateUsuarioDto } from './dto/create.usuario.dto';
 
 @UseGuards(JwtAuthGuard, RolesGuard) // aplica a todo el controller
 @Controller('usuarios')

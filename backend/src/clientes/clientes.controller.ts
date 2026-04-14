@@ -12,7 +12,7 @@ import { ClientesService } from './clientes.service';
 import { Cliente } from './cliente.entity';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { CreateClienteDto } from './create-cliente.dto';
+import { CreateClienteDto } from './dto/create-cliente.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('clientes')

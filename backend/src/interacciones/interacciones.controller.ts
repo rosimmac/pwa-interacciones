@@ -12,7 +12,7 @@ import {
 import { InteraccionesService } from './interacciones.service';
 import { Interaccion } from './interaccion.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { CreateInteraccionDto } from './create-interaccion.dto';
+import { CreateInteraccionDto } from './dto/create-interaccion.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('interacciones')

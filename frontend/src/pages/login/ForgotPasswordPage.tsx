@@ -32,7 +32,6 @@ export function ForgotPasswordPage() {
   async function onSubmit(values: ForgotSchema) {
     try {
       await api.forgotPassword(values.email);
-      toastRecuperacion.okEnviado();
       setSent(true);
     } catch {
       toastRecuperacion.errorEnlace();
