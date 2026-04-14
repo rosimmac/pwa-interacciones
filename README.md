@@ -10,7 +10,7 @@ A Progressive Web App for sales teams to quickly log customer interactions — m
 | Field    | Value              |
 |----------|--------------------|
 | Email    | carlos@example.com |
-| Password | Pass1234           |
+| Password | Pass1234.           |
 | Role     | `user`             |
 
 ## Project Status
