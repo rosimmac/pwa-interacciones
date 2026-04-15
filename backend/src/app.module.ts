@@ -9,9 +9,19 @@ import { EstadoInteraccionModule } from './estado_interaccion/estado-interaccion
 import { RegistroAccesosModule } from './registro_accesos/registro-accesos.module';
 import { AuthModule } from './auth/auth.module';
 
+/**
+ * Módulo raíz de la aplicación.
+ * - Carga las variables de entorno de forma global con ConfigModule.
+ * - Configura la conexión a MySQL con TypeORM leyendo los parámetros desde .env.
+ * - Registra todos los módulos de dominio: clientes, usuarios, interacciones,
+ *   tipos y estados de interacción, registro de accesos y autenticación.
+ */
 @Module({
   imports: [
+    // Hace disponibles las variables de entorno en toda la aplicación
     ConfigModule.forRoot({ isGlobal: true }),
+
+    // Conexión a MySQL configurada de forma asíncrona a partir de variables de entorno
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (config: ConfigService) => ({
@@ -21,7 +31,9 @@ import { AuthModule } from './auth/auth.module';
         username: config.get('DB_USERNAME'),
         password: config.get('DB_PASSWORD'),
         database: config.get('DB_DATABASE'),
+        // Detecta automáticamente todas las entidades del proyecto
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        // synchronize:false para no alterar el esquema en producción
         synchronize: false,
       }),
       inject: [ConfigService],

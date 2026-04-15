@@ -26,6 +26,13 @@ import * as bcrypt from 'bcryptjs';
 // para que devuelva lo que necesitemos con mockResolvedValue() o mockReturnValue().
 // ─────────────────────────────────────────────
 
+// Mockeamos nodemailer para evitar intentos de envío real de email
+jest.mock('nodemailer', () => ({
+  createTransport: jest.fn().mockReturnValue({
+    sendMail: jest.fn().mockResolvedValue({ messageId: 'test' }),
+  }),
+}));
+
 // Mock de UsuariosService: simula el acceso a la tabla de usuarios
 const mockUsuariosService = {
   findByEmail: jest.fn(), // Buscar usuario por email
