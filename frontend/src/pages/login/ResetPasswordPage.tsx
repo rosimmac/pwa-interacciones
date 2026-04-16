@@ -1,4 +1,15 @@
-// src/pages/ResetPasswordPage.tsx
+/**
+ * Página de restablecimiento de contraseña (paso 2 de 2).
+ *
+ * Lee el token de la query string (`?token=...`) generado por el backend al
+ * enviar el email de recuperación. Tres estados posibles:
+ *   1. Sin token en la URL → pantalla de error "Enlace inválido".
+ *   2. Formulario visible  → el usuario introduce y confirma la nueva clave.
+ *   3. `done = true`       → pantalla de éxito con botón para ir al login.
+ *
+ * El schema `resetSchema` se define localmente con refine de coincidencia de
+ * contraseñas, igual que en `registroSchema` pero sin nombre ni email.
+ */
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

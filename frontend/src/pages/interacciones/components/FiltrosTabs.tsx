@@ -1,3 +1,21 @@
+/**
+ * Barra de filtros por tipo de interacción.
+ *
+ * Renderiza un grupo de botones tipo "tab" (role="tablist") con un badge
+ * numérico estático. Cada botón cambia de color al activarse siguiendo la
+ * paleta semántica del tipo:
+ *   - todas       → azul
+ *   - consulta    → violeta
+ *   - reunion     → verde
+ *   - antecedente → naranja
+ *
+ * Las clases base de botón y badge se calculan con `useMemo` para evitar
+ * recalcular el string de Tailwind en cada render; solo se recalculan si
+ * cambia la prop `compact`.
+ *
+ * La prop `compact` reduce el padding para vistas móviles en espacio reducido.
+ */
+
 import { cn } from "@/lib/utils";
 import { useMemo } from "react";
 
@@ -7,7 +25,8 @@ type FiltroItem = {
   id: FiltroID;
   label: string;
   count: number;
-  color: string; // clases del badge cuando NO está activo
+  /** Clases Tailwind del badge cuando el filtro NO está activo. */
+  color: string;
 };
 
 const filtros: FiltroItem[] = [
@@ -32,6 +51,11 @@ const filtros: FiltroItem[] = [
   },
 ];
 
+/**
+ * Devuelve las clases Tailwind del botón y del badge para el estado activo
+ * según el tipo de filtro. Se mantiene separado de `filtros` para no mezclar
+ * datos con lógica de presentación.
+ */
 function classesActivasPorId(id: FiltroID) {
   switch (id) {
     case "todas":
@@ -58,8 +82,11 @@ function classesActivasPorId(id: FiltroID) {
 }
 
 type FiltrosTabsProps = {
-  value: FiltroID; // <- acepta solo esos literales
+  /** Filtro actualmente seleccionado. */
+  value: FiltroID;
+  /** Callback invocado al cambiar la selección. */
   onChange: (next: FiltroID) => void;
+  /** Si es true, reduce el padding para entornos con espacio horizontal limitado. */
   compact?: boolean;
 };
 

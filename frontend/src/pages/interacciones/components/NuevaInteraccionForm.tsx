@@ -1,3 +1,22 @@
+/**
+ * Formulario de creación y edición de interacción.
+ *
+ * Características destacadas:
+ *   1. Selector de tipo por botones de colores (Consulta / Reunión / Antecedente)
+ *      controlado con `watch("tipo")` + `setValue`, ya que los botones no son
+ *      inputs nativos registrables con `register`.
+ *   2. Dictado por voz integrado via `useSpeechToText`:
+ *        - El `finalTranscript` se anexa al texto existente en `descripcion`
+ *          separado por un espacio si el texto no termina ya en uno.
+ *        - El micrófono se colorea en rojo mientras escucha.
+ *        - Muestra el transcript provisional mientras el reconocedor procesa.
+ *   3. Selector de cliente cargado de la API al montar (`useEffect` de clientes).
+ *   4. El `useEffect` de reset espera a que `clientes` esté disponible antes de
+ *      prefizar los campos en modo edición (guarda para evitar un reset prematuro).
+ *   5. `formatDate` / `formatTime` garantizan padding a dos dígitos para que los
+ *      inputs `type="date"` y `type="time"` acepten el valor sin problemas.
+ */
+
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

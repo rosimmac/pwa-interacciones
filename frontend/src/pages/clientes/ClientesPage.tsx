@@ -1,3 +1,20 @@
+/**
+ * Página de gestión de clientes.
+ *
+ * Responsabilidades:
+ *   1. Carga clientes e interacciones en paralelo secuencial al montar:
+ *      primero los clientes, luego las interacciones para calcular el
+ *      conteo de interacciones por cliente (Record<clienteId, count>).
+ *   2. Filtrado en cliente por nombre via `useMemo`.
+ *   3. CRUD completo con feedback toast y reintento:
+ *        - Crear: guarda el último payload en `ultimoPayload` para poder
+ *          reintentar si la llamada de API falla.
+ *        - Actualizar: ídem, reintento con el mismo payload.
+ *        - Eliminar: confirmación modal antes de la llamada de API.
+ *   4. Control de permisos con `usePermisos`: los botones de editar/eliminar
+ *      y el `BotonFlotante` solo se montan si el rol lo permite.
+ */
+
 import { useEffect, useMemo, useState } from "react";
 import { api, type Cliente, type Interaccion } from "@/api/api";
 
@@ -10,18 +27,18 @@ import type { ClienteFormData } from "@/schemas/clientesSchema";
 import { toastCliente } from "@/components/toast";
 import { confirmDeleteToast } from "@/components/ConfirmToast";
 import { usePermisos } from "@/hooks/usePermisos";
-import { useAuth } from "@/context/AuthContext";
 
 export function ClientesPage() {
   const { puedeCrear, puedeEditar, puedeEliminar } = usePermisos();
-  const { user } = useAuth(); // importa useAuth de @/context/AuthContext
-  console.log("user:", user);
-  console.log("puedeEditar:", puedeEditar);
-  console.log("puedeEliminar:", puedeEliminar);
 
   const [clientes, setClientes] = useState<Cliente[]>([]);
+  /** Mapa clienteId → número de interacciones, para mostrar el contador en cada tarjeta. */
   const [conteo, setConteo] = useState<Record<number, number>>({});
   const [loading, setLoading] = useState(true);
+  /**
+   * Último payload enviado. Se persiste para poder reintentarlo desde el toast
+   * de error sin que el usuario tenga que volver a abrir el formulario.
+   */
   const [ultimoPayload, setUltimoPayload] = useState<ClienteFormData | null>(
     null,
   );
@@ -31,12 +48,18 @@ export function ClientesPage() {
   }>({ open: false, cliente: null });
   const [busqueda, setBusqueda] = useState("");
 
+  /**
+   * Carga inicial: clientes e interacciones secuencialmente.
+   * Las interacciones se usan solo para construir el mapa de conteo;
+   * no se almacenan en estado para evitar redundancia con InteraccionesPage.
+   */
   useEffect(() => {
     async function cargar() {
       try {
         const clientesData = await api.getClientes();
         const interaccionesData = await api.getInteracciones();
 
+        // Cuenta cuántas interacciones tiene cada cliente
         const counts: Record<number, number> = {};
         interaccionesData.forEach((i: Interaccion) => {
           counts[i.clienteId] = (counts[i.clienteId] || 0) + 1;
@@ -53,20 +76,27 @@ export function ClientesPage() {
     cargar();
   }, []);
 
+  /** Filtra por nombre; sin texto devuelve la lista completa. */
   const texto = busqueda.toLowerCase().trim();
   const clientesFiltrados = useMemo(() => {
     if (!texto) return clientes;
     return clientes.filter((c) => c.nombre.toLowerCase().includes(texto));
   }, [clientes, texto]);
 
+  /** Abre el modal en modo edición con el cliente seleccionado. */
   const handleEdit = (cliente: Cliente) => {
     setModalState({ open: true, cliente });
   };
 
+  /** Abre el modal en modo creación. */
   const handleAdd = () => {
     setModalState({ open: true, cliente: null });
   };
 
+  /**
+   * Crea un cliente, lo añade a la lista local y registra su conteo inicial (0).
+   * Guarda el payload antes de la llamada para poder reintentar desde el toast de error.
+   */
   const handleCreateCliente = async (data: ClienteFormData) => {
     setUltimoPayload(data);
     try {
@@ -82,6 +112,10 @@ export function ClientesPage() {
     }
   };
 
+  /**
+   * Actualiza un cliente y reemplaza el elemento en la lista local.
+   * Igual que en crear, guarda el payload para reintento desde el toast.
+   */
   const handleUpdateCliente = async (id: number, data: ClienteFormData) => {
     setUltimoPayload(data);
     try {
@@ -96,6 +130,10 @@ export function ClientesPage() {
     }
   };
 
+  /**
+   * Elimina un cliente tras confirmación modal.
+   * Si el usuario cancela, retorna sin realizar ninguna llamada de red.
+   */
   const handleDeleteCliente = async (id: number) => {
     const confirmar = await confirmDeleteToast(
       "¿Seguro que deseas eliminar el cliente?",

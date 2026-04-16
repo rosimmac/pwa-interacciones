@@ -1,4 +1,20 @@
-// src/pages/LoginPage.tsx
+/**
+ * Página de inicio de sesión.
+ *
+ * Valida con Zod + react-hook-form. Al enviar llama a `api.login`, almacena
+ * el token y los datos del usuario en el contexto de autenticación y redirige
+ * a `/interacciones`.
+ *
+ * El atributo `noValidate` en el formulario desactiva la validación HTML5
+ * nativa del navegador (incluyendo la del `<input type="email">`) para que
+ * toda la validación pase por react-hook-form + Zod, lo que garantiza
+ * mensajes de error coherentes y permite los tests de integración con jsdom.
+ *
+ * Layout adaptativo:
+ *   - Móvil:    pantalla completa con fondo azul claro, formulario sin tarjeta.
+ *   - Desktop:  tarjeta blanca centrada con `sm:max-w-md`.
+ */
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 

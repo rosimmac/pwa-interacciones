@@ -1,4 +1,15 @@
-// src/pages/RegistroPage.tsx
+/**
+ * Página de registro de nuevo usuario.
+ *
+ * Valida con Zod + react-hook-form (schema `registroSchema`) incluyendo la
+ * validación cruzada de que `password` y `confirmarPassword` coincidan.
+ * Tras el registro exitoso navega a `/login` para que el usuario inicie sesión.
+ *
+ * Layout adaptativo idéntico al de `LoginPage`:
+ *   - Móvil:   pantalla completa sin tarjeta, espaciador proporcional superior.
+ *   - Desktop: tarjeta blanca centrada con `sm:max-w-md`.
+ */
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 

@@ -1,3 +1,17 @@
+/**
+ * Tarjeta de visualización de un cliente.
+ *
+ * Muestra el nombre del cliente y, opcionalmente, el recuento de interacciones
+ * asociadas. Delega la estructura visual (icono, acciones editar/eliminar) en
+ * `BaseCard` con layout horizontal.
+ *
+ * Los callbacks `onEdit` y `onDelete` reciben el `id` del cliente en lugar de
+ * un objeto completo para mantener la interfaz mínima y evitar prop drilling.
+ *
+ * Se exporta memoizada con `React.memo` para evitar re-renders cuando el padre
+ * actualiza estado no relacionado con este cliente.
+ */
+
 import { BaseCard } from "@/components/BaseCard";
 import { UserRound } from "lucide-react";
 import { memo } from "react";

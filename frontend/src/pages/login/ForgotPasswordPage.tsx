@@ -1,4 +1,14 @@
-// src/pages/ForgotPasswordPage.tsx
+/**
+ * Página de recuperación de contraseña (paso 1 de 2).
+ *
+ * Solicita el email del usuario y llama a `api.forgotPassword`. Si la llamada
+ * tiene éxito muestra una pantalla de confirmación (estado `sent = true`) que
+ * indica al usuario que revise su correo. El mensaje es intencionalmente
+ * genérico para no revelar si el email existe en el sistema.
+ *
+ * El schema `forgotSchema` se define localmente porque solo se usa aquí y no
+ * merece un archivo propio en `schemas/`.
+ */
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

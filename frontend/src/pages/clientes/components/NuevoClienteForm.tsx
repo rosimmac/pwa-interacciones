@@ -1,3 +1,15 @@
+/**
+ * Formulario de creación y edición de cliente.
+ *
+ * Valida con Zod + react-hook-form (solo el campo `nombre`, máx. 50 caracteres).
+ * El `useEffect` de reset se dispara cuando cambia `clienteToEdit`:
+ *   - Con cliente: prefija el campo con su nombre actual.
+ *   - Sin cliente: limpia el campo para una nueva alta.
+ *
+ * Los callbacks `onCreate` y `onUpdate` son opcionales; si no se proporcionan
+ * el formulario loguea por consola (útil para pruebas aisladas del componente).
+ */
+
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,14 +18,13 @@ import { Button } from "@/components/ui/button";
 import { clientesSchema, type ClienteFormData } from "@/schemas/clientesSchema";
 
 type Props = {
+  /** Callback que cierra el modal tras guardar o cancelar. */
   onSuccess: () => void;
-  // Si editas, pásalo; si es alta, pásalo como null
+  /** Si se pasa, el formulario entra en modo edición con el nombre prefijado. */
   clienteToEdit?: { id: number; nombre: string } | null;
-  /**
-   * Si quieres que el form ejecute la lógica de crear/actualizar, provee estos handlers.
-   * Si no los pasas, emitiremos los datos por console.log y llamaremos onSuccess igualmente.
-   */
+  /** Callback invocado al enviar en modo creación. */
   onCreate?: (data: ClienteFormData) => Promise<void> | void;
+  /** Callback invocado al enviar en modo edición. */
   onUpdate?: (id: number, data: ClienteFormData) => Promise<void> | void;
 };
 
@@ -33,6 +44,7 @@ export function NuevoClienteForm({
     defaultValues: { nombre: "" },
   });
 
+  /** Prefija el nombre cuando se abre en modo edición; limpia en modo creación. */
   useEffect(() => {
     if (clienteToEdit) {
       reset({ nombre: clienteToEdit.nombre });
