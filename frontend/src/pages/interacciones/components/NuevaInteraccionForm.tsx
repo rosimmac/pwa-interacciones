@@ -73,6 +73,7 @@ export function NuevaInteraccionForm({
   interaccionToEdit,
 }: NuevaInteraccionFormProps) {
   const isEditing = !!interaccionToEdit;
+  const now = new Date();
 
   const [clientes, setClientes] = useState<Cliente[]>([]);
 
@@ -93,8 +94,8 @@ export function NuevaInteraccionForm({
       tipo: "reunion",
       descripcion: "",
       clienteId: undefined,
-      fecha: "",
-      hora: "",
+      fecha: formatDate(now),
+      hora: formatTime(now),
     },
   });
 
@@ -113,12 +114,13 @@ export function NuevaInteraccionForm({
         });
       }, 50);
     } else {
+      const n = new Date();
       reset({
         tipo: "reunion",
         descripcion: "",
         clienteId: undefined,
-        fecha: "",
-        hora: "",
+        fecha: formatDate(n),
+        hora: formatTime(n),
       });
     }
   }, [open, interaccionToEdit, reset, clientes]);
@@ -177,8 +179,8 @@ export function NuevaInteraccionForm({
         tipo: "reunion",
         descripcion: "",
         clienteId: undefined,
-        fecha: "",
-        hora: "",
+        fecha: formatDate(new Date()),
+        hora: formatTime(new Date()),
       });
 
       onSuccess?.();
