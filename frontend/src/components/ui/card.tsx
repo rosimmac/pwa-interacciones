@@ -1,3 +1,21 @@
+/**
+ * Familia de componentes Card (shadcn/ui).
+ *
+ * Estructura semántica esperada:
+ *   <Card>
+ *     <CardHeader>
+ *       <CardTitle />
+ *       <CardDescription />
+ *       <CardAction />   ← acción alineada a la derecha (botón, menú…)
+ *     </CardHeader>
+ *     <CardContent />
+ *     <CardFooter />
+ *   </Card>
+ *
+ * `CardHeader` usa CSS Grid con `@container` para colocar `CardAction`
+ * automáticamente en la segunda columna cuando está presente.
+ */
+
 import * as React from "react"
 
 import { cn } from "@/lib/utils"

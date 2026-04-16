@@ -1,3 +1,12 @@
+/**
+ * Componente Textarea (shadcn/ui).
+ *
+ * Envuelve un `<textarea>` nativo con estilos coherentes con `Input`.
+ * Usa `field-sizing-content` para crecer automáticamente con el contenido
+ * (CSS Intrinsic Sizing) y `min-h-16` como altura mínima de partida.
+ * Incluye estados visuales de foco, error (`aria-invalid`) y deshabilitado.
+ */
+
 import * as React from "react"
 
 import { cn } from "@/lib/utils"

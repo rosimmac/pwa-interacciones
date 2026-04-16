@@ -1,3 +1,20 @@
+/**
+ * Formulario de creación y edición de usuario.
+ *
+ * Valida con Zod + react-hook-form. La contraseña acepta cadena vacía en
+ * modo edición (el schema usa `.or(z.literal(""))`) para no obligar al
+ * administrador a cambiarla en cada actualización.
+ *
+ * El campo `rol` usa un `<Select>` de Radix que no está integrado de forma
+ * nativa con `register`, por lo que se controla mediante `watch` + `setValue`
+ * con `shouldValidate: true` para que los errores de validación se actualicen
+ * en tiempo real al cambiar la selección.
+ *
+ * El `useEffect` de reset se dispara cuando cambia `open` o `usuarioToEdit`.
+ * El `setTimeout(..., 0)` en el modo edición difiere el reset un tick para
+ * asegurar que el componente ya está montado antes de escribir en los campos.
+ */
+
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,10 +32,15 @@ import { usuarioSchema, type UsuarioFormData } from "@/schemas/usuarioSchema";
 import type { Usuario } from "@/api/api";
 
 type Props = {
+  /** Indica si el modal contenedor está abierto; dispara el reset de campos. */
   open: boolean;
+  /** Callback que cierra el modal y opcionalmente refresca la lista. */
   onSuccess: () => void;
+  /** Si se proporciona, el formulario entra en modo edición con los datos prefijados. */
   usuarioToEdit?: Usuario | null;
+  /** Callback invocado al enviar el formulario en modo creación. */
   onCreate?: (data: UsuarioFormData) => Promise<void> | void;
+  /** Callback invocado al enviar el formulario en modo edición. */
   onUpdate?: (id: number, data: UsuarioFormData) => Promise<void> | void;
 };
 
@@ -41,11 +63,19 @@ export function NuevoUsuarioForm({
     defaultValues: { nombre: "", email: "", password: "", rol: "user" },
   });
 
+  /** Valor actual del campo rol; necesario porque Select no usa register nativo. */
   const currentRol = watch("rol");
 
+  /**
+   * Resetea el formulario cada vez que el modal se abre.
+   * - Modo edición: prefija los campos con los datos del usuario; la contraseña
+   *   se deja vacía deliberadamente para no exponer el hash almacenado.
+   * - Modo creación: resetea a los valores por defecto.
+   */
   useEffect(() => {
     if (!open) return;
     if (usuarioToEdit) {
+      // setTimeout(..., 0) asegura que el DOM esté listo antes del reset
       setTimeout(() => {
         reset({
           nombre: usuarioToEdit.nombre,
@@ -59,6 +89,7 @@ export function NuevoUsuarioForm({
     }
   }, [open, usuarioToEdit, reset]);
 
+  /** Delega en `onCreate` o `onUpdate` según el modo del formulario. */
   const onSubmit = async (data: UsuarioFormData) => {
     try {
       if (usuarioToEdit) {

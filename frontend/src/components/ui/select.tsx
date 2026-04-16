@@ -1,3 +1,21 @@
+/**
+ * Familia de componentes Select basados en Radix UI `Select` primitive.
+ *
+ * Árbol de componentes:
+ *   `Select`                 — raíz controlada/no-controlada.
+ *   `SelectTrigger`          — botón que abre el desplegable; soporta tamaños
+ *                              `sm` (h-8) y `default` (h-9) via `data-size`.
+ *   `SelectContent`          — panel flotante con soporte para posición `popper`
+ *                              (anclada al trigger) o `item-aligned` (por defecto).
+ *   `SelectScrollUpButton`   — chevron superior para scroll cuando hay muchos ítems.
+ *   `SelectScrollDownButton` — chevron inferior para scroll.
+ *   `SelectItem`             — opción individual con checkmark de selección activa.
+ *   `SelectLabel`            — cabecera de grupo, solo visual (no seleccionable).
+ *   `SelectSeparator`        — línea divisoria entre grupos.
+ *   `SelectGroup`            — agrupa opciones relacionadas semánticamente.
+ *   `SelectValue`            — muestra el valor seleccionado en el trigger.
+ */
+
 import * as React from "react"
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react"
 import { Select as SelectPrimitive } from "radix-ui"

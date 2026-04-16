@@ -1,19 +1,38 @@
+/**
+ * Colección centralizada de toasts de feedback para cada entidad del dominio.
+ *
+ * Cada objeto agrupa los mensajes de éxito y error de las operaciones CRUD
+ * de una entidad (clientes, interacciones, usuarios…). Esta centralización
+ * evita cadenas de texto dispersas por los componentes y facilita cambiarlas
+ * desde un único punto.
+ *
+ * Todos los toasts de éxito comparten el mismo estilo verde (`successStyle`).
+ * Los toasts de error delegan en `errorToast`, que incluye opcionalmente un
+ * botón "Reintentar" cuando se pasa el callback `onRetry`.
+ */
+
 import { toast } from "sonner";
 import { errorToast } from "./ErrorToast";
 
+/** Estilos comunes para todos los toasts de operación exitosa. */
 const successStyle = {
   background: "#16a34a",
   color: "white",
   border: "none",
 };
 
+/** Botón de cierre manual del toast (etiqueta "✕"). */
 const closeButton = { label: "✕", onClick: () => {} };
+
+/** Estilos del botón de cierre superpuesto al toast. */
 const cancelButtonStyle = {
   background: "transparent",
   border: "none",
   color: "white",
   fontSize: "1rem",
 };
+
+// ── Clientes ─────────────────────────────────────────────────────────────────
 
 export const toastCliente = {
   okGuardado: () =>
@@ -34,6 +53,7 @@ export const toastCliente = {
       cancel: closeButton,
       cancelButtonStyle,
     }),
+  /** Muestra un error de guardado con botón de reintento opcional. */
   errorGuardar: (onRetry?: () => void) =>
     errorToast(
       "Error al guardar el cliente.",
@@ -53,6 +73,8 @@ export const toastCliente = {
       onRetry,
     ),
 };
+
+// ── Interacciones ─────────────────────────────────────────────────────────────
 
 export const toastInteraccion = {
   okGuardado: () =>
@@ -93,6 +115,8 @@ export const toastInteraccion = {
     ),
 };
 
+// ── Registro de cuenta ────────────────────────────────────────────────────────
+
 export const toastRegistro = {
   okGuardado: () =>
     toast.success("Cuenta creada correctamente", {
@@ -107,6 +131,8 @@ export const toastRegistro = {
     ),
 };
 
+// ── Dictado por voz ───────────────────────────────────────────────────────────
+
 export const toastVoz = {
   okDictado: () =>
     toast.success("Texto añadido desde dictado", {
@@ -114,6 +140,7 @@ export const toastVoz = {
       cancel: closeButton,
       cancelButtonStyle,
     }),
+  /** `denegado` determina si el micrófono fue bloqueado por el usuario. */
   errorMicrofono: (denegado: boolean) =>
     errorToast(
       "Error de voz",
@@ -126,6 +153,8 @@ export const toastVoz = {
     ),
 };
 
+// ── Autenticación ─────────────────────────────────────────────────────────────
+
 export const toastAuth = {
   okCerrarSesion: () =>
     toast.success("Sesión cerrada correctamente", {
@@ -134,6 +163,8 @@ export const toastAuth = {
       cancelButtonStyle,
     }),
 };
+
+// ── Usuarios ──────────────────────────────────────────────────────────────────
 
 export const toastUsuario = {
   okGuardado: () =>
@@ -174,6 +205,8 @@ export const toastUsuario = {
     ),
 };
 
+// ── Recuperación de contraseña ────────────────────────────────────────────────
+
 export const toastRecuperacion = {
   okEnviado: () =>
     toast.success("Enlace enviado correctamente", {
@@ -187,6 +220,7 @@ export const toastRecuperacion = {
       cancel: closeButton,
       cancelButtonStyle,
     }),
+  /** Se muestra cuando el token del enlace de recuperación ha expirado o es inválido. */
   errorEnlace: () =>
     errorToast(
       "Enlace inválido o caducado",

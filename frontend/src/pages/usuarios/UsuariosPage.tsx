@@ -1,3 +1,18 @@
+/**
+ * Página de gestión de usuarios del sistema.
+ *
+ * Responsabilidades:
+ *   1. Carga la lista completa de usuarios al montar el componente.
+ *   2. Filtrado en cliente por nombre o email según el texto de búsqueda.
+ *   3. CRUD completo con feedback toast:
+ *        - Crear: append al final de la lista local tras éxito de API.
+ *        - Actualizar: solo incluye `password` en el payload si no está vacío,
+ *          permitiendo editar otros campos sin cambiar la contraseña.
+ *        - Eliminar: confirmación modal antes de la llamada a la API.
+ *   4. Estado único del modal (`open` + `usuario`) para alternar entre
+ *      modo creación (usuario = null) y modo edición.
+ */
+
 import { useEffect, useState } from "react";
 import { api, type Usuario } from "@/api/api";
 
@@ -19,6 +34,7 @@ export function UsuariosPage() {
     usuario: Usuario | null;
   }>({ open: false, usuario: null });
 
+  /** Carga inicial de todos los usuarios al montar la página. */
   useEffect(() => {
     async function cargar() {
       try {
@@ -33,6 +49,7 @@ export function UsuariosPage() {
     cargar();
   }, []);
 
+  /** Filtra por nombre o email; sin texto devuelve la lista completa. */
   const usuariosFiltrados = busqueda.trim()
     ? usuarios.filter(
         (u) =>
@@ -41,10 +58,13 @@ export function UsuariosPage() {
       )
     : usuarios;
 
+  /** Abre el modal en modo creación. */
   const handleAdd = () => setModalState({ open: true, usuario: null });
+  /** Abre el modal en modo edición con el usuario seleccionado. */
   const handleEdit = (usuario: Usuario) =>
     setModalState({ open: true, usuario });
 
+  /** Crea un usuario y lo añade al final de la lista local. */
   const handleCreateUsuario = async (data: UsuarioFormData) => {
     try {
       const nuevo = await api.createUsuario(data);
@@ -56,6 +76,11 @@ export function UsuariosPage() {
     }
   };
 
+  /**
+   * Actualiza un usuario existente.
+   * La contraseña solo se incluye en el payload si el campo no está vacío,
+   * lo que permite modificar nombre, email o rol sin forzar un cambio de clave.
+   */
   const handleUpdateUsuario = async (id: number, data: UsuarioFormData) => {
     try {
       const body: Partial<Usuario> & { password?: string } = {
@@ -76,6 +101,11 @@ export function UsuariosPage() {
     }
   };
 
+  /**
+   * Elimina un usuario tras confirmación.
+   * Si el usuario cancela el toast de confirmación, la función retorna sin
+   * realizar ninguna llamada de red.
+   */
   const handleDeleteUsuario = async (id: number) => {
     const confirmar = await confirmDeleteToast(
       "¿Seguro que deseas eliminar el usuario?",

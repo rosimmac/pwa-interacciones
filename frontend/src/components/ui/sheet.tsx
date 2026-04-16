@@ -1,3 +1,24 @@
+/**
+ * Familia de componentes Sheet (drawer/panel deslizante) basados en el
+ * primitive `Dialog` de Radix UI reutilizado con animaciones de slide.
+ *
+ * `SheetContent` acepta una prop `side` que controla desde qué borde aparece
+ * el panel: "right" (por defecto), "left", "top" o "bottom". Las animaciones
+ * de entrada/salida (`slide-in-from-*` / `slide-out-to-*`) se aplican via
+ * clases Tailwind condicionadas al valor de `side`.
+ *
+ * El botón de cierre (X) es opcional mediante `showCloseButton` (true por defecto).
+ *
+ * Árbol de componentes:
+ *   `Sheet`           — raíz (alias de DialogRoot).
+ *   `SheetTrigger`    — elemento que abre el panel.
+ *   `SheetContent`    — panel deslizante con overlay y botón de cierre.
+ *   `SheetHeader`     — cabecera con título y descripción.
+ *   `SheetFooter`     — pie con acciones, pegado al borde inferior (`mt-auto`).
+ *   `SheetTitle`      — título semántico accesible.
+ *   `SheetDescription`— descripción accesible; ocultable con `sr-only`.
+ */
+
 import * as React from "react"
 import { XIcon } from "lucide-react"
 import { Dialog as SheetPrimitive } from "radix-ui"

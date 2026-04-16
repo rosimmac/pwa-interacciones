@@ -1,8 +1,26 @@
+/**
+ * Toast de error con opción de reintento.
+ *
+ * Muestra un aviso visual de error con mensaje, descripción y,
+ * opcionalmente, un botón "Reintentar" que ejecuta el callback `onRetry`
+ * y cierra el toast. Siempre incluye un botón "Cerrar".
+ *
+ * Se cierra automáticamente tras 6 segundos (`duration: 6000`).
+ * Devuelve el ID del toast para que el llamante pueda descartarlo
+ * manualmente si lo necesita.
+ *
+ * Uso:
+ * ```ts
+ * errorToast("Error al guardar", "Comprueba tu conexión", () => guardar());
+ * ```
+ */
+
 import { toast } from "sonner";
 
 export function errorToast(
   mensaje: string,
   descripcion: string,
+  /** Callback opcional que se ejecuta al pulsar "Reintentar". */
   onRetry?: () => void,
 ) {
   const id = toast.custom(
@@ -25,6 +43,7 @@ export function errorToast(
             marginBottom: "14px",
           }}
         >
+          {/* Icono de advertencia en círculo rojo */}
           <div
             style={{
               width: "36px",
@@ -48,6 +67,7 @@ export function errorToast(
               />
             </svg>
           </div>
+
           <div style={{ flex: 1 }}>
             <p
               style={{
@@ -64,9 +84,12 @@ export function errorToast(
             >
               {descripcion}
             </p>
+
+            {/* Botones: "Reintentar" (condicional) y "Cerrar" */}
             <div
               style={{ display: "flex", gap: "8px", justifyContent: "center" }}
             >
+              {/* El botón Reintentar solo aparece si se proporciona el callback. */}
               {onRetry && (
                 <button
                   onClick={() => {

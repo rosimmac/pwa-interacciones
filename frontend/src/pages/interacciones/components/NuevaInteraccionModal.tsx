@@ -1,3 +1,18 @@
+/**
+ * Modal responsivo para crear o editar una interacción.
+ *
+ * Estrategia de layout adaptativo:
+ *   - Móvil (< 768 px): `Sheet` deslizante desde abajo con altura máxima del 90 % de la ventana.
+ *   - Desktop (≥ 768 px): `Dialog` centrado con ancho máximo de 512 px.
+ *
+ * Ambos contenedores renderizan el mismo `NuevaInteraccionForm` mediante
+ * la función `renderForm()`, evitando duplicar la lógica del formulario.
+ *
+ * Cuando `interaccionToEdit` tiene valor, el modal entra en modo edición:
+ *   - El título cambia a "Editar Interacción".
+ *   - `handleUpdate` envuelve `onUpdate` para inyectar automáticamente el `id`.
+ */
+
 import {
   Sheet,
   SheetContent,
@@ -19,8 +34,11 @@ import type { Interaccion } from "@/api/api";
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /** Si se pasa, el modal entra en modo edición con los datos prefijados. */
   interaccionToEdit?: Interaccion | null;
+  /** Callback invocado al guardar una nueva interacción. */
   onCreate?: (data: any) => Promise<void>;
+  /** Callback invocado al guardar los cambios de una interacción existente. */
   onUpdate?: (id: number, data: any) => Promise<void>;
 };
 
@@ -35,11 +53,13 @@ export function NuevaInteraccionModal({
   const isEditing = !!interaccionToEdit;
   const title = isEditing ? "Editar Interacción" : "Nueva Interacción";
 
+  // Envuelve `onUpdate` para inyectar el id de la interacción bajo edición.
   const handleUpdate =
     onUpdate && interaccionToEdit
       ? (data: any) => onUpdate(interaccionToEdit.id, data)
       : undefined;
 
+  /** Formulario compartido por Sheet y Dialog. */
   const renderForm = () => (
     <NuevaInteraccionForm
       open={open}
@@ -53,10 +73,12 @@ export function NuevaInteraccionModal({
 
   return (
     <>
+      {/* Versión escritorio: Dialog centrado */}
       <Dialog open={open && isDesktop} onOpenChange={onOpenChange}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
+            {/* Descripción solo para lectores de pantalla (accesibilidad) */}
             <DialogDescription className="sr-only">
               {isEditing
                 ? "Edita los datos de la interacción"
@@ -67,6 +89,7 @@ export function NuevaInteraccionModal({
         </DialogContent>
       </Dialog>
 
+      {/* Versión móvil: Sheet deslizante desde abajo */}
       <Sheet open={open && !isDesktop} onOpenChange={onOpenChange}>
         <SheetContent
           side="bottom"

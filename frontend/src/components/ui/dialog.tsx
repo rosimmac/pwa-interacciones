@@ -1,3 +1,19 @@
+/**
+ * Familia de componentes Dialog basados en Radix UI `Dialog` primitive.
+ *
+ * Árbol de componentes:
+ *   `Dialog` → `DialogTrigger` abre el diálogo.
+ *   `DialogContent` renderiza `DialogPortal` + `DialogOverlay` + contenido
+ *     centrado con animaciones fade/zoom. Incluye botón de cierre (X) por
+ *     defecto, ocultable mediante `showCloseButton={false}`.
+ *   `DialogHeader`      — sección superior con título y descripción.
+ *   `DialogFooter`      — sección inferior con acciones; incluye botón
+ *                         "Close" opcional via `showCloseButton`.
+ *   `DialogTitle`       — título semántico accesible (aria-labelledby).
+ *   `DialogDescription` — descripción accesible (aria-describedby); se puede
+ *                         ocultar visualmente con `className="sr-only"`.
+ */
+
 import * as React from "react"
 import { XIcon } from "lucide-react"
 import { Dialog as DialogPrimitive } from "radix-ui"

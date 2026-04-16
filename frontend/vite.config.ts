@@ -1,6 +1,6 @@
 import path from "path";
 import tailwindcss from "@tailwindcss/vite";
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react-swc";
 import { VitePWA } from "vite-plugin-pwa";
 
@@ -56,5 +56,19 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
+  },
+  test: {
+    // jsdom simula el DOM del navegador en Node.js, necesario para renderizar
+    // componentes React y manipular elementos HTML en los tests.
+    environment: "jsdom",
+
+    // Se ejecuta antes de cada suite de tests para registrar los matchers de
+    // jest-dom y configurar el cleanup automático de React Testing Library.
+    setupFiles: ["./src/test/setup.ts"],
+
+    // Resetea el historial de llamadas, instancias y resultados de todos los
+    // vi.fn() entre tests sin eliminar la implementación del mock.
+    // Equivale a llamar vi.clearAllMocks() en un beforeEach global.
+    clearMocks: true,
   },
 });

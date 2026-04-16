@@ -1,3 +1,15 @@
+/**
+ * Modal responsivo para crear o editar un usuario del sistema.
+ *
+ * Idéntico en estructura a `NuevoClienteModal` y `NuevaInteraccionModal`:
+ *   - Móvil (< 768 px): `Sheet` deslizante desde abajo.
+ *   - Desktop (≥ 768 px): `Dialog` centrado.
+ *
+ * La prop `key` de `NuevoUsuarioForm` fuerza un desmontaje y remontaje
+ * del formulario cuando cambia el usuario editado, garantizando que los
+ * `useEffect` de reset de campos se ejecuten correctamente.
+ */
+
 import {
   Sheet,
   SheetContent,
@@ -20,8 +32,11 @@ import type { Usuario } from "@/api/api";
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /** Si se pasa, el modal entra en modo edición con los datos del usuario. */
   usuarioToEdit?: Usuario | null;
+  /** Callback invocado al guardar un nuevo usuario. */
   onCreate: (data: UsuarioFormData) => Promise<void>;
+  /** Callback invocado al guardar los cambios de un usuario existente. */
   onUpdate: (id: number, data: UsuarioFormData) => Promise<void>;
 };
 
@@ -38,6 +53,11 @@ export function NuevoUsuarioModal({
     ? "Modifica los datos del usuario y guarda los cambios"
     : "Rellena los datos para registrar un nuevo usuario";
 
+  /**
+   * La `key` basada en el id del usuario editado (o "nuevo") garantiza que
+   * React desmonte y vuelva a montar el formulario cuando cambia el usuario
+   * seleccionado, forzando el reset de todos los campos.
+   */
   const renderForm = () => (
     <NuevoUsuarioForm
       key={usuarioToEdit?.id ?? "nuevo"}
@@ -51,6 +71,7 @@ export function NuevoUsuarioModal({
 
   return (
     <>
+      {/* Versión escritorio: Dialog centrado */}
       <Dialog open={open && isDesktop} onOpenChange={onOpenChange}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
@@ -63,6 +84,7 @@ export function NuevoUsuarioModal({
         </DialogContent>
       </Dialog>
 
+      {/* Versión móvil: Sheet deslizante desde abajo */}
       <Sheet open={open && !isDesktop} onOpenChange={onOpenChange}>
         <SheetContent
           side="bottom"

@@ -1,3 +1,21 @@
+/**
+ * Toast de confirmación de eliminación.
+ *
+ * Muestra un aviso visual de peligro con dos botones ("Cancelar" / "Eliminar")
+ * y devuelve una promesa que se resuelve con `true` si el usuario confirma
+ * o con `false` si cancela.
+ *
+ * La promesa se resuelve en el handler de cada botón, que también descarta
+ * el toast. `duration: Infinity` evita que el toast se cierre solo antes de
+ * que el usuario tome una decisión.
+ *
+ * Uso:
+ * ```ts
+ * const confirmar = await confirmDeleteToast("¿Eliminar este registro?");
+ * if (confirmar) { ... }
+ * ```
+ */
+
 import { toast } from "sonner";
 
 export function confirmDeleteToast(
@@ -5,6 +23,7 @@ export function confirmDeleteToast(
   descripcion = "Si lo eliminas, no lo podrás recuperar",
 ): Promise<boolean> {
   return new Promise((resolve) => {
+    // `id` se usa para descartar el toast manualmente desde los botones.
     const id = toast.custom(
       () => (
         <div
@@ -17,6 +36,7 @@ export function confirmDeleteToast(
             padding: "1.25rem 1.25rem 1rem",
           }}
         >
+          {/* Icono + textos */}
           <div
             style={{
               display: "flex",
@@ -25,6 +45,7 @@ export function confirmDeleteToast(
               marginBottom: "14px",
             }}
           >
+            {/* Círculo rojo con icono de advertencia (SVG inline) */}
             <div
               style={{
                 width: "36px",
@@ -64,9 +85,12 @@ export function confirmDeleteToast(
               </p>
             </div>
           </div>
+
+          {/* Botones de acción */}
           <div
             style={{ display: "flex", gap: "8px", justifyContent: "center" }}
           >
+            {/* Cancelar: cierra el toast y resuelve con false */}
             <button
               onClick={() => {
                 toast.dismiss(id);
@@ -86,6 +110,7 @@ export function confirmDeleteToast(
             >
               Cancelar
             </button>
+            {/* Confirmar: cierra el toast y resuelve con true */}
             <button
               onClick={() => {
                 toast.dismiss(id);
@@ -108,6 +133,7 @@ export function confirmDeleteToast(
           </div>
         </div>
       ),
+      // `Infinity` previene el cierre automático del toast antes de la decisión.
       { duration: Infinity, position: "bottom-center" },
     );
   });

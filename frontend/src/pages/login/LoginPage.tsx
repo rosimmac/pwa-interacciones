@@ -62,7 +62,7 @@ export function LoginPage() {
           Inicia sesión y gestiona tus interacciones
         </h1>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
           {/* Email */}
           <div className="space-y-4">
             <Label htmlFor="email" className="mb-1">

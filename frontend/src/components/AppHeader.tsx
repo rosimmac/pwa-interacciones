@@ -1,10 +1,24 @@
+/**
+ * Cabecera de página reutilizable.
+ *
+ * Muestra el título de la sección, el botón de apertura del menú lateral
+ * y, opcionalmente, un campo de búsqueda controlado desde la página padre.
+ *
+ * El componente se exporta en dos formas:
+ *   - `AppHeaderRaw`  – versión sin memoización, útil para pruebas.
+ *   - `AppHeader`     – versión memoizada con `React.memo` para evitar
+ *                       re-renders cuando las props no cambian.
+ */
+
 import { SidebarMenu } from "@/components/SidebarMenu";
 import { Input } from "@/components/ui/input";
 import { Search, X } from "lucide-react";
 import { memo } from "react";
 
 type PageHeaderProps = {
+  /** Texto del título de la sección actual. */
   title: string;
+  /** Placeholder del buscador; si se omite se genera automáticamente. */
   placeholder?: string;
 
   /** Control del buscador (controlado desde la página) */
@@ -37,10 +51,11 @@ export function AppHeaderRaw({
         <SidebarMenu />
       </div>
 
-      {/* Buscador */}
+      {/* Buscador — se oculta cuando `hideSearch` es true */}
       {!hideSearch && (
         <div className="w-full -mt-6">
           <div className="relative w-full text-white">
+            {/* Icono decorativo de búsqueda, no interactivo */}
             <Search
               size={18}
               className="absolute left-3 top-1/2 -translate-y-1/2 text-white/70 z-20 pointer-events-none"
@@ -50,6 +65,7 @@ export function AppHeaderRaw({
               type="text"
               value={searchValue}
               onChange={(e) => onSearchChange?.(e.target.value)}
+              // Si no se pasa placeholder, se genera uno con el título de la sección.
               placeholder={placeholder ?? `Buscar ${title.toLowerCase()}...`}
               className="
                 w-full pl-10 pr-10 py-3
@@ -63,6 +79,7 @@ export function AppHeaderRaw({
               "
             />
 
+            {/* Botón de borrar — solo visible cuando hay texto y se ha pasado `onClearSearch` */}
             {!!searchValue && onClearSearch && (
               <button
                 type="button"
@@ -79,4 +96,5 @@ export function AppHeaderRaw({
   );
 }
 
+/** Versión memoizada para uso en producción. */
 export const AppHeader = memo(AppHeaderRaw);

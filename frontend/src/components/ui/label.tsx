@@ -1,3 +1,11 @@
+/**
+ * Componente Label basado en Radix UI `Label` primitive.
+ *
+ * Extiende el `<label>` nativo con gestión automática del cursor y opacidad
+ * cuando el input asociado está deshabilitado, utilizando las clases
+ * `peer-disabled` de Tailwind para aplicar estilos sin JS extra.
+ */
+
 import * as React from "react"
 import { Label as LabelPrimitive } from "radix-ui"
 

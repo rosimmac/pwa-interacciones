@@ -1,3 +1,18 @@
+/**
+ * Modal responsivo para crear o editar un cliente.
+ *
+ * Estrategia de layout adaptativo:
+ *   - Móvil (< 768 px): `Sheet` deslizante desde abajo.
+ *   - Desktop (≥ 768 px): `Dialog` centrado con ancho máximo de 512 px.
+ *
+ * El contenido del formulario (`formContent`) se calcula una sola vez y se
+ * reutiliza en ambas variantes para evitar duplicidad de código.
+ *
+ * Cuando `clienteToEdit` tiene valor, el modal entra en modo edición:
+ *   - El título cambia a "Editar Cliente".
+ *   - `NuevoClienteForm` recibe el cliente a editar para prefill de campos.
+ */
+
 import {
   Sheet,
   SheetContent,
@@ -19,8 +34,11 @@ import type { ClienteFormData } from "@/schemas/clientesSchema";
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /** Si se pasa, el modal entra en modo edición con los datos del cliente. */
   clienteToEdit?: { id: number; nombre: string } | null;
+  /** Callback invocado al guardar un nuevo cliente. */
   onCreate: (data: ClienteFormData) => Promise<void>;
+  /** Callback invocado al guardar los cambios de un cliente existente. */
   onUpdate: (id: number, data: ClienteFormData) => Promise<void>;
 };
 
@@ -43,6 +61,7 @@ export function NuevoClienteModal({
     ? "Modifica el nombre del cliente y guarda los cambios"
     : "Rellena el nombre para registrar un nuevo cliente";
 
+  // El formulario es idéntico en ambas variantes; se calcula una vez.
   const formContent = (
     <NuevoClienteForm
       clienteToEdit={clienteToEdit ?? null}
@@ -54,10 +73,12 @@ export function NuevoClienteModal({
 
   return (
     <>
+      {/* Versión escritorio: Dialog centrado */}
       <Dialog open={open && isDesktop} onOpenChange={onOpenChange}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>{titulo}</DialogTitle>
+            {/* Solo visible para lectores de pantalla */}
             <DialogDescription className="sr-only">
               {descripcion}
             </DialogDescription>
@@ -66,6 +87,7 @@ export function NuevoClienteModal({
         </DialogContent>
       </Dialog>
 
+      {/* Versión móvil: Sheet deslizante desde abajo */}
       <Sheet open={open && !isDesktop} onOpenChange={onOpenChange}>
         <SheetContent
           side="bottom"

@@ -1,3 +1,18 @@
+/**
+ * Componente Badge con variantes de estilo gestionadas por CVA.
+ *
+ * Variantes disponibles (`variant`):
+ *   - `default`     — fondo primario, texto sobre primario.
+ *   - `secondary`   — fondo secundario.
+ *   - `destructive` — rojo, para estados de error o eliminación.
+ *   - `outline`     — solo borde, sin fondo.
+ *   - `ghost`       — sin fondo ni borde; hover reactivo.
+ *   - `link`        — texto subrayado al hover.
+ *
+ * La prop `asChild` (via Radix `Slot.Root`) permite delegar el renderizado
+ * al hijo directo, útil para envolver un `<a>` sin anidar elementos.
+ */
+
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"

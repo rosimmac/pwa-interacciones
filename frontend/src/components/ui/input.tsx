@@ -1,3 +1,15 @@
+/**
+ * Componente Input (shadcn/ui).
+ *
+ * Envuelve un `<input>` nativo con estilos consistentes para todos los tipos
+ * (text, email, password, file…). Incluye estados visuales para:
+ *   - Foco: anillo de color primario.
+ *   - Error (`aria-invalid`): anillo y borde destructivo.
+ *   - Deshabilitado: cursor bloqueado y opacidad reducida.
+ *
+ * Todas las props nativas de `<input>` se propagan mediante spread.
+ */
+
 import * as React from "react";
 
 import { cn } from "@/lib/utils";

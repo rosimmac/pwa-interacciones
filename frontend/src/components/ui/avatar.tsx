@@ -1,3 +1,17 @@
+/**
+ * Componentes de Avatar basados en Radix UI `Avatar` primitive.
+ *
+ * Árbol de componentes:
+ *   - `Avatar`            — contenedor circular con soporte para tres tamaños (sm/default/lg)
+ *                           gestionados mediante `data-size` + variantes Tailwind.
+ *   - `AvatarImage`       — imagen con aspect-ratio 1:1; Radix oculta automáticamente
+ *                           si falla la carga y muestra `AvatarFallback` en su lugar.
+ *   - `AvatarFallback`    — iniciales o icono cuando la imagen no está disponible.
+ *   - `AvatarBadge`       — indicador de estado superpuesto (p.ej. punto verde "en línea").
+ *   - `AvatarGroup`       — contenedor que solapa múltiples avatares con `ring` como separador.
+ *   - `AvatarGroupCount`  — elemento numérico al final de un grupo (p.ej. "+3").
+ */
+
 "use client"
 
 import * as React from "react"
