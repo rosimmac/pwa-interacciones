@@ -33,7 +33,7 @@ export default defineConfig({
             type: "image/png",
           },
           {
-            src: "icono.png",
+            src: "iconoDefinitivo.png",
             sizes: "512x512",
             type: "image/png",
             purpose: "any maskable",
