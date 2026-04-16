@@ -73,7 +73,6 @@ export function NuevaInteraccionForm({
   interaccionToEdit,
 }: NuevaInteraccionFormProps) {
   const isEditing = !!interaccionToEdit;
-  const now = new Date();
 
   const [clientes, setClientes] = useState<Cliente[]>([]);
 
@@ -94,8 +93,8 @@ export function NuevaInteraccionForm({
       tipo: "reunion",
       descripcion: "",
       clienteId: undefined,
-      fecha: formatDate(now),
-      hora: formatTime(now),
+      fecha: "",
+      hora: "",
     },
   });
 
@@ -114,13 +113,12 @@ export function NuevaInteraccionForm({
         });
       }, 50);
     } else {
-      const n = new Date();
       reset({
         tipo: "reunion",
         descripcion: "",
         clienteId: undefined,
-        fecha: formatDate(n),
-        hora: formatTime(n),
+        fecha: "",
+        hora: "",
       });
     }
   }, [open, interaccionToEdit, reset, clientes]);
@@ -179,8 +177,8 @@ export function NuevaInteraccionForm({
         tipo: "reunion",
         descripcion: "",
         clienteId: undefined,
-        fecha: formatDate(new Date()),
-        hora: formatTime(new Date()),
+        fecha: "",
+        hora: "",
       });
 
       onSuccess?.();
@@ -315,12 +313,12 @@ export function NuevaInteraccionForm({
         </div>
 
         {/* Fecha y hora */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="space-y-2">
             <Label htmlFor="fecha" className="text-muted-foreground">
               Fecha
             </Label>
-            <Input id="fecha" type="date" {...register("fecha")} />
+            <Input id="fecha" type="date" className="w-full" {...register("fecha")} />
             {errors.fecha && (
               <p className="text-sm text-destructive">{errors.fecha.message}</p>
             )}
@@ -329,7 +327,7 @@ export function NuevaInteraccionForm({
             <Label htmlFor="hora" className="text-muted-foreground">
               Hora
             </Label>
-            <Input id="hora" type="time" {...register("hora")} />
+            <Input id="hora" type="time" className="w-full" {...register("hora")} />
             {errors.hora && (
               <p className="text-sm text-destructive">{errors.hora.message}</p>
             )}
