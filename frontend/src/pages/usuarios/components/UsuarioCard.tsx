@@ -45,6 +45,7 @@ function UsuarioCardRaw({ usuario, onEdit, onDelete }: UsuarioCardProps) {
       icon={<UserRound className="h-6 w-6 text-gray-500" />}
       badge={null}
       layout="horizontal"
+      onClick={onEdit}
       onEdit={onEdit}
       onDelete={onDelete}
       colorClasses={{

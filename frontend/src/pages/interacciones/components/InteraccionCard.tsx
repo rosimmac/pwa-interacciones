@@ -67,6 +67,7 @@ export function InteraccionCard({
 }: InteraccionCardProps) {
   return (
     <BaseCard
+      onClick={onEdit}
       onDelete={onDelete}
       onEdit={onEdit}
       icon={icono}

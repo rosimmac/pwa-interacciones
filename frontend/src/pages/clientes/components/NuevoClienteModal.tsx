@@ -91,7 +91,8 @@ export function NuevoClienteModal({
       <Sheet open={open && !isDesktop} onOpenChange={onOpenChange}>
         <SheetContent
           side="bottom"
-          className="max-h-[90vh] rounded-t-xl overflow-y-auto"
+          className="rounded-t-xl overflow-y-auto"
+          style={{ maxHeight: "90dvh" }}
         >
           <SheetHeader>
             <SheetTitle>{titulo}</SheetTitle>

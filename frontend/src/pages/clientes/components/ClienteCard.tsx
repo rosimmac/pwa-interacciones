@@ -39,6 +39,7 @@ export function ClienteCardRaw({
       badge={null}
       layout="horizontal"
       // Acciones: edit/delete
+      onClick={onEdit ? () => onEdit(id) : undefined}
       onEdit={onEdit ? () => onEdit(id) : undefined}
       onDelete={onDelete ? () => onDelete(id) : undefined}
       // Colores propios de clienteCard

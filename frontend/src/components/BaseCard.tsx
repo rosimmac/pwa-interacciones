@@ -8,6 +8,7 @@ type BaseCardProps = {
   children: ReactNode; // contenido interno variable
   onEdit?: () => void;
   onDelete?: () => void;
+  onClick?: () => void;
   layout?: "vertical" | "horizontal";
   colorClasses?: {
     iconBg: string;
@@ -22,6 +23,7 @@ export function BaseCard({
   children,
   onEdit,
   onDelete,
+  onClick,
   layout = "vertical", // por defecto las interacciones siguen funcionando
   colorClasses,
 }: BaseCardProps) {
@@ -39,7 +41,7 @@ export function BaseCard({
   };
 
   return (
-    <Card className="rounded-2xl shadow-sm bg-white border">
+    <Card className="rounded-2xl shadow-sm bg-white border" onClick={onClick}>
       <CardContent className="p-4">
         {/* Si es LAYOUT HORIZONTAL (Clientes) */}
         {layout === "horizontal" && (
