@@ -92,7 +92,10 @@ export function NuevoClienteModal({
         <SheetContent
           side="bottom"
           className="rounded-t-xl overflow-y-auto"
-          style={{ maxHeight: "90dvh" }}
+          style={{
+            maxHeight: "90dvh",
+            paddingBottom: "env(keyboard-inset-height, 0px)",
+          }}
         >
           <SheetHeader>
             <SheetTitle>{titulo}</SheetTitle>

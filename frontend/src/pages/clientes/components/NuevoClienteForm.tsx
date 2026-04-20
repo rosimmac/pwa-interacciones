@@ -76,7 +76,7 @@ export function NuevoClienteForm({
       console.error(err);
     }
   };
-
+  const { ref, onBlur, onChange, name } = register("nombre");
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       <label
@@ -88,7 +88,15 @@ export function NuevoClienteForm({
 
       <Input
         id="cliente-nombre"
-        {...register("nombre")}
+        name={name}
+        ref={ref}
+        onBlur={onBlur}
+        onChange={onChange}
+        onFocus={(e) => {
+          setTimeout(() => {
+            e.target.scrollIntoView({ behavior: "smooth", block: "center" });
+          }, 300);
+        }}
         placeholder="ej: Marta García"
         className="bg-white border rounded-lg h-11 mt-2"
       />
