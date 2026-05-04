@@ -31,6 +31,7 @@ import { AuthModule } from './auth/auth.module';
         username: config.get('DB_USERNAME'),
         password: config.get('DB_PASSWORD'),
         database: config.get('DB_DATABASE'),
+        charset: 'utf8mb4',
         // Detecta automáticamente todas las entidades del proyecto
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         // synchronize:false para no alterar el esquema en producción
