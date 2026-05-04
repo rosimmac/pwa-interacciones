@@ -303,7 +303,13 @@ export function InteraccionesPage() {
               cliente={
                 clientes[item.clienteId]?.nombre ?? "Cliente desconocido"
               }
-              fecha={new Date(item.fecha).toLocaleString()}
+              fecha={new Date(item.fecha).toLocaleString(undefined, {
+                day: "2-digit",
+                month: "numeric",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
               icono={
                 item.tipo.nombre.toLowerCase() === "reunion" ? (
                   <Users />
