@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(npm view *)",
-      "Bash(npm list *)",
-      "Bash(npx dotenv *)"
-    ]
-  }
-}
