@@ -8,7 +8,7 @@ import { UsuariosService } from '../usuarios/usuarios.service';
 import { RegistroAccesosService } from '../registro_accesos/registro-accesos.service';
 import * as bcrypt from 'bcryptjs';
 import * as crypto from 'crypto';
-import * as nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
 /**
  * Servicio de autenticación.
@@ -70,41 +70,41 @@ export class AuthService {
    * La respuesta es siempre el mismo mensaje genérico independientemente de si el email
    * existe o no, para evitar la enumeración de cuentas registradas.
    *
+   * El envío se delega en Resend, servicio de email transaccional externo, para evitar
+   * las restricciones SMTP que aplican los proveedores de hosting (Railway bloquea
+   * las conexiones salientes en los puertos 465 y 587).
+   *
    * @param email - Correo electrónico del usuario que solicita el reset.
    */
   async forgotPassword(email: string) {
     const usuario = await this.usuariosService.findByEmail(email);
+    // Respuesta genérica aunque el email no exista: evita enumerar cuentas registradas
     if (!usuario) return { message: 'Si el email existe, recibirás un enlace' };
 
+    // Token criptográficamente seguro de 32 bytes (64 caracteres hex)
     const token = crypto.randomBytes(32).toString('hex');
-    const expiry = new Date(Date.now() + 60 * 60 * 1000); // Expira en 1 hora
+    // El enlace de recuperación caduca en 1 hora desde su generación
+    const expiry = new Date(Date.now() + 60 * 60 * 1000);
 
     await this.usuariosService.guardarResetToken(email, token, expiry);
 
     console.log('Token guardado, enviando email a:', email);
 
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 587,
-      secure: false,
-      auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS,
-      },
-    });
-
+    // La instancia de Resend se crea por llamada para evitar estado compartido entre peticiones
+    const resend = new Resend(process.env.RESEND_API_KEY);
     const resetUrl = `http://localhost:5173/restablecer?token=${token}`;
 
     try {
-      await transporter.sendMail({
-        from: process.env.MAIL_USER,
+      await resend.emails.send({
+        from: 'onboarding@resend.dev', // Dominio por defecto de Resend (no requiere dominio propio)
         to: email,
         subject: 'Recuperación de contraseña',
         html: `<p>Haz clic en el enlace para restablecer tu contraseña. Caduca en 1 hora.</p>
-             <a href="${resetUrl}">${resetUrl}</a>`,
+               <a href="${resetUrl}">${resetUrl}</a>`,
       });
       console.log('Email enviado correctamente');
     } catch (error) {
+      // El error se registra pero no se propaga: la respuesta al cliente es siempre genérica
       console.error('Error al enviar email:', error);
     }
 
@@ -132,7 +132,7 @@ export class AuthService {
 
     await this.usuariosService.update(usuario.id, { password: newPassword });
 
-    // Limpiamos el token para que el enlace no pueda reutilizarse
+    // Invalidamos el token para que el enlace de recuperación no pueda reutilizarse
     await this.usuariosService.guardarResetToken(usuario.email, null, null);
 
     return { message: 'Contraseña actualizada correctamente' };
