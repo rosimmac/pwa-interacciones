@@ -92,7 +92,7 @@ export class AuthService {
 
     // La instancia de Resend se crea por llamada para evitar estado compartido entre peticiones
     const resend = new Resend(process.env.RESEND_API_KEY);
-    const resetUrl = `http://localhost:5173/restablecer?token=${token}`;
+    const resetUrl = `https://pwa-interacciones.vercel.app/restablecer?token=${token}`;
 
     try {
       await resend.emails.send({
