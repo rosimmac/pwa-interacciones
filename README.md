@@ -1,4 +1,5 @@
 # PWA – Registro Rápido de Interacciones
+
 Registra una interacción con un cliente en menos de 10 segundos.
 
 Aplicación web progresiva (PWA) para equipos comerciales que necesitan registrar interacciones con clientes de forma ágil — reuniones, consultas, seguimientos — con foco en velocidad, usabilidad y una UX limpia. Desarrollada como proyecto full-stack con backend real en NestJS y base de datos MySQL, completamente desplegada en producción.
@@ -8,7 +9,7 @@ Aplicación web progresiva (PWA) para equipos comerciales que necesitan registra
 🔗 [pwa-interacciones.vercel.app](https://pwa-interacciones.vercel.app/)
 
 | Campo      | Valor              |
-|------------|--------------------|
+| ---------- | ------------------ |
 | Email      | carlos@example.com |
 | Contraseña | Pass1234.          |
 | Rol        | `user`             |
@@ -19,43 +20,43 @@ Desplegado y en producción — frontend en Vercel, backend en Railway.
 
 ## Funcionalidades
 
-| Funcionalidad | Detalle |
-|---|---|
-| ⚡ Registro ultrarrápido | Interacción completa registrada en menos de 10 segundos |
-| 👥 Control de acceso por roles | Permisos `admin` / `user` / `solo lectura` |
-| 🎤 Entrada por voz | Dictado de campos manos libres con Web Speech API |
-| 📊 Panel de clientes | Historial de interacciones y métricas clave |
-| 📱 Mobile-first | Totalmente responsiva e instalable como PWA |
-| 🛡 Formularios con validación | React Hook Form + Zod |
-| 🔐 Autenticación JWT | Autenticación real con registro de accesos |
-| 🔑 Recuperación de contraseña | Flujo de restablecimiento por email con Nodemailer |
-| 🎨 Diseñada en Figma | Interfaz construida desde un sistema de diseño propio |
+| Funcionalidad                  | Detalle                                                 |
+| ------------------------------ | ------------------------------------------------------- |
+| ⚡ Registro ultrarrápido       | Interacción completa registrada en menos de 10 segundos |
+| 👥 Control de acceso por roles | Permisos `admin` / `user` / `solo lectura`              |
+| 🎤 Entrada por voz             | Dictado de campos manos libres con Web Speech API       |
+| 📊 Panel de clientes           | Historial de interacciones y métricas clave             |
+| 📱 Mobile-first                | Totalmente responsiva e instalable como PWA             |
+| 🛡 Formularios con validación  | React Hook Form + Zod                                   |
+| 🔐 Autenticación JWT           | Autenticación real con registro de accesos              |
+| 🔑 Recuperación de contraseña  | Resend                                                  |
+| 🎨 Diseñada en Figma           | Interfaz construida desde un sistema de diseño propio   |
 
 ## Stack tecnológico
 
 ### Frontend
 
-| | |
-|---|---|
-| Framework | React 18 + TypeScript |
-| Bundler | Vite |
-| Estilos | Tailwind CSS v4 + shadcn/ui |
-| Enrutamiento | React Router v7 |
-| Formularios | React Hook Form + Zod |
-| Cliente HTTP | Axios (con interceptores JWT) |
-| Notificaciones | Sonner |
+|                |                               |
+| -------------- | ----------------------------- |
+| Framework      | React 18 + TypeScript         |
+| Bundler        | Vite                          |
+| Estilos        | Tailwind CSS v4 + shadcn/ui   |
+| Enrutamiento   | React Router v7               |
+| Formularios    | React Hook Form + Zod         |
+| Cliente HTTP   | Axios (con interceptores JWT) |
+| Notificaciones | Sonner                        |
 
 ### Backend
 
-| | |
-|---|---|
-| Framework | NestJS |
-| Lenguaje | TypeScript |
-| ORM | TypeORM |
+|               |                                                 |
+| ------------- | ----------------------------------------------- |
+| Framework     | NestJS                                          |
+| Lenguaje      | TypeScript                                      |
+| ORM           | TypeORM                                         |
 | Base de datos | MySQL (Docker en local / Railway en producción) |
-| Autenticación | JWT + bcrypt |
-| Email | Nodemailer + App Passwords de Gmail |
-| API | REST con prefijo global `/api` |
+| Autenticación | JWT + bcrypt                                    |
+| Email         | Resend (email transaccional)                    |
+| API           | REST con prefijo global `/api`                  |
 
 ## Arquitectura
 
@@ -118,11 +119,11 @@ cd frontend
 npm run dev
 ```
 
-| Servicio  | URL |
-|-----------|-----|
-| Frontend  | http://localhost:5173 |
-| API       | http://localhost:3000/api |
-| MySQL     | localhost:3306 |
+| Servicio | URL                       |
+| -------- | ------------------------- |
+| Frontend | http://localhost:5173     |
+| API      | http://localhost:3000/api |
+| MySQL    | localhost:3306            |
 
 ## Autenticación
 
@@ -136,11 +137,11 @@ La autenticación la gestiona el backend NestJS mediante tokens JWT y hash de co
 
 ### Roles
 
-| Rol | Permisos |
-|---|---|
-| `admin` | Acceso completo — gestión de usuarios, clientes e interacciones |
-| `user` | Crear y consultar sus propios registros |
-| `solo lectura` | Solo visualización |
+| Rol            | Permisos                                                        |
+| -------------- | --------------------------------------------------------------- |
+| `admin`        | Acceso completo — gestión de usuarios, clientes e interacciones |
+| `user`         | Crear y consultar sus propios registros                         |
+| `solo lectura` | Solo visualización                                              |
 
 ## Capturas de pantalla
 
