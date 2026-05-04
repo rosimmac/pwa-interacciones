@@ -29,24 +29,17 @@ type FiltroItem = {
   color: string;
 };
 
-const filtros: FiltroItem[] = [
-  { id: "todas", label: "Todas", count: 4, color: "bg-blue-100 text-blue-700" },
+const filtros: Omit<FiltroItem, "count">[] = [
+  { id: "todas", label: "Todas", color: "bg-blue-100 text-blue-700" },
   {
     id: "consulta",
     label: "Consultas",
-    count: 1,
     color: "bg-purple-100 text-purple-700",
   },
-  {
-    id: "reunion",
-    label: "Reuniones",
-    count: 2,
-    color: "bg-green-100 text-green-700",
-  },
+  { id: "reunion", label: "Reuniones", color: "bg-green-100 text-green-700" },
   {
     id: "antecedente",
     label: "Antecedentes",
-    count: 2,
     color: "bg-orange-100 text-orange-700",
   },
 ];
@@ -88,12 +81,14 @@ type FiltrosTabsProps = {
   onChange: (next: FiltroID) => void;
   /** Si es true, reduce el padding para entornos con espacio horizontal limitado. */
   compact?: boolean;
+  counts: Record<FiltroID, number>;
 };
 
 export function FiltrosTabs({
   value,
   onChange,
   compact = false, // opcional para móvil
+  counts,
 }: FiltrosTabsProps) {
   const baseButton = useMemo(
     () =>
@@ -130,7 +125,7 @@ export function FiltrosTabs({
             <span
               className={cn(baseBadge, activo ? activeClasses.badge : f.color)}
             >
-              {f.count}
+              {counts[f.id]}
             </span>
             {f.label}
           </button>

@@ -47,6 +47,7 @@ export function InteraccionesPage() {
   const [loading, setLoading] = useState(true);
   const [filtro, setFiltro] = useState<FiltroID>("todas");
   const [busqueda, setBusqueda] = useState("");
+
   /**
    * Estado único del modal: `open` controla la visibilidad e `interaccion`
    * determina si se abre en modo creación (null) o edición.
@@ -244,6 +245,23 @@ export function InteraccionesPage() {
     }
   };
 
+  const counts: Record<FiltroID, number> = useMemo(() => {
+    const base = puedeVerTodo
+      ? interacciones
+      : interacciones.filter((i) => i.usuarioId === user?.id);
+
+    return {
+      todas: base.length,
+      consulta: base.filter((i) => i.tipo.nombre.toLowerCase() === "consulta")
+        .length,
+      reunion: base.filter((i) => i.tipo.nombre.toLowerCase() === "reunion")
+        .length,
+      antecedente: base.filter(
+        (i) => i.tipo.nombre.toLowerCase() === "antecedente",
+      ).length,
+    };
+  }, [interacciones, puedeVerTodo, user?.id]);
+
   /** Pantalla de carga inicial: solo se muestra la primera vez, antes de recibir datos. */
   if (loading && interacciones.length === 0) {
     return <p className="px-4 mt-6">Cargando interacciones...</p>;
@@ -261,7 +279,7 @@ export function InteraccionesPage() {
       />
 
       {/* Pestañas de filtro por tipo: todas / reunion / consulta / antecedente */}
-      <FiltrosTabs value={filtro} onChange={setFiltro} />
+      <FiltrosTabs value={filtro} onChange={setFiltro} counts={counts} />
 
       <SectionTitle>
         {puedeVerTodo ? "Todas las interacciones" : "Mis interacciones"}
