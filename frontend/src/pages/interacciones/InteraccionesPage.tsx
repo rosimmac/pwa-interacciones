@@ -152,7 +152,6 @@ export function InteraccionesPage() {
 
   /**
    * Traduce el nombre de tipo de interacción al `tipoId` numérico que espera el backend.
-   * Nota: tanto "reunion" como "antecedente" mapean al id 2 según el esquema de BD actual.
    */
   const idtipoFromTipoString = (tipo: string) => {
     let tipoId: number = 0;
@@ -164,7 +163,7 @@ export function InteraccionesPage() {
         tipoId = 2;
         break;
       case "antecedente":
-        tipoId = 2;
+        tipoId = 3;
         break;
     }
     return tipoId;
