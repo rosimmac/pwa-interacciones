@@ -1,6 +1,7 @@
 DROP DATABASE IF EXISTS railway;
 CREATE DATABASE railway CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE railway;
+SET NAMES utf8mb4;
 
 CREATE TABLE usuario (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
