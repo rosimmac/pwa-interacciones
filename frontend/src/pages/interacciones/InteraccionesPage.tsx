@@ -182,8 +182,7 @@ export function InteraccionesPage() {
         descripcion: data.descripcion,
         clienteId: data.clienteId,
         usuarioId: user!.id,
-        // Combina fecha (YYYY-MM-DD) y hora (HH:mm) en formato ISO 8601
-        fecha: `${data.fecha}T${data.hora}:00`,
+        fecha: new Date(`${data.fecha}T${data.hora}:00`).toISOString(),
       };
       const nueva = await api.createInteraccion(payload);
 
@@ -209,7 +208,7 @@ export function InteraccionesPage() {
         estadoId: 2,
         descripcion: data.descripcion,
         clienteId: data.clienteId,
-        fecha: `${data.fecha}T${data.hora}:00`,
+        fecha: new Date(`${data.fecha}T${data.hora}:00`).toISOString(),
       };
       const actualizada = await api.updateInteraccion(id, payload);
       setInteracciones((prev) =>
