@@ -1,3 +1,18 @@
+/**
+ * Tarjeta base reutilizable para las entidades del dominio.
+ *
+ * Soporta dos variantes de layout:
+ *   - `vertical`   (default): icono y badge en la cabecera, contenido debajo.
+ *                  Usada por InteraccionCard.
+ *   - `horizontal`: icono a la izquierda, contenido al centro, acciones a la derecha.
+ *                  Usada por ClienteCard y UsuarioCard.
+ *
+ * Los handlers de edición y eliminación detienen la propagación del evento para
+ * evitar que el clic active también el `onClick` de la tarjeta completa.
+ * `colorClasses` permite personalizar la paleta por tipo de entidad sin duplicar
+ * la lógica de presentación en cada tarjeta concreta.
+ */
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Trash2, Pencil } from "lucide-react";
 import type { ReactNode } from "react";

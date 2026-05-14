@@ -1,3 +1,18 @@
+/**
+ * Menú lateral de navegación principal de la aplicación.
+ *
+ * Implementado con `Sheet` de Radix UI, que desliza desde la izquierda en
+ * móvil y escritorio. Muestra los enlaces a Interacciones, Clientes y,
+ * condicionalmente, Usuarios (solo si el usuario tiene rol "admin").
+ *
+ * El cierre de sesión presenta un `Dialog` de confirmación antes de llamar a
+ * `api.logout`. El bloque `finally` garantiza que el contexto local se limpie
+ * aunque la llamada de red falle.
+ *
+ * Exportado memoizado con `React.memo` para evitar re-renders innecesarios
+ * cuando el componente padre actualiza estado no relacionado con la sesión.
+ */
+
 import {
   Sheet,
   SheetContent,

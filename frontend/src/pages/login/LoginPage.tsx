@@ -26,6 +26,7 @@ import { loginSchema, type LoginSchema } from "@/schemas/loginSchema";
 import { useContext } from "react";
 import { AuthContext } from "@/context/AuthContext";
 import { api } from "@/api/api";
+import { errorToast } from "@/components/ErrorToast";
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -59,9 +60,8 @@ export function LoginPage() {
 
       navigate("/interacciones", { replace: true });
     } catch {
-      // El interceptor de 401 ya gestiona tokens inválidos,
-      // aquí capturamos credenciales incorrectas
-      alert("Email o contraseña incorrectos"); // luego lo cambiamos por un toast
+      // El interceptor de 401 gestiona tokens caducados; aquí capturamos credenciales incorrectas.
+      errorToast("Credenciales incorrectas", "El email o la contraseña no son válidos.");
     }
   }
   return (

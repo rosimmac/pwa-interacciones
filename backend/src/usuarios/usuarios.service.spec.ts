@@ -20,13 +20,6 @@ import { Usuario } from './usuario.entity';
 import { NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 
-// Mockeamos nodemailer para evitar intentos de envío real de email
-jest.mock('nodemailer', () => ({
-  createTransport: jest.fn().mockReturnValue({
-    sendMail: jest.fn().mockResolvedValue({ messageId: 'test' }),
-  }),
-}));
-
 // ─────────────────────────────────────────────
 // MOCK DEL QUERY BUILDER
 // guardarResetToken() usa createQueryBuilder() para hacer un UPDATE directo.

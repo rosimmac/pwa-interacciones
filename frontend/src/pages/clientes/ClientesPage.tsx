@@ -171,9 +171,6 @@ export function ClientesPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {clientesFiltrados.map((cliente) => {
             const count = conteo[cliente.id] ?? 0;
-            console.log("onEdit:", puedeEditar ? "función" : undefined);
-            console.log("onDelete:", puedeEliminar ? "función" : undefined);
-
             return (
               <ClienteCard
                 key={cliente.id}
